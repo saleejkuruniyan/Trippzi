@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trippzi-worker
+  namespace: trippzi
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: trippzi-worker
+  template:
+    metadata:
+      labels:
+        app: trippzi-worker
+    spec:
+      containers:
+      - name: worker
+        image: trippzi-backend:latest
+        command: ["/opt/venv/bin/celery", "-A", "core", "worker", "--loglevel=info", "--pool=threads", "--concurrency=4"]
+        envFrom:
+        - secretRef:
+            name: trippzi-secrets
+        env:
+        - name: CELERY_BROKER_URL
+          value: redis://redis-service:6379/0

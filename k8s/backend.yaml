@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trippzi-backend
+  namespace: trippzi
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: trippzi-backend
+  template:
+    metadata:
+      labels:
+        app: trippzi-backend
+    spec:
+      containers:
+      - name: backend
+        image: trippzi-backend:latest
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - secretRef:
+            name: trippzi-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trippzi-backend-service
+  namespace: trippzi
+spec:
+  selector:
+    app: trippzi-backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP

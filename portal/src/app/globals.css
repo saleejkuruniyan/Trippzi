@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-baloo);
+  --font-serif: var(--font-lora), serif;
+}
+
+:root {
+  --background: #faf9f6; /* Soft Cream */
+  --foreground: #1c1917; /* Warm Black */
+  --card: #ffffff;
+  --primary: #2563eb;
+  --accent: #15803d; /* Forest Green accent */
+}
+
+.dark {
+  --background: #0c0a09;
+  --foreground: #f5f5f4;
+  --card: #1c1917;
+}
+
+@layer base {
+  * {
+    @apply border-zinc-200 dark:border-zinc-800 transition-colors duration-200;
+  }
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)] selection:bg-blue-100 dark:selection:bg-blue-900/30;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-bold tracking-tight;
+  }
+}
+
+/* Custom Utilities */
+.glass-panel {
+  @apply bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md border border-white/20 dark:border-zinc-800/50;
+}

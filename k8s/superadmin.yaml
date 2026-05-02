@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trippzi-superadmin
+  namespace: trippzi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trippzi-superadmin
+  template:
+    metadata:
+      labels:
+        app: trippzi-superadmin
+    spec:
+      containers:
+      - name: superadmin
+        image: trippzi-superadmin:latest
+        ports:
+        - containerPort: 3001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trippzi-superadmin-service
+  namespace: trippzi
+spec:
+  selector:
+    app: trippzi-superadmin
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3001
+  type: ClusterIP

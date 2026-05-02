@@ -1,0 +1,92 @@
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils.text import slugify
+import uuid
+import os
+
+def destination_image_path(instance, filename):
+    ext = filename.split('.')[-1]
+    name = slugify(instance.name)
+    return f"images/{name}/{uuid.uuid4()}.{ext}"
+
+def itinerary_image_path(instance, filename):
+    ext = filename.split('.')[-1]
+    country = slugify(instance.destination)
+    # If instance.id is not yet available, use 'temp' or omit
+    itinerary_part = f"{instance.id}/" if instance.id else ""
+    return f"images/{country}/{itinerary_part}{uuid.uuid4()}.{ext}"
+
+class Destination(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(unique=True, blank=True)
+    description = models.TextField()
+    image = models.ImageField(upload_to=destination_image_path, blank=True, null=True)
+    image_url = models.URLField(blank=True, null=True) # Keep for fallback or external
+    
+    # Rich Guide Content
+    airports = models.JSONField(default=list, help_text="List of major airports")
+    best_time = models.TextField(help_text="Best time to visit description")
+    visa_process = models.TextField(help_text="Detailed visa process description")
+    days_recommendation = models.JSONField(default=dict, help_text="Duration vs description mapping")
+    tips = models.JSONField(default=list, help_text="Pro-tips and things to keep in mind")
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+class Itinerary(models.Model):
+    destination_rel = models.ForeignKey(Destination, on_delete=models.CASCADE, related_name='itineraries', null=True)
+    title = models.CharField(max_length=255)
+    destination = models.CharField(max_length=255)
+    duration_days = models.IntegerField()
+    
+    # Pricing
+    regular_price = models.DecimalField(max_digits=10, decimal_places=2, default=999.00)
+    sale_price = models.DecimalField(max_digits=10, decimal_places=2, default=799.00)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    description = models.TextField()
+    highlights = models.TextField(blank=True, help_text="Short highlight e.g. 'Kuala Lumpur + Langkawi'")
+    content = models.JSONField(help_text="Day-wise itinerary structure")
+    image = models.ImageField(upload_to=itinerary_image_path, blank=True, null=True)
+    image_url = models.URLField(blank=True, null=True)
+    
+    is_premium = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.title} ({self.destination})"
+
+class VisaRule(models.Model):
+    source_country = models.CharField(max_length=100)
+    destination_country = models.CharField(max_length=100)
+    visa_required = models.BooleanField(default=True)
+    requirements = models.TextField(blank=True)
+    documentation = models.JSONField(help_text="Required documents list", default=list)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('source_country', 'destination_country')
+
+    def __str__(self):
+        return f"Visa: {self.source_country} -> {self.destination_country}"
+
+class Transaction(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    itinerary = models.ForeignKey(Itinerary, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, default='PENDING')
+    razorpay_order_id = models.CharField(max_length=100, blank=True)
+    razorpay_payment_id = models.CharField(max_length=100, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Txn: {self.user.username} - {self.itinerary.title}"
