@@ -90,7 +90,7 @@ export default function DestinationsPage() {
                 >
                   <div className="aspect-[4/5] relative overflow-hidden">
                     <Image 
-                      src={dest.image_url || "/destinations/bali.png"} 
+                      src={dest.image || dest.image_url || "/destinations/bali.png"} 
                       alt={dest.name} 
                       fill 
                       className="object-cover group-hover:scale-110 transition-transform duration-700" 

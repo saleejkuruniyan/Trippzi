@@ -124,4 +124,21 @@ class Command(BaseCommand):
                 image_url=f"https://source.unsplash.com/featured/?{dest_name},travel"
             )
 
-        self.stdout.write(self.style.SUCCESS(f'Successfully seeded {len(itineraries)} itineraries!'))
+        # 5. Create Visa Rules
+        visa_rules = [
+            ("India", "Thailand", True, "30 days stay, Visa on Arrival available. Carry return flight and proof of funds.", ["Passport", "Photo", "Return Ticket"]),
+            ("India", "Vietnam", True, "30-90 days stay, E-Visa required. Apply online at official portal.", ["Passport Copy", "Digital Photo"]),
+            ("India", "Malaysia", False, "30 days stay, Visa Free for Indians. Must fill MDAC form 3 days prior.", ["Passport", "Return Ticket", "MDAC"]),
+            ("India", "Hong Kong", False, "14 days stay, Pre-arrival registration (PAR) required.", ["Passport", "PAR Document"]),
+        ]
+
+        for src, dest, req, details, docs in visa_rules:
+            VisaRule.objects.create(
+                source_country=src,
+                destination_country=dest,
+                visa_required=req,
+                requirements=details,
+                documentation=docs
+            )
+
+        self.stdout.write(self.style.SUCCESS(f'Successfully seeded {len(itineraries)} itineraries and {len(visa_rules)} visa rules!'))

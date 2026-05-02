@@ -28,14 +28,14 @@ export async function login(data: { username: string, password: string }) {
 
 export async function fetchStats() {
   const res = await fetch(`${API_BASE}/admin/stats/`, { headers: getHeaders() });
+  if (!res.ok) return null;
   return res.json();
 }
 
 export async function fetchUsers() {
   const res = await fetch(`${API_BASE}/admin/users/`, { headers: getHeaders() });
   if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    console.error("Fetch Users Error:", res.status, errorData);
+    console.error("Fetch Users Error:", res.status);
     return [];
   }
   return res.json();
@@ -43,11 +43,19 @@ export async function fetchUsers() {
 
 export async function fetchItineraries() {
   const res = await fetch(`${API_BASE}/itineraries/`, { headers: getHeaders() });
+  if (!res.ok) {
+    console.error("Fetch Itineraries Error:", res.status);
+    return [];
+  }
   return res.json();
 }
 
 export async function fetchVisaRules() {
-  const res = await fetch(`${API_BASE}/visa/`, { headers: getHeaders() });
+  const res = await fetch(`${API_BASE}/admin/visa-rules/`, { headers: getHeaders() });
+  if (!res.ok) {
+    console.error("Fetch Visa Rules Error:", res.status);
+    return [];
+  }
   return res.json();
 }
 

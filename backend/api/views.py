@@ -1,12 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 from django.db.models import Sum, Count
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
+from .services.ai_engine import AIEngine
 from .models import Itinerary, VisaRule, Transaction, Destination
 from .serializers import (
     ItinerarySerializer, VisaRuleSerializer, TransactionSerializer, 
@@ -17,12 +18,15 @@ class DestinationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Destination.objects.all()
     serializer_class = DestinationSerializer
     lookup_field = 'slug'
+    permission_classes = [AllowAny]
 
 class ItineraryViewSet(viewsets.ModelViewSet):
     queryset = Itinerary.objects.all().order_by('-created_at')
     serializer_class = ItinerarySerializer
+    permission_classes = [AllowAny] # Making it AllowAny for now as per destinations page usage
 
 class GenerateItineraryView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         destination = request.data.get('destination')
         duration = request.data.get('duration', 5)
@@ -48,6 +52,7 @@ class GenerateItineraryView(APIView):
         }, status=status.HTTP_200_OK)
 
 class VisaRuleView(APIView):
+    permission_classes = [AllowAny]
     def get(self, request):
         source = request.query_params.get('source')
         dest = request.query_params.get('destination')
@@ -82,12 +87,15 @@ class AdminStatsView(APIView):
             "total_visa_rules": total_visa_rules
         })
 
-class AdminUserViewSet(viewsets.ReadOnlyModelViewSet):
+class AdminUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    # Temporarily allowing IsAuthenticated to help with initial setup, 
-    # but ideally this should be IsAdminUser once you've promoted your user.
-    permission_classes = [IsAdminUser] 
+    permission_classes = [IsAdminUser]
+
+class AdminVisaRuleViewSet(viewsets.ModelViewSet):
+    queryset = VisaRule.objects.all().order_by('destination_country')
+    serializer_class = VisaRuleSerializer
+    permission_classes = [IsAdminUser]
 
 class AdminTransactionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Transaction.objects.all().order_by('-created_at')

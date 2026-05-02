@@ -6,11 +6,20 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'source.unsplash.com',
+        hostname: '**.unsplash.com',
       },
       {
         protocol: 'https',
-        hostname: 'images.unsplash.com',
+        hostname: '**.budlee.ai',
+      },
+      {
+        protocol: 'http',
+        hostname: '**.budlee.ai',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8000',
       },
     ],
   },

@@ -37,8 +37,10 @@ export default function AdminDashboard() {
 
     try {
       const res = await login({ username, password })
+      console.log("Login Response:", res);
       const token = res.access_token || res.access || res.key
       if (token) {
+        console.log("Token acquired:", token);
         localStorage.setItem('trippzi-token', token)
         setIsAuthenticated(true)
         loadStats()

@@ -84,7 +84,7 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
                 className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-2xl"
               >
                 <Image 
-                  src={itinerary.image_url || "/destinations/bali.png"} 
+                  src={itinerary.image || itinerary.image_url || "/destinations/bali.png"} 
                   alt={itinerary.title} 
                   fill 
                   className="object-cover" 
@@ -195,7 +195,7 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
               {related.map((item: any) => (
                 <Link key={item.id} href={`/itinerary/${item.id}`} className="group space-y-4">
                   <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-sm group-hover:shadow-xl transition-all">
-                    <Image src={item.image_url || "/destinations/bali.png"} alt={item.title} fill className="object-cover group-hover:scale-105 transition-transform" />
+                    <Image src={item.image || item.image_url || "/destinations/bali.png"} alt={item.title} fill className="object-cover group-hover:scale-105 transition-transform" />
                   </div>
                   <div>
                     <h5 className="font-bold group-hover:text-blue-600 transition-colors">{item.title}</h5>
