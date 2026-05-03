@@ -162,8 +162,11 @@ export default function GeneratePage() {
                   <input 
                     type="number" min="1" max="30"
                     className="w-full px-4 py-3 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-transparent focus:ring-2 focus:ring-blue-500 text-zinc-900 dark:text-zinc-50"
-                    value={formData.duration}
-                    onChange={e => setFormData({...formData, duration: parseInt(e.target.value)})}
+                    value={formData.duration || ""}
+                    onChange={e => {
+                      const val = parseInt(e.target.value);
+                      setFormData({...formData, duration: isNaN(val) ? 0 : val});
+                    }}
                   />
                 </div>
 

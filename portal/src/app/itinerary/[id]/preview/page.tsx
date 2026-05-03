@@ -87,27 +87,27 @@ export default function ItineraryPreviewPage() {
               <div className="space-y-8">
                 <h3 className="text-2xl font-bold text-blue-500">Theme: {day1.theme}</h3>
                 
-                {day1Images.length > 0 && (
-                  <div className="relative aspect-video rounded-[2rem] overflow-hidden border border-zinc-800 shadow-2xl">
-                    <Image 
-                      src={day1Images[0].image || day1Images[0].image_url} 
-                      alt="Day 1 Preview" 
-                      fill 
-                      className="object-cover"
-                    />
-                  </div>
-                )}
-
-                <div className="space-y-6">
-                  {day1.activities?.map((act: any, i: number) => (
-                    <div key={i} className="flex gap-6 group">
-                      <div className="text-blue-600 font-black text-sm pt-1 shrink-0">{act.time}</div>
-                      <div>
-                        <h4 className="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors">{act.activity}</h4>
-                        <p className="text-zinc-400 leading-relaxed font-light">{act.description}</p>
+                <div className="space-y-12">
+                  {day1.activities?.map((act: any, i: number) => {
+                    const spotImage = day1Images.find((img: any) => img.caption === act.activity);
+                    return (
+                      <div key={i} className="flex flex-col md:flex-row gap-6 group">
+                        <div className="w-full md:w-48 h-32 relative rounded-2xl overflow-hidden shrink-0 border border-zinc-800">
+                          <Image 
+                            src={spotImage?.image || spotImage?.image_url || "/destinations/bali.png"} 
+                            alt={act.activity}
+                            fill
+                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                        </div>
+                        <div>
+                          <div className="text-blue-600 font-black text-sm mb-1">{act.time}</div>
+                          <h4 className="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors">{act.activity}</h4>
+                          <p className="text-zinc-400 leading-relaxed font-light text-sm">{act.description}</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}

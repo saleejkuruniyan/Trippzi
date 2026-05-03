@@ -18,8 +18,18 @@ class SimpleItinerarySerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        # Rule: Mask thumbnail if not approved
-        if not instance.is_approved:
+        request = self.context.get('request')
+        user = request.user if request else None
+        
+        # Rule: Mask thumbnail if not approved, unless staff or owner
+        is_owned = False
+        if user and user.is_authenticated:
+            if instance.user == user:
+                is_owned = True
+            elif Transaction.objects.filter(user=user, itinerary=instance, status='COMPLETED').exists():
+                is_owned = True
+
+        if not instance.is_approved and not is_owned and not (user and user.is_staff):
             data['image'] = None
             data['image_url'] = None
         return data
@@ -79,8 +89,8 @@ class ItinerarySerializer(serializers.ModelSerializer):
             if 'day_details' in data:
                 data['day_details'] = [d for d in data['day_details'] if d.get('day_number') == 1]
         
-        # Rule: Mask thumbnail if not approved
-        if not instance.is_approved:
+        # Rule: Mask thumbnail if not approved, unless staff or owner
+        if not instance.is_approved and not is_owned and not (user and user.is_staff):
             data['image'] = None
             data['image_url'] = None
                 

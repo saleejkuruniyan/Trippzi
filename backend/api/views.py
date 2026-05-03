@@ -124,6 +124,13 @@ class GenerateItineraryView(APIView):
         # 1. Generate Itinerary Structure
         itinerary_data = ai_engine.generate_itinerary(destination, duration, budget, style, interests)
         
+        if "error" in itinerary_data:
+            return Response({
+                "error": "AI Generation failed",
+                "details": itinerary_data.get("error"),
+                "raw": itinerary_data.get("raw")
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
         # 1b. Ensure Destination exists or create it
         dest_obj, created = Destination.objects.get_or_create(
             name__iexact=destination,
@@ -193,21 +200,28 @@ class GenerateItineraryView(APIView):
                 theme = day.get('theme', '')
                 query = f"{destination} {theme}"
                 
-                # Fetch up to 2 images per day
-                image_urls = fetch_unsplash_images(query, count=2)
+                # Fetch images for top 3 activities/spots in each day
+                activities = day.get('activities', [])[:3]
                 
-                for idx, img_url in enumerate(image_urls):
-                    day_detail = ItineraryDay.objects.create(
-                        itinerary=itinerary_obj,
-                        day_number=day_num,
-                        location_name=theme,
-                        image_url=img_url,
-                        caption=f"{theme} - {idx+1}"
-                    )
-                    # Download to local storage (R2/S3) for persistence
-                    image_file = download_image_to_content_file(img_url)
-                    if image_file:
-                        day_detail.image.save(f"day_{day_num}_{idx}.jpg", image_file)
+                for idx, act in enumerate(activities):
+                    spot_name = act.get('activity', '')
+                    location = act.get('location', theme)
+                    query = f"{destination} {location} {spot_name}"
+                    
+                    image_urls = fetch_unsplash_images(query, count=1)
+                    if image_urls:
+                        img_url = image_urls[0]
+                        day_detail = ItineraryDay.objects.create(
+                            itinerary=itinerary_obj,
+                            day_number=day_num,
+                            location_name=location,
+                            image_url=img_url,
+                            caption=spot_name
+                        )
+                        # Download to local storage (R2/S3)
+                        image_file = download_image_to_content_file(img_url)
+                        if image_file:
+                            day_detail.image.save(f"day_{day_num}_spot_{idx}.jpg", image_file)
 
         return Response({
             "itinerary": itinerary_data,

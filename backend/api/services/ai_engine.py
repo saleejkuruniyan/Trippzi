@@ -3,6 +3,7 @@ from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.output_parsers import ResponseSchema, StructuredOutputParser
 from django.conf import settings
+import json
 
 class AIEngine:
     def __init__(self):
@@ -11,47 +12,6 @@ class AIEngine:
             api_key=settings.OPENAI_API_KEY,
             base_url=settings.OPENAI_API_BASE,
             temperature=0.7,
-        )
-
-    def generate_itinerary(self, destination, duration, budget, style, interests):
-        """
-        Generates a day-wise itinerary structure using AI.
-        """
-        
-        response_schemas = [
-            ResponseSchema(name="title", description="A catchy title for the trip"),
-            ResponseSchema(name="overview", description="A brief overview of the trip"),
-            ResponseSchema(name="days", description="An array of daily plans. Each day should have a 'day_number', 'theme', and 'activities' (array of {time, activity, description, location, cost_estimate})."),
-            ResponseSchema(name="budget_breakdown", description="Estimated costs for transport, food, activities, and stay."),
-            ResponseSchema(name="packing_list", description="Suggested packing items based on destination and duration."),
-            ResponseSchema(name="local_tips", description="Important local customs or hacks.")
-        ]
-        
-        output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
-        format_instructions = output_parser.get_format_instructions()
-
-        prompt = ChatPromptTemplate.from_template(
-            """
-            You are an expert travel consultant. Generate a highly detailed {duration}-day travel itinerary for {destination}.
-            
-            User Preferences:
-            - Budget: {budget}
-            - Travel Style: {style}
-            - Interests: {interests}
-            
-            {format_instructions}
-            
-            Ensure the itinerary is realistic, accounts for travel time between attractions, and includes specific food recommendations for each day.
-            """
-        )
-
-        messages = prompt.format_messages(
-            destination=destination,
-            duration=duration,
-            budget=budget,
-            style=style,
-            interests=interests,
-            format_instructions=format_instructions
         )
 
     def _extract_json(self, text):

@@ -3,9 +3,14 @@ from .models import Itinerary, VisaRule, Transaction, Destination, UserProfile, 
 
 @admin.register(Destination)
 class DestinationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'created_at')
-    search_fields = ('name',)
+    list_display = ('name', 'slug', 'itineraries_count', 'created_at')
+    search_fields = ('name', 'description', 'visa_process')
     prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ('created_at', 'updated_at')
+
+    def itineraries_count(self, obj):
+        return obj.itineraries.count()
+    itineraries_count.short_description = 'Itineraries'
 
 class ItineraryDayInline(admin.TabularInline):
     model = ItineraryDay
@@ -14,35 +19,52 @@ class ItineraryDayInline(admin.TabularInline):
 
 @admin.register(Itinerary)
 class ItineraryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'destination', 'duration_days', 'price', 'is_premium', 'is_custom', 'is_approved', 'user', 'created_at')
-    list_filter = ('is_premium', 'is_custom', 'is_approved', 'destination', 'created_at')
-    search_fields = ('title', 'destination', 'description', 'user__username')
+    list_display = ('id', 'title', 'destination', 'duration_days', 'price', 'is_approved', 'is_custom', 'user', 'created_at')
+    list_filter = ('is_approved', 'is_custom', 'is_premium', 'destination', 'created_at')
+    search_fields = ('title', 'destination', 'description', 'user__username', 'user__email')
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
     inlines = [ItineraryDayInline]
+    
+    actions = ['approve_itineraries', 'unapprove_itineraries']
+
+    def approve_itineraries(self, request, queryset):
+        queryset.update(is_approved=True)
+    approve_itineraries.short_description = "Approve selected itineraries"
+
+    def unapprove_itineraries(self, request, queryset):
+        queryset.update(is_approved=False)
+    unapprove_itineraries.short_description = "Unapprove selected itineraries"
+
+@admin.register(ItineraryDay)
+class ItineraryDayAdmin(admin.ModelAdmin):
+    list_display = ('itinerary', 'day_number', 'location_name', 'caption')
+    list_filter = ('itinerary__destination', 'day_number')
+    search_fields = ('itinerary__title', 'location_name', 'caption')
+    ordering = ('itinerary', 'day_number')
 
 @admin.register(VisaRule)
 class VisaRuleAdmin(admin.ModelAdmin):
     list_display = ('source_country', 'destination_country', 'visa_required', 'last_updated')
     list_filter = ('visa_required', 'source_country', 'destination_country')
-    search_fields = ('source_country', 'destination_country')
+    search_fields = ('source_country', 'destination_country', 'requirements')
     ordering = ('source_country', 'destination_country')
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'itinerary', 'amount', 'status', 'created_at')
     list_filter = ('status', 'created_at')
-    search_fields = ('user__username', 'itinerary__title', 'razorpay_order_id', 'razorpay_payment_id')
+    search_fields = ('user__username', 'user__email', 'itinerary__title', 'razorpay_order_id', 'razorpay_payment_id')
     ordering = ('-created_at',)
     readonly_fields = ('created_at',)
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'phone_number', 'city', 'country', 'zip_code')
-    search_fields = ('user__username', 'user__email', 'phone_number', 'city')
+    search_fields = ('user__username', 'user__email', 'phone_number', 'city', 'country')
 
 @admin.register(Wishlist)
 class WishlistAdmin(admin.ModelAdmin):
     list_display = ('user', 'itinerary', 'created_at')
     list_filter = ('created_at',)
-    search_fields = ('user__email', 'itinerary__title')
+    search_fields = ('user__username', 'user__email', 'itinerary__title')

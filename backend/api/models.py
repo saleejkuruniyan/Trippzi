@@ -16,6 +16,12 @@ def itinerary_image_path(instance, filename):
     itinerary_part = f"{instance.id}/" if instance.id else ""
     return f"images/{country}/{itinerary_part}{uuid.uuid4()}.{ext}"
 
+def itinerary_day_image_path(instance, filename):
+    country = slugify(instance.itinerary.destination)
+    itinerary_id = instance.itinerary.id
+    day_number = instance.day_number
+    return f"images/{country}/{itinerary_id}/{day_number}/{uuid.uuid4()}.png"
+
 class Destination(models.Model):
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(unique=True, blank=True)
@@ -76,13 +82,12 @@ class ItineraryDay(models.Model):
     itinerary = models.ForeignKey(Itinerary, on_delete=models.CASCADE, related_name='day_details')
     day_number = models.IntegerField()
     location_name = models.CharField(max_length=255, blank=True)
-    image = models.ImageField(upload_to='day_images/', blank=True, null=True)
+    image = models.ImageField(upload_to=itinerary_day_image_path, blank=True, null=True)
     image_url = models.URLField(max_length=500, blank=True, null=True)
     caption = models.CharField(max_length=255, blank=True)
     
     class Meta:
         ordering = ['day_number']
-        unique_together = ('itinerary', 'day_number')
 
     def __str__(self):
         return f"{self.itinerary.title} - Day {self.day_number}"
