@@ -1,0 +1,3166 @@
+[
+  {
+    "id": 1,
+    "name": "France",
+    "description": "France is a world-renowned destination for its art, fashion, gastronomy, and iconic landmarks like the Eiffel Tower. It offers a diverse landscape from the stylish French Riviera to the historic chateaus of the Loire Valley and the snowy peaks of the Alps.",
+    "top5": [
+      {
+        "name": "Paris",
+        "description": "The iconic 'City of Light' is world-renowned for its architectural landmarks like the Eiffel Tower, the Louvre's artistic treasures, and its romantic, caf\u00e9-lined boulevards."
+      },
+      {
+        "name": "Nice & French Riviera",
+        "description": "A glamorous Mediterranean coastline offering azure waters, pebble beaches, and luxury resorts favored by the international elite."
+      },
+      {
+        "name": "Lyon",
+        "description": "Widely regarded as France\u2019s culinary capital, this city features the historic Vieux Lyon district and a sophisticated gastronomic scene."
+      },
+      {
+        "name": "Bordeaux",
+        "description": "A premier destination for wine enthusiasts, known for its elegant neoclassical architecture and surrounding world-class vineyards."
+      },
+      {
+        "name": "Strasbourg",
+        "description": "A charming blend of French and German cultures, featuring picturesque timber-framed houses and a stunning Gothic cathedral."
+      }
+    ],
+    "airports": [
+      "CDG",
+      "ORY"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 2,
+    "name": "Italy",
+    "description": "Italy is a living museum of history, art, and culture, home to more UNESCO World Heritage sites than any other country. From the ancient ruins of Rome to the Renaissance masterpieces of Florence and the romantic canals of Venice, it is a feast for the senses.",
+    "top5": [
+      {
+        "name": "Rome",
+        "description": "The 'Eternal City' is a living museum of Western civilization, featuring the Colosseum, the Roman Forum, and the spiritual grandeur of Vatican City."
+      },
+      {
+        "name": "Venice",
+        "description": "A romantic 'Floating City' famous for its intricate canal systems, ornate bridges, and the majestic St. Mark's Square."
+      },
+      {
+        "name": "Florence",
+        "description": "The cradle of the Renaissance, home to unparalleled masterpieces of art and architecture, including the Duomo and the Uffizi Gallery."
+      },
+      {
+        "name": "Amalfi Coast",
+        "description": "A breathtaking stretch of coastline with pastel-colored villages perched precariously over the Mediterranean Sea."
+      },
+      {
+        "name": "Milan",
+        "description": "Italy\u2019s global hub for fashion and design, dominated by the magnificent Duomo di Milano and high-end shopping galleries."
+      }
+    ],
+    "airports": [
+      "FCO",
+      "MXP"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 3,
+    "name": "Spain",
+    "description": "Spain is a vibrant Mediterranean nation known for its passionate culture, sun-drenched beaches, and architectural wonders like the Sagrada Familia. It offers a diverse experience from the lively streets of Madrid to the historic charm of Seville and the party island of Ibiza.",
+    "top5": [
+      {
+        "name": "Madrid",
+        "description": "Spain's vibrant capital, known for its grand boulevards, the prestigious Prado Museum, and the opulent Royal Palace."
+      },
+      {
+        "name": "Barcelona",
+        "description": "A Mediterranean metropolis defined by Antoni Gaud\u00ed\u2019s surreal modernist architecture and the bustling atmosphere of Las Ramblas."
+      },
+      {
+        "name": "Seville",
+        "description": "The heart of Andalusia, famous for its historic Alc\u00e1zar palace, towering Giralda, and the passionate traditions of flamenco."
+      },
+      {
+        "name": "Granada",
+        "description": "Home to the Alhambra, a magnificent Moorish citadel and palace complex set against the backdrop of the Sierra Nevada mountains."
+      },
+      {
+        "name": "Ibiza",
+        "description": "A world-famous Balearic Island known for its legendary nightlife, luxury beach clubs, and serene coastal coves."
+      }
+    ],
+    "airports": [
+      "MAD",
+      "BCN"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 4,
+    "name": "USA",
+    "description": "The USA is a vast and diverse country offering everything from the neon-lit streets of New York City and the glamour of Hollywood to the awe-inspiring natural beauty of the Grand Canyon and Yellowstone National Park. It is a land of endless exploration and iconic road trips.",
+    "top5": [
+      {
+        "name": "New York City",
+        "description": "A global center of culture and commerce, famous for its towering skyscrapers, Broadway theaters, and the sprawling Central Park."
+      },
+      {
+        "name": "Los Angeles",
+        "description": "The world's entertainment capital, featuring the Hollywood Hills, Santa Monica beaches, and a diverse cultural landscape."
+      },
+      {
+        "name": "Grand Canyon",
+        "description": "An awe-inspiring natural wonder in Arizona, showcasing millions of years of geological history through its immense, colorful rock layers."
+      },
+      {
+        "name": "Las Vegas",
+        "description": "The ultimate entertainment destination, known for its vibrant nightlife, themed mega-resorts, and world-class casinos along the Strip."
+      },
+      {
+        "name": "San Francisco",
+        "description": "A hilly city on the Pacific coast, celebrated for the iconic Golden Gate Bridge, historic cable cars, and Victorian architecture."
+      }
+    ],
+    "airports": [
+      "JFK",
+      "LAX",
+      "ORD"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 5,
+    "name": "China",
+    "description": "China is a land of monumental history and rapid modernization, where the Great Wall snakes across ancient hills and futuristic skylines dominate cities like Shanghai. It offers a profound cultural journey through its ancient temples, imperial palaces, and diverse natural landscapes.",
+    "top5": [
+      {
+        "name": "Beijing",
+        "description": "The historical heart of China, featuring imperial landmarks like the Forbidden City, the Temple of Heaven, and nearby sections of the Great Wall."
+      },
+      {
+        "name": "Shanghai",
+        "description": "A futuristic global hub defined by its stunning Lujiazui skyline, the historic Bund waterfront, and traditional Yu Garden."
+      },
+      {
+        "name": "Xi'an",
+        "description": "Once the start of the Silk Road, this ancient city is famous for the Terracotta Army and its well-preserved Ming dynasty city walls."
+      },
+      {
+        "name": "Chengdu",
+        "description": "The gateway to Giant Panda research and a culinary hotspot known for its spicy Sichuan cuisine and relaxed tea house culture."
+      },
+      {
+        "name": "Guilin",
+        "description": "Famous for its surreal karst limestone landscapes and the scenic Li River, often depicted in traditional Chinese ink paintings."
+      }
+    ],
+    "airports": [
+      "PEK",
+      "PVG"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 6,
+    "name": "UK",
+    "description": "The UK is a historic island nation that blends centuries of tradition with a vibrant modern culture. From the iconic landmarks of London and the medieval streets of Edinburgh to the mysterious stones of Stonehenge, it offers a rich tapestry of heritage and natural beauty.",
+    "top5": [
+      {
+        "name": "London",
+        "description": "A global metropolis blending royal heritage at Buckingham Palace with modern culture along the bustling South Bank of the Thames."
+      },
+      {
+        "name": "Edinburgh",
+        "description": "Scotland\u2019s capital, featuring a dramatic medieval Old Town and an elegant Georgian New Town overlooked by Edinburgh Castle."
+      },
+      {
+        "name": "Bath",
+        "description": "A UNESCO World Heritage site known for its perfectly preserved Roman baths and stunning honey-colored Georgian architecture."
+      },
+      {
+        "name": "Oxford",
+        "description": "The 'City of Dreaming Spires,' home to the world\u2019s oldest English-speaking university and magnificent college chapels."
+      },
+      {
+        "name": "Isle of Skye",
+        "description": "A rugged island in the Inner Hebrides, famous for its dramatic volcanic landscapes, medieval castles, and picturesque fishing villages."
+      }
+    ],
+    "airports": [
+      "LHR",
+      "LGW"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 7,
+    "name": "Turkey",
+    "description": "Turkey is a transcontinental bridge between East and West, where the historic minarets of Istanbul meet the otherworldly landscapes of Cappadocia. It is a land of rich history, stunning coastlines, and a world-famous culinary tradition that is as diverse as its heritage.",
+    "top5": [
+      {
+        "name": "Istanbul",
+        "description": "A transcontinental city where East meets West, featuring the Hagia Sophia, Blue Mosque, and the bustling Grand Bazaar."
+      },
+      {
+        "name": "Cappadocia",
+        "description": "A surreal landscape of 'fairy chimney' rock formations, ancient cave dwellings, and iconic sunrise hot air balloon flights."
+      },
+      {
+        "name": "Ephesus",
+        "description": "One of the best-preserved ancient Roman cities in the world, home to the Library of Celsus and a massive Great Theater."
+      },
+      {
+        "name": "Antalya",
+        "description": "The gateway to Turkey's southern Mediterranean coast, offering turquoise waters, luxury resorts, and a charming old town harbor."
+      },
+      {
+        "name": "Pamukkale",
+        "description": "A natural wonder featuring white travertine terraces filled with mineral-rich thermal waters and the ruins of the ancient spa city Hierapolis."
+      }
+    ],
+    "airports": [
+      "IST",
+      "AYT"
+    ],
+    "visa_for_indians": "eVisa (with US/UK/Schengen visa) / Visa Required"
+  },
+  {
+    "id": 8,
+    "name": "Mexico",
+    "description": "Mexico is a land of vibrant colors, ancient Mayan ruins, and spectacular beaches along the Caribbean and Pacific coasts. It offers a rich cultural experience from the historic center of Mexico City and the turquoise waters of Cancun to its world-renowned, spicy cuisine.",
+    "top5": [
+      {
+        "name": "Mexico City",
+        "description": "A sprawling high-altitude capital known for its Aztec heritage at Templo Mayor, grand Z\u00f3calo square, and vibrant art scene."
+      },
+      {
+        "name": "Cancun",
+        "description": "A world-renowned beach destination on the Yucatan Peninsula, offering turquoise Caribbean waters and all-inclusive luxury resorts."
+      },
+      {
+        "name": "Tulum",
+        "description": "A coastal town famous for its well-preserved Mayan ruins perched on cliffs above white-sand beaches and crystal-clear cenotes."
+      },
+      {
+        "name": "Oaxaca",
+        "description": "A cultural gem known for its colonial architecture, indigenous traditions, and sophisticated regional cuisine including mole and mezcal."
+      },
+      {
+        "name": "Los Cabos",
+        "description": "Located at the tip of the Baja Peninsula, it offers a dramatic desert-meets-sea landscape and world-class sportfishing and golf."
+      }
+    ],
+    "airports": [
+      "MEX",
+      "CUN"
+    ],
+    "visa_for_indians": "Visa Required (Visa-free with US/UK/Schengen/etc. visa)"
+  },
+  {
+    "id": 9,
+    "name": "Germany",
+    "description": "Germany is a country of fairytale castles, historic cities, and a deep cultural heritage in music, art, and philosophy. From the vibrant energy of Berlin and the beer-soaked tradition of Munich's Oktoberfest to the scenic beauty of the Rhine Valley and the Black Forest.",
+    "top5": [
+      {
+        "name": "Berlin",
+        "description": "A dynamic capital rich in modern history, featuring the Brandenburg Gate, the remnants of the Berlin Wall, and a cutting-edge art scene."
+      },
+      {
+        "name": "Munich",
+        "description": "The heart of Bavarian culture, famous for its historic Marienplatz, the annual Oktoberfest, and proximity to the stunning Alps."
+      },
+      {
+        "name": "Hamburg",
+        "description": "A major port city known for its historic Speicherstadt warehouse district, vibrant canals, and the modern Elbphilharmonie concert hall."
+      },
+      {
+        "name": "Cologne",
+        "description": "Dominated by its massive Gothic cathedral, this Rhine-side city is known for its Roman history and colorful Old Town."
+      },
+      {
+        "name": "Heidelberg",
+        "description": "A romantic destination featuring the evocative ruins of Heidelberg Castle and Germany\u2019s oldest university set along the Neckar River."
+      }
+    ],
+    "airports": [
+      "FRA",
+      "MUC"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 10,
+    "name": "Greece",
+    "description": "Greece is the cradle of Western civilization, a land where ancient myths come to life among the ruins of the Acropolis and the white-washed villages of the Aegean islands. It offers a perfect blend of historic exploration, Mediterranean cuisine, and stunning coastal beauty.",
+    "top5": [
+      {
+        "name": "Athens",
+        "description": "The birthplace of democracy, centered around the majestic Parthenon on the Acropolis and the historic streets of Plaka."
+      },
+      {
+        "name": "Santorini",
+        "description": "An iconic island famous for its blue-domed churches, white-washed villages, and spectacular sunsets over the volcanic caldera."
+      },
+      {
+        "name": "Mykonos",
+        "description": "A cosmopolitan island destination known for its vibrant nightlife, luxury boutiques, and beautiful Aegean beaches."
+      },
+      {
+        "name": "Crete",
+        "description": "Greece's largest island, home to the ancient Palace of Knossos, rugged mountains, and stunning pink-sand beaches at Elafonisi."
+      },
+      {
+        "name": "Meteora",
+        "description": "A breathtaking site featuring ancient monasteries perched atop towering sandstone pillars in central Greece."
+      }
+    ],
+    "airports": [
+      "ATH"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 11,
+    "name": "UAE",
+    "description": "The United Arab Emirates is a futuristic desert nation where ultra-modern skyscrapers like the Burj Khalifa meet traditional Arabian heritage. It is a global hub for luxury shopping, world-class theme parks, and ambitious architectural marvels.",
+    "top5": [
+      {
+        "name": "Dubai",
+        "description": "A futuristic metropolis known for record-breaking architecture like the Burj Khalifa, man-made islands, and ultra-luxury shopping."
+      },
+      {
+        "name": "Abu Dhabi",
+        "description": "The UAE capital, home to the architectural masterpiece of the Sheikh Zayed Grand Mosque and the cultural hub of Saadiyat Island."
+      },
+      {
+        "name": "Ras Al Khaimah",
+        "description": "A nature-focused emirate offering rugged mountains, desert dunes, and luxury beach resorts for adventure and relaxation."
+      },
+      {
+        "name": "Sharjah",
+        "description": "The UAE's cultural center, recognized for its beautifully restored heritage area and world-class Islamic museums and art galleries."
+      },
+      {
+        "name": "Fujairah",
+        "description": "Located on the east coast, it is famous for its Hajar Mountain backdrop and pristine snorkeling and diving sites in the Gulf of Oman."
+      }
+    ],
+    "airports": [
+      "DXB",
+      "AUH"
+    ],
+    "visa_for_indians": "eVisa / Visa Required (VoA with US/UK/Schengen visa)"
+  },
+  {
+    "id": 12,
+    "name": "Portugal",
+    "description": "Portugal is a sun-kissed Atlantic nation known for its maritime history, soulful fado music, and stunning coastal landscapes. From the tiled streets of Lisbon to the historic wine cellars of Porto, it offers a warm and authentic European experience.",
+    "top5": [
+      {
+        "name": "Lisbon",
+        "description": "Portugal's hilly capital, known for its historic Bel\u00e9m Tower, vintage yellow trams, and the soulful music of Fado echoing in Alfama."
+      },
+      {
+        "name": "Porto",
+        "description": "A riverside city famous for its colorful Ribeira district, the iconic Dom Lu\u00eds I Bridge, and its namesake Port wine cellars."
+      },
+      {
+        "name": "Algarve",
+        "description": "The southern coast offering dramatic limestone cliffs, golden beaches, and world-class golf courses overlooking the Atlantic."
+      },
+      {
+        "name": "Sintra",
+        "description": "A fairytale town near Lisbon, featuring the whimsical Pena Palace and mysterious Moorish castle ruins hidden in forested hills."
+      },
+      {
+        "name": "Madeira",
+        "description": "A volcanic island known as the 'Island of Eternal Spring,' famous for its rugged landscapes, botanical gardens, and levada hiking trails."
+      }
+    ],
+    "airports": [
+      "LIS",
+      "OPO"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 13,
+    "name": "Saudi Arabia",
+    "description": "Saudi Arabia is a land of deep spiritual significance and rapid modernization, home to the holiest sites of Islam and the ancient Nabataean ruins of AlUla. It offers a unique mix of high-tech cities and pristine Red Sea coastlines.",
+    "top5": [
+      {
+        "name": "Riyadh",
+        "description": "The modern capital where skyscrapers like the Kingdom Centre meet the historic clay-brick fortress of Masmak."
+      },
+      {
+        "name": "Jeddah",
+        "description": "The historic gateway to Mecca, known for its coral-built Al-Balad district and the beautiful Red Sea corniche."
+      },
+      {
+        "name": "AlUla",
+        "description": "An open-air museum showcasing ancient Nabataean tombs at Hegra and surreal rock formations in a vast desert landscape."
+      },
+      {
+        "name": "Medina",
+        "description": "One of Islam's holiest cities, centered around the Prophet's Mosque and a site of immense spiritual and historical significance."
+      },
+      {
+        "name": "Mecca",
+        "description": "The spiritual heart of Islam and the holiest city, attracting millions of pilgrims annually to the Masjid al-Haram and the Kaaba."
+      }
+    ],
+    "airports": [
+      "RUH",
+      "JED"
+    ],
+    "visa_for_indians": "eVisa (with US/UK/Schengen visa) / Visa Required"
+  },
+  {
+    "id": 14,
+    "name": "Poland",
+    "description": "Poland is a country of resilient history and architectural beauty, featuring the medieval charm of Krakow and the restored elegance of Warsaw. It offers a rich cultural tapestry of folk traditions and historic sites.",
+    "top5": [
+      {
+        "name": "Warsaw",
+        "description": "A resilient capital blending restored Gothic architecture in the Old Town with modern skyscrapers and a poignant WWII history."
+      },
+      {
+        "name": "Krakow",
+        "description": "A royal city famous for its grand Rynek G\u0142\u00f3wny square, Wawel Castle, and its status as a survivor of wartime destruction."
+      },
+      {
+        "name": "Gdansk",
+        "description": "A picturesque Baltic port city known for its colorful Long Market and its role as the birthplace of the Solidarity movement."
+      },
+      {
+        "name": "Wroclaw",
+        "description": "The 'City of 100 Bridges,' built on multiple islands and famous for its stunning market square and whimsical bronze gnomes."
+      },
+      {
+        "name": "Zakopane",
+        "description": "The winter capital of Poland, nestled at the foot of the Tatra Mountains and known for its unique wooden architecture and hiking trails."
+      }
+    ],
+    "airports": [
+      "WAW",
+      "KRK"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 15,
+    "name": "Netherlands",
+    "description": "The Netherlands is a land of iconic windmills, vibrant tulip fields, and historic canal-lined cities like Amsterdam. It is world-renowned for its progressive culture, bike-friendly streets, and rich artistic heritage.",
+    "top5": [
+      {
+        "name": "Amsterdam",
+        "description": "Famous for its intricate UNESCO-listed canal network, historic townhouses, and world-class institutions like the Rijksmuseum."
+      },
+      {
+        "name": "Rotterdam",
+        "description": "A city defined by its innovative modern architecture, bustling port, and the iconic Cube Houses and Erasmus Bridge."
+      },
+      {
+        "name": "Utrecht",
+        "description": "A medieval gem featuring unique wharves along its canals and the towering Dom Tower in its heart."
+      },
+      {
+        "name": "The Hague",
+        "description": "The seat of the Dutch government and international law, known for its regal palaces and the seaside resort of Scheveningen."
+      },
+      {
+        "name": "Keukenhof",
+        "description": "Commonly known as the 'Garden of Europe,' it is the world's largest flower garden, showcasing millions of tulips every spring."
+      }
+    ],
+    "airports": [
+      "AMS"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 16,
+    "name": "Croatia",
+    "description": "Croatia is a Mediterranean jewel with a stunning coastline of over 1,000 islands and historic walled cities like Dubrovnik. It offers a perfect blend of ancient Roman ruins and turquoise Adriatic waters.",
+    "top5": [
+      {
+        "name": "Dubrovnik",
+        "description": "The 'Pearl of the Adriatic,' famous for its massive medieval stone walls surrounding a stunning limestone-paved Old Town."
+      },
+      {
+        "name": "Split",
+        "description": "A coastal city centered around the immense, 4th-century Roman ruins of Diocletian's Palace, now a living city core."
+      },
+      {
+        "name": "Plitvice Lakes",
+        "description": "A UNESCO-listed national park featuring 16 terraced emerald lakes joined by a series of cascading waterfalls."
+      },
+      {
+        "name": "Hvar",
+        "description": "A glamorous island destination known for its luxury yachts, lavender fields, and well-preserved Renaissance architecture."
+      },
+      {
+        "name": "Zadar",
+        "description": "A historic port city known for its Roman and Venetian ruins and the unique Sea Organ and Sun Salutation art installations."
+      }
+    ],
+    "airports": [
+      "ZAG",
+      "DBV"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 17,
+    "name": "Thailand",
+    "description": "Thailand, the 'Land of Smiles,' is a vibrant kingdom that offers something for everyone, from the bustling street markets of Bangkok to the serene white-sand beaches of the south. Its rich culture and cuisine are world-famous.",
+    "top5": [
+      {
+        "name": "Bangkok",
+        "description": "A vibrant capital where ornate shrines and the Grand Palace contrast with a bustling street life and modern skyscrapers."
+      },
+      {
+        "name": "Phuket",
+        "description": "Thailand's largest island, offering beautiful Andaman Sea beaches, luxury resorts, and the lively atmosphere of Patong."
+      },
+      {
+        "name": "Chiang Mai",
+        "description": "The cultural heart of Northern Thailand, known for its hundreds of ornate Buddhist temples and mountainous terrain."
+      },
+      {
+        "name": "Koh Samui",
+        "description": "A tropical paradise in the Gulf of Thailand, famous for its palm-fringed beaches, coconut groves, and high-end wellness spas."
+      },
+      {
+        "name": "Krabi",
+        "description": "A stunning coastal province characterized by its dramatic limestone karsts, emerald waters, and the iconic Railay Beach."
+      }
+    ],
+    "airports": [
+      "BKK",
+      "DMK",
+      "HKT"
+    ],
+    "visa_for_indians": "Visa-free / Visa on Arrival"
+  },
+  {
+    "id": 18,
+    "name": "Malaysia",
+    "description": "Malaysia is a multicultural melting pot where modern skylines like the Petronas Towers overlook lush tropical rainforests. It offers a unique mix of Malay, Chinese, and Indian influences.",
+    "top5": [
+      {
+        "name": "Kuala Lumpur",
+        "description": "A modern metropolis dominated by the iconic Petronas Twin Towers and a diverse blend of Malay, Chinese, and Indian cultures."
+      },
+      {
+        "name": "Langkawi",
+        "description": "An archipelago of 99 islands known for its turquoise waters, lush rainforests, and duty-free shopping status."
+      },
+      {
+        "name": "Penang",
+        "description": "A culinary and cultural hub famous for its George Town street art, colonial heritage, and world-renowned street food scene."
+      },
+      {
+        "name": "Malacca",
+        "description": "A historic port city reflecting its Portuguese, Dutch, and British colonial past through its unique architecture and museums."
+      },
+      {
+        "name": "Cameron Highlands",
+        "description": "A hill station offering a cool climate, emerald-green tea plantations, and scenic hiking trails in the mountains."
+      }
+    ],
+    "airports": [
+      "KUL"
+    ],
+    "visa_for_indians": "Visa-free (up to 30 days)"
+  },
+  {
+    "id": 19,
+    "name": "Vietnam",
+    "description": "Vietnam is a land of breathtaking natural beauty and deep historical resilience, from the emerald waters of Ha Long Bay to the bustling streets of Ho Chi Minh City. It offers a rich cultural experience.",
+    "top5": [
+      {
+        "name": "Hanoi",
+        "description": "A charming capital known for its centuries-old architecture, bustling Old Quarter, and rich influences from French and Chinese cultures."
+      },
+      {
+        "name": "Ho Chi Minh City",
+        "description": "A dynamic economic hub where modern skyscrapers stand alongside French colonial landmarks and poignant war history sites."
+      },
+      {
+        "name": "Ha Long Bay",
+        "description": "A UNESCO World Heritage site featuring thousands of limestone karsts and isles rising from emerald waters, best explored by cruise."
+      },
+      {
+        "name": "Hoi An",
+        "description": "An exceptionally well-preserved ancient town famous for its colorful lanterns, tailor shops, and mix of architectural styles."
+      },
+      {
+        "name": "Hue",
+        "description": "The former imperial capital of Vietnam, home to the vast 19th-century Citadel and the tombs of Nguyen dynasty emperors."
+      }
+    ],
+    "airports": [
+      "SGN",
+      "HAN"
+    ],
+    "visa_for_indians": "eVisa Required"
+  },
+  {
+    "id": 20,
+    "name": "Canada",
+    "description": "Canada is a vast and friendly nation known for its spectacular wilderness, multicultural cities, and high quality of life. From the majestic Rocky Mountains to the thunderous Niagara Falls.",
+    "top5": [
+      {
+        "name": "Vancouver",
+        "description": "A coastal seaport city in BC, known for its stunning mix of ocean and mountain views and the urban oasis of Stanley Park."
+      },
+      {
+        "name": "Toronto",
+        "description": "Canada's largest city and cultural melting pot, dominated by the CN Tower and a vibrant arts and sports scene."
+      },
+      {
+        "name": "Banff",
+        "description": "Located in the heart of the Rockies, it offers breathtaking alpine scenery, turquoise glacial lakes, and world-class skiing."
+      },
+      {
+        "name": "Montreal",
+        "description": "A Francophone cultural hub known for its historic Old Port, creative festivals, and a sophisticated European atmosphere."
+      },
+      {
+        "name": "Quebec City",
+        "description": "One of North America's oldest cities, featuring the iconic Ch\u00e2teau Frontenac and a charming, walled historic district."
+      }
+    ],
+    "airports": [
+      "YYZ",
+      "YVR",
+      "YUL"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 21,
+    "name": "Japan",
+    "description": "Japan is a captivating blend of ancient traditions and cutting-edge technology, where serene temples coexist with neon-lit skyscrapers. From the beauty of cherry blossoms to its world-renowned culinary excellence.",
+    "top5": [
+      {
+        "name": "Tokyo",
+        "description": "A neon-lit metropolis where futuristic technology meets traditional temples like Senso-ji and the serene Meiji Shrine."
+      },
+      {
+        "name": "Kyoto",
+        "description": "The former imperial capital, home to thousands of Buddhist temples, Shinto shrines, and the traditional geisha district of Gion."
+      },
+      {
+        "name": "Osaka",
+        "description": "Known as 'Japan's Kitchen,' it is a vibrant city famous for its street food, modern architecture, and lively nightlife."
+      },
+      {
+        "name": "Nara",
+        "description": "A historic city famous for its freely roaming deer and the Todai-ji Temple, which houses a massive bronze Buddha statue."
+      },
+      {
+        "name": "Mount Fuji",
+        "description": "Japan's most iconic peak and a sacred site, offering stunning views from the Fuji Five Lakes region and surrounding hot springs."
+      }
+    ],
+    "airports": [
+      "NRT",
+      "HND",
+      "KIX"
+    ],
+    "visa_for_indians": "eVisa available (with conditions) / Visa Required"
+  },
+  {
+    "id": 22,
+    "name": "Morocco",
+    "description": "Morocco is a North African kingdom that dazzles with its vibrant colors, aromatic markets, and the majestic landscapes of the Sahara Desert. Its imperial cities offer a sensory journey through Moorish culture.",
+    "top5": [
+      {
+        "name": "Marrakech",
+        "description": "The 'Ochre City' is a sensory feast of vibrant souks, ornate palaces, and the buzzing energy of the Jemaa el-Fnaa square."
+      },
+      {
+        "name": "Fez",
+        "description": "A medieval cultural center home to one of the world's largest car-free urban areas and the ancient University of al-Qarawiyyin."
+      },
+      {
+        "name": "Chefchaouen",
+        "description": "A picturesque town in the Rif Mountains, famous for its strikingly blue-washed buildings and peaceful atmosphere."
+      },
+      {
+        "name": "Sahara Desert",
+        "description": "A vast sea of golden dunes at Merzouga, offering unforgettable camel treks and nights under the desert stars."
+      },
+      {
+        "name": "Casablanca",
+        "description": "A modern port city and economic hub featuring a unique blend of Art Deco architecture and the magnificent Hassan II Mosque."
+      }
+    ],
+    "airports": [
+      "CMN",
+      "RAK"
+    ],
+    "visa_for_indians": "eVisa Required"
+  },
+  {
+    "id": 23,
+    "name": "Egypt",
+    "description": "Egypt is a monumental destination where the wonders of the ancient world, like the Great Pyramids, stand as a testament to history. The Nile River and the Red Sea provide historic and natural wonders.",
+    "top5": [
+      {
+        "name": "Cairo",
+        "description": "A chaotic yet captivating capital, home to the Great Pyramids of Giza, the Sphinx, and the treasures of the Egyptian Museum."
+      },
+      {
+        "name": "Luxor",
+        "description": "Often called the 'world's greatest open-air museum,' it features the Valley of the Kings and the massive Karnak Temple complex."
+      },
+      {
+        "name": "Aswan",
+        "description": "A serene city on the Nile, known for its beautiful river views, the Philae Temple, and the colossal High Dam."
+      },
+      {
+        "name": "Sharm El Sheikh",
+        "description": "A world-class resort destination on the Red Sea, famous for its crystal-clear waters and vibrant coral reef diving sites."
+      },
+      {
+        "name": "Alexandria",
+        "description": "A Mediterranean port city with a rich Greco-Roman history, home to the modern Bibliotheca Alexandrina and Qaitbay Citadel."
+      }
+    ],
+    "airports": [
+      "CAI",
+      "HRG"
+    ],
+    "visa_for_indians": "Visa on Arrival / eVisa Required"
+  },
+  {
+    "id": 24,
+    "name": "Switzerland",
+    "description": "Switzerland is a land of breathtaking Alpine beauty, famous for its pristine lakes, snow-capped peaks, and efficient world-class rail system. It is a premium destination for luxury and outdoor enthusiasts.",
+    "top5": [
+      {
+        "name": "Zurich",
+        "description": "A global center for banking and finance that also offers a beautiful lakeside setting and a vibrant old town and art scene."
+      },
+      {
+        "name": "Lucerne",
+        "description": "A picturesque city on Lake Lucerne, famous for its medieval Chapel Bridge and stunning views of Mount Pilatus."
+      },
+      {
+        "name": "Zermatt",
+        "description": "A car-free mountain village at the foot of the iconic Matterhorn, offering world-class skiing and hiking landscapes."
+      },
+      {
+        "name": "Interlaken",
+        "description": "Switzerland\u2019s adventure capital, nestled between two lakes and surrounded by the towering peaks of the Eiger, M\u00f6nch, and Jungfrau."
+      },
+      {
+        "name": "Geneva",
+        "description": "A cosmopolitan city on Lake Geneva, home to the UN headquarters and the towering Jet d'Eau fountain."
+      }
+    ],
+    "airports": [
+      "ZRH",
+      "GVA"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 25,
+    "name": "Hungary",
+    "description": "Hungary is a central European gem dominated by the architectural grandeur of Budapest. Its rich history is reflected in its diverse folk art, Tokaj vineyards, and soulful culinary tradition.",
+    "top5": [
+      {
+        "name": "Budapest",
+        "description": "The 'Pearl of the Danube,' famous for its stunning Parliament Building, historic thermal baths, and vibrant 'ruin bars.'"
+      },
+      {
+        "name": "Lake Balaton",
+        "description": "Central Europe\u2019s largest freshwater lake, offering a mix of beach resorts, volcanic hills, and historic lakeside towns."
+      },
+      {
+        "name": "Eger",
+        "description": "A historic northern city known for its baroque architecture, massive castle, and the 'Bull's Blood' red wine region."
+      },
+      {
+        "name": "Debrecen",
+        "description": "Hungary's second-largest city and cultural heart of the Great Plain, known for its Great Reformed Church and folk traditions."
+      },
+      {
+        "name": "Szentendre",
+        "description": "A charming riverside town near Budapest, famous for its Mediterranean feel, colorful houses, and numerous art galleries."
+      }
+    ],
+    "airports": [
+      "BUD"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 26,
+    "name": "Czechia",
+    "description": "Czechia is a fairytale destination featuring the spired skyline of Prague and a landscape dotted with hundreds of medieval castles. It is renowned for its beer culture and historic spa towns.",
+    "top5": [
+      {
+        "name": "Prague",
+        "description": "Prague is one of the most significant tourist destinations in Czechia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Cesky Krumlov",
+        "description": "Cesky Krumlov is one of the most significant tourist destinations in Czechia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Brno",
+        "description": "Brno is one of the most significant tourist destinations in Czechia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Karlovy Vary",
+        "description": "Karlovy Vary is one of the most significant tourist destinations in Czechia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Kutna Hora",
+        "description": "Kutna Hora is one of the most significant tourist destinations in Czechia, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "PRG"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 27,
+    "name": "Indonesia",
+    "description": "Indonesia is a vast archipelago of over 17,000 islands, offering an incredible diversity of cultures and landscapes. Bali remains its crown jewel, famous for its unique Hindu culture and rice terraces.",
+    "top5": [
+      {
+        "name": "Bali",
+        "description": "Bali is one of the most significant tourist destinations in Indonesia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Jakarta",
+        "description": "Jakarta is one of the most significant tourist destinations in Indonesia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Yogyakarta",
+        "description": "Yogyakarta is one of the most significant tourist destinations in Indonesia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Komodo Island",
+        "description": "Komodo Island is one of the most significant tourist destinations in Indonesia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Raja Ampat",
+        "description": "Raja Ampat is one of the most significant tourist destinations in Indonesia, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "DPS",
+      "CGK"
+    ],
+    "visa_for_indians": "Visa on Arrival (e-VOA available)"
+  },
+  {
+    "id": 28,
+    "name": "Singapore",
+    "description": "Singapore is a dynamic city-state that serves as a global hub of innovation, featuring futuristic architecture like the Gardens by the Bay. It is a paradise for foodies and shoppers.",
+    "top5": [
+      {
+        "name": "Marina Bay",
+        "description": "Marina Bay is one of the most significant tourist destinations in Singapore, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Sentosa Island",
+        "description": "Sentosa Island is one of the most significant tourist destinations in Singapore, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Orchard Road",
+        "description": "Orchard Road is one of the most significant tourist destinations in Singapore, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Little India",
+        "description": "Little India is one of the most significant tourist destinations in Singapore, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Chinatown",
+        "description": "Chinatown is one of the most significant tourist destinations in Singapore, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "SIN"
+    ],
+    "visa_for_indians": "eVisa Required"
+  },
+  {
+    "id": 29,
+    "name": "Denmark",
+    "description": "Denmark is the epitome of Scandinavian charm, known for its 'hygge' lifestyle and pioneering design. It is a land of coastal beauty, Viking history, and a world-class culinary scene.",
+    "top5": [
+      {
+        "name": "Copenhagen",
+        "description": "Copenhagen is one of the most significant tourist destinations in Denmark, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Aarhus",
+        "description": "Aarhus is one of the most significant tourist destinations in Denmark, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Odense",
+        "description": "Odense is one of the most significant tourist destinations in Denmark, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Billund",
+        "description": "Billund is one of the most significant tourist destinations in Denmark, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Skagen",
+        "description": "Skagen is one of the most significant tourist destinations in Denmark, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "CPH"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 30,
+    "name": "South Korea",
+    "description": "South Korea is a land of high-energy cities and tranquil mountains, where ancient palaces stand in the shadow of sleek, modern skyscrapers. It is a global cultural powerhouse.",
+    "top5": [
+      {
+        "name": "Seoul",
+        "description": "Seoul is one of the most significant tourist destinations in South Korea, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Busan",
+        "description": "Busan is one of the most significant tourist destinations in South Korea, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Jeju Island",
+        "description": "Jeju Island is one of the most significant tourist destinations in South Korea, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Gyeongju",
+        "description": "Gyeongju is one of the most significant tourist destinations in South Korea, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Incheon",
+        "description": "Incheon is one of the most significant tourist destinations in South Korea, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "ICN",
+      "GMP"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 31,
+    "name": "Jordan",
+    "description": "Jordan is an ancient kingdom that offers a journey through time, from the rose-red city of Petra to the Martian-like landscapes of Wadi Rum. Its hospitality is legendary.",
+    "top5": [
+      {
+        "name": "Petra",
+        "description": "Petra is one of the most significant tourist destinations in Jordan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Wadi Rum",
+        "description": "Wadi Rum is one of the most significant tourist destinations in Jordan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Dead Sea",
+        "description": "Dead Sea is one of the most significant tourist destinations in Jordan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Amman",
+        "description": "Amman is one of the most significant tourist destinations in Jordan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Aqaba",
+        "description": "Aqaba is one of the most significant tourist destinations in Jordan, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "AMM",
+      "AQJ"
+    ],
+    "visa_for_indians": "Visa on Arrival"
+  },
+  {
+    "id": 32,
+    "name": "Kazakhstan",
+    "description": "Kazakhstan is a land of vast steppes, rugged mountains, and futuristic cities. It offers a unique blend of Central Asian culture and stunning natural wonders like Charyn Canyon.",
+    "top5": [
+      {
+        "name": "Almaty",
+        "description": "Almaty is one of the most significant tourist destinations in Kazakhstan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Astana",
+        "description": "Astana is one of the most significant tourist destinations in Kazakhstan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Charyn Canyon",
+        "description": "Charyn Canyon is one of the most significant tourist destinations in Kazakhstan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Big Almaty Lake",
+        "description": "Big Almaty Lake is one of the most significant tourist destinations in Kazakhstan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Turkistan",
+        "description": "Turkistan is one of the most significant tourist destinations in Kazakhstan, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "ALA",
+      "NQZ"
+    ],
+    "visa_for_indians": "Visa-free (up to 14 days)"
+  },
+  {
+    "id": 33,
+    "name": "Tunisia",
+    "description": "Tunisia is a Mediterranean gem where ancient Roman ruins stand alongside vibrant coastal towns and the golden dunes of the Sahara. Its history is reflected in its bustling souks.",
+    "top5": [
+      {
+        "name": "Tunis",
+        "description": "Tunis is one of the most significant tourist destinations in Tunisia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Sidi Bou Said",
+        "description": "Sidi Bou Said is one of the most significant tourist destinations in Tunisia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Carthage",
+        "description": "Carthage is one of the most significant tourist destinations in Tunisia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Hammamet",
+        "description": "Hammamet is one of the most significant tourist destinations in Tunisia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "El Jem",
+        "description": "El Jem is one of the most significant tourist destinations in Tunisia, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "TUN",
+      "NBE"
+    ],
+    "visa_for_indians": "Visa Required / eVisa with conditions"
+  },
+  {
+    "id": 34,
+    "name": "India",
+    "description": "India is a subcontinent of incredible diversity, where ancient spirituality meets modern dynamism. It is a land of vibrant festivals, historic monuments, and a world-famous culinary heritage.",
+    "top5": [
+      {
+        "name": "Delhi",
+        "description": "Delhi is one of the most significant tourist destinations in India, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Agra (Taj Mahal)",
+        "description": "Agra (Taj Mahal) is one of the most significant tourist destinations in India, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Jaipur",
+        "description": "Jaipur is one of the most significant tourist destinations in India, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Mumbai",
+        "description": "Mumbai is one of the most significant tourist destinations in India, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Kerala Backwaters",
+        "description": "Kerala Backwaters is one of the most significant tourist destinations in India, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "DEL",
+      "BOM",
+      "BLR"
+    ],
+    "visa_for_indians": "Not applicable (Citizen)"
+  },
+  {
+    "id": 35,
+    "name": "Belgium",
+    "description": "Belgium is a small country with a big heart, famous for its medieval architecture, world-class chocolates, and a rich beer culture. It offers a sophisticated European experience.",
+    "top5": [
+      {
+        "name": "Brussels",
+        "description": "Brussels is one of the most significant tourist destinations in Belgium, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Bruges",
+        "description": "Bruges is one of the most significant tourist destinations in Belgium, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Ghent",
+        "description": "Ghent is one of the most significant tourist destinations in Belgium, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Antwerp",
+        "description": "Antwerp is one of the most significant tourist destinations in Belgium, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Ardennes",
+        "description": "Ardennes is one of the most significant tourist destinations in Belgium, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "BRU",
+      "CRL"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 36,
+    "name": "Ireland",
+    "description": "Ireland, the 'Emerald Isle,' is a land of rolling green hills, rugged Atlantic cliffs, and a warm culture centered around storytelling and traditional music.",
+    "top5": [
+      {
+        "name": "Dublin",
+        "description": "Dublin is one of the most significant tourist destinations in Ireland, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Galway",
+        "description": "Galway is one of the most significant tourist destinations in Ireland, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Ring of Kerry",
+        "description": "Ring of Kerry is one of the most significant tourist destinations in Ireland, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Cliffs of Moher",
+        "description": "Cliffs of Moher is one of the most significant tourist destinations in Ireland, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Cork",
+        "description": "Cork is one of the most significant tourist destinations in Ireland, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "DUB",
+      "SNN",
+      "ORK"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 37,
+    "name": "South Africa",
+    "description": "South Africa is a 'World in One Country,' offering everything from Table Mountain and vibrant Cape Town to world-class safaris in the Kruger National Park.",
+    "top5": [
+      {
+        "name": "Cape Town",
+        "description": "Cape Town is one of the most significant tourist destinations in South Africa, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Johannesburg",
+        "description": "Johannesburg is one of the most significant tourist destinations in South Africa, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Kruger National Park",
+        "description": "Kruger National Park is one of the most significant tourist destinations in South Africa, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Garden Route",
+        "description": "Garden Route is one of the most significant tourist destinations in South Africa, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Durban",
+        "description": "Durban is one of the most significant tourist destinations in South Africa, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "JNB",
+      "CPT",
+      "DUR"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 38,
+    "name": "Dominican Republic",
+    "description": "The Dominican Republic is a Caribbean paradise known for its pristine beaches, crystal-clear waters, and the infectious rhythms of merengue and bachata.",
+    "top5": [
+      {
+        "name": "Punta Cana",
+        "description": "Punta Cana is one of the most significant tourist destinations in Dominican Republic, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Santo Domingo",
+        "description": "Santo Domingo is one of the most significant tourist destinations in Dominican Republic, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Samana",
+        "description": "Samana is one of the most significant tourist destinations in Dominican Republic, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Puerto Plata",
+        "description": "Puerto Plata is one of the most significant tourist destinations in Dominican Republic, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "La Romana",
+        "description": "La Romana is one of the most significant tourist destinations in Dominican Republic, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "PUJ",
+      "SDQ"
+    ],
+    "visa_for_indians": "Visa Required (Visa-free with US/UK/Schengen/etc. visa)"
+  },
+  {
+    "id": 39,
+    "name": "Uzbekistan",
+    "description": "Uzbekistan is the heart of the ancient Silk Road, home to the legendary cities of Samarkand and Bukhara, boasting stunning Islamic architecture and warm hospitality.",
+    "top5": [
+      {
+        "name": "Samarkand",
+        "description": "Samarkand is one of the most significant tourist destinations in Uzbekistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Bukhara",
+        "description": "Bukhara is one of the most significant tourist destinations in Uzbekistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Khiva",
+        "description": "Khiva is one of the most significant tourist destinations in Uzbekistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Tashkent",
+        "description": "Tashkent is one of the most significant tourist destinations in Uzbekistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Fergana Valley",
+        "description": "Fergana Valley is one of the most significant tourist destinations in Uzbekistan, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "TAS",
+      "SKD"
+    ],
+    "visa_for_indians": "Visa-free (up to 30 days)"
+  },
+  {
+    "id": 40,
+    "name": "Taiwan",
+    "description": "Taiwan is a dynamic island nation that offers a perfect blend of modern urban life and breathtaking natural scenery, from neon-lit streets to dramatic cliffs.",
+    "top5": [
+      {
+        "name": "Taipei",
+        "description": "Taipei is one of the most significant tourist destinations in Taiwan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Taroko Gorge",
+        "description": "Taroko Gorge is one of the most significant tourist destinations in Taiwan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Kaohsiung",
+        "description": "Kaohsiung is one of the most significant tourist destinations in Taiwan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Sun Moon Lake",
+        "description": "Sun Moon Lake is one of the most significant tourist destinations in Taiwan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Jiufen",
+        "description": "Jiufen is one of the most significant tourist destinations in Taiwan, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "TPE",
+      "KHH"
+    ],
+    "visa_for_indians": "Visa Required (Travel Auth available)"
+  },
+  {
+    "id": 41,
+    "name": "Sweden",
+    "description": "Sweden is the epitome of Scandinavian design and pristine nature, where historic cobblestone streets meet the ethereal beauty of the Northern Lights. It is a land of safety and innovation.",
+    "top5": [
+      {
+        "name": "Stockholm",
+        "description": "Stockholm is one of the most significant tourist destinations in Sweden, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Gothenburg",
+        "description": "Gothenburg is one of the most significant tourist destinations in Sweden, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Kiruna",
+        "description": "Kiruna is one of the most significant tourist destinations in Sweden, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Visby",
+        "description": "Visby is one of the most significant tourist destinations in Sweden, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Malmo",
+        "description": "Malmo is one of the most significant tourist destinations in Sweden, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "ARN",
+      "GOT"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 42,
+    "name": "Brazil",
+    "description": "Brazil is a vibrant and vast nation famous for its sun-drenched beaches, the energy of Carnival, and the unparalleled biodiversity of the Amazon rainforest.",
+    "top5": [
+      {
+        "name": "Rio de Janeiro",
+        "description": "Rio de Janeiro is one of the most significant tourist destinations in Brazil, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Sao Paulo",
+        "description": "Sao Paulo is one of the most significant tourist destinations in Brazil, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Salvador",
+        "description": "Salvador is one of the most significant tourist destinations in Brazil, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Iguazu Falls",
+        "description": "Iguazu Falls is one of the most significant tourist destinations in Brazil, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Manaus",
+        "description": "Manaus is one of the most significant tourist destinations in Brazil, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "GRU",
+      "GIG"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 43,
+    "name": "Cambodia",
+    "description": "Cambodia is a land of ancient wonders and resilient spirit, home to the magnificent temple complex of Angkor Wat, a testament to the grandeur of the Khmer Empire.",
+    "top5": [
+      {
+        "name": "Siem Reap (Angkor)",
+        "description": "Siem Reap (Angkor) is one of the most significant tourist destinations in Cambodia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Phonm Penh",
+        "description": "Phonm Penh is one of the most significant tourist destinations in Cambodia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Sihanoukville",
+        "description": "Sihanoukville is one of the most significant tourist destinations in Cambodia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Kampot",
+        "description": "Kampot is one of the most significant tourist destinations in Cambodia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Battambang",
+        "description": "Battambang is one of the most significant tourist destinations in Cambodia, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "PNH",
+      "SAI"
+    ],
+    "visa_for_indians": "Visa on Arrival / eVisa"
+  },
+  {
+    "id": 44,
+    "name": "Bahrain",
+    "description": "Bahrain is a friendly island nation in the Persian Gulf where modern skyscrapers stand alongside historic forts and bustling souks. It offers a unique cultural blend.",
+    "top5": [
+      {
+        "name": "Manama",
+        "description": "Manama is one of the most significant tourist destinations in Bahrain, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Muharraq",
+        "description": "Muharraq is one of the most significant tourist destinations in Bahrain, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Al Areen Wildlife Park",
+        "description": "Al Areen Wildlife Park is one of the most significant tourist destinations in Bahrain, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Bahrain Circuit",
+        "description": "Bahrain Circuit is one of the most significant tourist destinations in Bahrain, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Qal'at al-Bahrain",
+        "description": "Qal'at al-Bahrain is one of the most significant tourist destinations in Bahrain, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "BAH"
+    ],
+    "visa_for_indians": "eVisa / Visa on Arrival"
+  },
+  {
+    "id": 45,
+    "name": "Argentina",
+    "description": "Argentina is a land of dramatic landscapes and passionate culture, from the cosmopolitan elegance of Buenos Aires to the glaciers of Patagonia. It is famous for steaks and tango.",
+    "top5": [
+      {
+        "name": "Buenos Aires",
+        "description": "Buenos Aires is one of the most significant tourist destinations in Argentina, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Iguazu Falls",
+        "description": "Iguazu Falls is one of the most significant tourist destinations in Argentina, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Bariloche",
+        "description": "Bariloche is one of the most significant tourist destinations in Argentina, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "El Calafate",
+        "description": "El Calafate is one of the most significant tourist destinations in Argentina, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Mendoza",
+        "description": "Mendoza is one of the most significant tourist destinations in Argentina, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "EZE",
+      "AEP"
+    ],
+    "visa_for_indians": "Visa Required (AVE available with US/Schengen visa)"
+  },
+  {
+    "id": 46,
+    "name": "Norway",
+    "description": "Norway is a land of spectacular fjords, snow-capped mountains, and the mystical Northern Lights. It is a haven for outdoor enthusiasts and Viking heritage seekers.",
+    "top5": [
+      {
+        "name": "Oslo",
+        "description": "Oslo is one of the most significant tourist destinations in Norway, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Bergen",
+        "description": "Bergen is one of the most significant tourist destinations in Norway, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Tromso",
+        "description": "Tromso is one of the most significant tourist destinations in Norway, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Geirangerfjord",
+        "description": "Geirangerfjord is one of the most significant tourist destinations in Norway, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Lofoten Islands",
+        "description": "Lofoten Islands is one of the most significant tourist destinations in Norway, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "OSL",
+      "BGO"
+    ],
+    "visa_for_indians": "Schengen Visa Required"
+  },
+  {
+    "id": 47,
+    "name": "Philippines",
+    "description": "The Philippines is an archipelago of over 7,000 islands, boasting some of the world's most beautiful beaches and world-class diving spots in turquoise lagoons.",
+    "top5": [
+      {
+        "name": "Boracay",
+        "description": "Boracay is one of the most significant tourist destinations in Philippines, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Palawan (El Nido)",
+        "description": "Palawan (El Nido) is one of the most significant tourist destinations in Philippines, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Cebu",
+        "description": "Cebu is one of the most significant tourist destinations in Philippines, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Manila",
+        "description": "Manila is one of the most significant tourist destinations in Philippines, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Siargao",
+        "description": "Siargao is one of the most significant tourist destinations in Philippines, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "MNL",
+      "CEB"
+    ],
+    "visa_for_indians": "Visa Required (Visa-free with US/UK/Schengen/etc. visa)"
+  },
+  {
+    "id": 48,
+    "name": "Puerto Rico",
+    "description": "Puerto Rico is a vibrant Caribbean island and US territory known for its colorful colonial architecture in Old San Juan and lush tropical rainforests like El Yunque.",
+    "top5": [
+      {
+        "name": "Old San Juan",
+        "description": "Old San Juan is one of the most significant tourist destinations in Puerto Rico, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "El Yunque Forest",
+        "description": "El Yunque Forest is one of the most significant tourist destinations in Puerto Rico, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Vieques",
+        "description": "Vieques is one of the most significant tourist destinations in Puerto Rico, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Culebra",
+        "description": "Culebra is one of the most significant tourist destinations in Puerto Rico, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Ponce",
+        "description": "Ponce is one of the most significant tourist destinations in Puerto Rico, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "SJU"
+    ],
+    "visa_for_indians": "US Visa Required"
+  },
+  {
+    "id": 49,
+    "name": "Australia",
+    "description": "Australia is a vast island continent that offers a unique mix of cosmopolitan cities, the rugged Outback, and the spectacular Great Barrier Reef.",
+    "top5": [
+      {
+        "name": "Sydney",
+        "description": "Sydney is one of the most significant tourist destinations in Australia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Melbourne",
+        "description": "Melbourne is one of the most significant tourist destinations in Australia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Great Barrier Reef",
+        "description": "Great Barrier Reef is one of the most significant tourist destinations in Australia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Gold Coast",
+        "description": "Gold Coast is one of the most significant tourist destinations in Australia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Uluru",
+        "description": "Uluru is one of the most significant tourist destinations in Australia, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "SYD",
+      "MEL",
+      "BNE"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 50,
+    "name": "Chile",
+    "description": "Chile is a land of extremes, stretching from the arid Atacama Desert to the rugged glaciers of Patagonia, framed by the majestic Andes Mountains.",
+    "top5": [
+      {
+        "name": "Santiago",
+        "description": "Santiago is one of the most significant tourist destinations in Chile, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Atacama Desert",
+        "description": "Atacama Desert is one of the most significant tourist destinations in Chile, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Torres del Paine",
+        "description": "Torres del Paine is one of the most significant tourist destinations in Chile, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Valparaiso",
+        "description": "Valparaiso is one of the most significant tourist destinations in Chile, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Easter Island",
+        "description": "Easter Island is one of the most significant tourist destinations in Chile, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "SCL"
+    ],
+    "visa_for_indians": "Visa Required (Visa-free with US visa)"
+  },
+  {
+    "id": 51,
+    "name": "Peru",
+    "description": "Peru is a land of mystical energy and archaeological wonders, most famously home to the mountaintop Inca citadel of Machu Picchu and the culinary scene of Lima.",
+    "top5": [
+      {
+        "name": "Machu Picchu",
+        "description": "Machu Picchu is one of the most significant tourist destinations in Peru, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Cusco",
+        "description": "Cusco is one of the most significant tourist destinations in Peru, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Lima",
+        "description": "Lima is one of the most significant tourist destinations in Peru, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Lake Titicaca",
+        "description": "Lake Titicaca is one of the most significant tourist destinations in Peru, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Sacred Valley",
+        "description": "Sacred Valley is one of the most significant tourist destinations in Peru, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "LIM"
+    ],
+    "visa_for_indians": "Visa Required (Visa-free with US/UK/Schengen/etc. visa)"
+  },
+  {
+    "id": 52,
+    "name": "Colombia",
+    "description": "Colombia is a country of vibrant colors and diverse landscapes, from Caribbean beaches to lush coffee regions. It is celebrated for its warm hospitality and rich culture.",
+    "top5": [
+      {
+        "name": "Cartagena",
+        "description": "Cartagena is one of the most significant tourist destinations in Colombia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Medellin",
+        "description": "Medellin is one of the most significant tourist destinations in Colombia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Bogota",
+        "description": "Bogota is one of the most significant tourist destinations in Colombia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Coffee Region",
+        "description": "Coffee Region is one of the most significant tourist destinations in Colombia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Tayrona Park",
+        "description": "Tayrona Park is one of the most significant tourist destinations in Colombia, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "BOG",
+      "MDE"
+    ],
+    "visa_for_indians": "Visa Required (Visa-free with US/Schengen visa)"
+  },
+  {
+    "id": 53,
+    "name": "Panama",
+    "description": "Panama is the 'Bridge of the Americas,' famous for the architectural marvel of the Panama Canal and the cosmopolitan skyline of Panama City.",
+    "top5": [
+      {
+        "name": "Panama City",
+        "description": "Panama City is one of the most significant tourist destinations in Panama, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Panama Canal",
+        "description": "Panama Canal is one of the most significant tourist destinations in Panama, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Bocas del Toro",
+        "description": "Bocas del Toro is one of the most significant tourist destinations in Panama, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Boquete",
+        "description": "Boquete is one of the most significant tourist destinations in Panama, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "San Blas Islands",
+        "description": "San Blas Islands is one of the most significant tourist destinations in Panama, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "PTY"
+    ],
+    "visa_for_indians": "Visa Required (Visa-free with US/UK/Schengen/etc. visa)"
+  },
+  {
+    "id": 54,
+    "name": "Kenya",
+    "description": "Kenya is the ultimate safari destination, home to the iconic Maasai Mara National Reserve and the breathtaking Great Rift Valley and Swahili Coast.",
+    "top5": [
+      {
+        "name": "Maasai Mara",
+        "description": "Maasai Mara is one of the most significant tourist destinations in Kenya, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Nairobi",
+        "description": "Nairobi is one of the most significant tourist destinations in Kenya, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Amboseli",
+        "description": "Amboseli is one of the most significant tourist destinations in Kenya, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Mombasa",
+        "description": "Mombasa is one of the most significant tourist destinations in Kenya, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Lake Nakuru",
+        "description": "Lake Nakuru is one of the most significant tourist destinations in Kenya, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "NBO",
+      "MBA"
+    ],
+    "visa_for_indians": "eTA Required (Visa-free but authorization needed)"
+  },
+  {
+    "id": 55,
+    "name": "Tanzania",
+    "description": "Tanzania is a land of natural superlatives, featuring Africa's highest peak, Mount Kilimanjaro, and the vast plains of the Serengeti and exotic Zanzibar.",
+    "top5": [
+      {
+        "name": "Serengeti",
+        "description": "Serengeti is one of the most significant tourist destinations in Tanzania, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Zanzibar",
+        "description": "Zanzibar is one of the most significant tourist destinations in Tanzania, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Mount Kilimanjaro",
+        "description": "Mount Kilimanjaro is one of the most significant tourist destinations in Tanzania, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Ngorongoro Crater",
+        "description": "Ngorongoro Crater is one of the most significant tourist destinations in Tanzania, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Dar es Salaam",
+        "description": "Dar es Salaam is one of the most significant tourist destinations in Tanzania, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "DAR",
+      "JRO",
+      "ZNZ"
+    ],
+    "visa_for_indians": "Visa on Arrival / eVisa"
+  },
+  {
+    "id": 56,
+    "name": "Ethiopia",
+    "description": "Ethiopia is the 'Cradle of Humanity,' a country with a unique Christian heritage and stunning landscapes like the Simien Mountains and rock-hewn churches.",
+    "top5": [
+      {
+        "name": "Lalibela",
+        "description": "Lalibela is one of the most significant tourist destinations in Ethiopia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Addis Ababa",
+        "description": "Addis Ababa is one of the most significant tourist destinations in Ethiopia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Simien Mountains",
+        "description": "Simien Mountains is one of the most significant tourist destinations in Ethiopia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Gondar",
+        "description": "Gondar is one of the most significant tourist destinations in Ethiopia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Aksum",
+        "description": "Aksum is one of the most significant tourist destinations in Ethiopia, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "ADD"
+    ],
+    "visa_for_indians": "eVisa Required"
+  },
+  {
+    "id": 57,
+    "name": "Mauritius",
+    "description": "Mauritius is a sparkling island nation in the Indian Ocean, known for its sapphire-blue waters, luxury resorts, and a lush interior of volcanic peaks.",
+    "top5": [
+      {
+        "name": "Port Louis",
+        "description": "Port Louis is one of the most significant tourist destinations in Mauritius, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Grand Baie",
+        "description": "Grand Baie is one of the most significant tourist destinations in Mauritius, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Le Morne Brabant",
+        "description": "Le Morne Brabant is one of the most significant tourist destinations in Mauritius, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Chamarel",
+        "description": "Chamarel is one of the most significant tourist destinations in Mauritius, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Black River Gorges",
+        "description": "Black River Gorges is one of the most significant tourist destinations in Mauritius, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "MRU"
+    ],
+    "visa_for_indians": "Visa on Arrival (Free)"
+  },
+  {
+    "id": 58,
+    "name": "Seychelles",
+    "description": "Seychelles is a tropical archipelago of 115 islands, famous for its giant granite boulders, pristine beaches, and rare wildlife like the giant tortoise.",
+    "top5": [
+      {
+        "name": "Mahe",
+        "description": "Mahe is one of the most significant tourist destinations in Seychelles, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Praslin",
+        "description": "Praslin is one of the most significant tourist destinations in Seychelles, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "La Digue",
+        "description": "La Digue is one of the most significant tourist destinations in Seychelles, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Curieuse Island",
+        "description": "Curieuse Island is one of the most significant tourist destinations in Seychelles, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Bird Island",
+        "description": "Bird Island is one of the most significant tourist destinations in Seychelles, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "SEZ"
+    ],
+    "visa_for_indians": "Visa-free (Visitor's Permit on arrival)"
+  },
+  {
+    "id": 59,
+    "name": "Maldives",
+    "description": "The Maldives is a tropical dreamscape of over 1,000 coral islands, where overwater bungalows sit above vibrant turquoise lagoons teeming with marine life.",
+    "top5": [
+      {
+        "name": "Male",
+        "description": "Male is one of the most significant tourist destinations in Maldives, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Ari Atoll",
+        "description": "Ari Atoll is one of the most significant tourist destinations in Maldives, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Baa Atoll",
+        "description": "Baa Atoll is one of the most significant tourist destinations in Maldives, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "North Male Atoll",
+        "description": "North Male Atoll is one of the most significant tourist destinations in Maldives, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Maafushi",
+        "description": "Maafushi is one of the most significant tourist destinations in Maldives, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "MLE"
+    ],
+    "visa_for_indians": "Visa on Arrival (Free)"
+  },
+  {
+    "id": 60,
+    "name": "Sri Lanka",
+    "description": "Sri Lanka, the 'Teardrop of India,' is a lush island nation that packs an incredible diversity from ancient temples and tea plantations to elephant-filled parks.",
+    "top5": [
+      {
+        "name": "Colombo",
+        "description": "Colombo is one of the most significant tourist destinations in Sri Lanka, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Kandy",
+        "description": "Kandy is one of the most significant tourist destinations in Sri Lanka, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Sigiriya",
+        "description": "Sigiriya is one of the most significant tourist destinations in Sri Lanka, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Galle",
+        "description": "Galle is one of the most significant tourist destinations in Sri Lanka, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Ella",
+        "description": "Ella is one of the most significant tourist destinations in Sri Lanka, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "CMB"
+    ],
+    "visa_for_indians": "Visa-free (Temporary pilot program)"
+  },
+  {
+    "id": 61,
+    "name": "Nepal",
+    "description": "Nepal is a land of majestic mountains and deep spirituality, home to eight of the world's highest peaks, including Mount Everest, and vibrant cultural heritage.",
+    "top5": [
+      {
+        "name": "Kathmandu",
+        "description": "Kathmandu is one of the most significant tourist destinations in Nepal, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Pokhara",
+        "description": "Pokhara is one of the most significant tourist destinations in Nepal, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Everest Base Camp",
+        "description": "Everest Base Camp is one of the most significant tourist destinations in Nepal, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Lumbini",
+        "description": "Lumbini is one of the most significant tourist destinations in Nepal, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Chitwan",
+        "description": "Chitwan is one of the most significant tourist destinations in Nepal, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "KTM"
+    ],
+    "visa_for_indians": "Visa-free (for Indian citizens)"
+  },
+  {
+    "id": 62,
+    "name": "Bhutan",
+    "description": "Bhutan is the 'Land of the Thunder Dragon,' a secluded Himalayan kingdom famous for its monasteries and unique philosophy of Gross National Happiness.",
+    "top5": [
+      {
+        "name": "Tiger's Nest",
+        "description": "Tiger's Nest is one of the most significant tourist destinations in Bhutan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Thimphu",
+        "description": "Thimphu is one of the most significant tourist destinations in Bhutan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Punakha Dzong",
+        "description": "Punakha Dzong is one of the most significant tourist destinations in Bhutan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Phobjikha Valley",
+        "description": "Phobjikha Valley is one of the most significant tourist destinations in Bhutan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Bumthang",
+        "description": "Bumthang is one of the most significant tourist destinations in Bhutan, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "PBH"
+    ],
+    "visa_for_indians": "Visa-free (Permit required)"
+  },
+  {
+    "id": 63,
+    "name": "Bangladesh",
+    "description": "Bangladesh is a land of lush greenery and intricate river systems, home to the world's largest mangrove forest, the Sundarbans, and rich history.",
+    "top5": [
+      {
+        "name": "Dhaka",
+        "description": "Dhaka is one of the most significant tourist destinations in Bangladesh, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Sundarbans",
+        "description": "Sundarbans is one of the most significant tourist destinations in Bangladesh, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Cox's Bazar",
+        "description": "Cox's Bazar is one of the most significant tourist destinations in Bangladesh, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Sylhet",
+        "description": "Sylhet is one of the most significant tourist destinations in Bangladesh, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Chittagong",
+        "description": "Chittagong is one of the most significant tourist destinations in Bangladesh, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "DAC"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 64,
+    "name": "Myanmar",
+    "description": "Myanmar is a land of golden pagodas and ancient traditions, most famously home to the thousands of temples that dot the plains of Bagan and Inle Lake.",
+    "top5": [
+      {
+        "name": "Bagan",
+        "description": "Bagan is one of the most significant tourist destinations in Myanmar, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Yangon",
+        "description": "Yangon is one of the most significant tourist destinations in Myanmar, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Mandalay",
+        "description": "Mandalay is one of the most significant tourist destinations in Myanmar, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Inle Lake",
+        "description": "Inle Lake is one of the most significant tourist destinations in Myanmar, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Ngapali Beach",
+        "description": "Ngapali Beach is one of the most significant tourist destinations in Myanmar, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "RGN"
+    ],
+    "visa_for_indians": "eVisa Required"
+  },
+  {
+    "id": 65,
+    "name": "Laos",
+    "description": "Laos is a tranquil landlocked nation in Southeast Asia, known for its laid-back lifestyle, stunning Buddhist architecture, and lush mountainous terrain.",
+    "top5": [
+      {
+        "name": "Luang Prabang",
+        "description": "Luang Prabang is one of the most significant tourist destinations in Laos, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Vang Vieng",
+        "description": "Vang Vieng is one of the most significant tourist destinations in Laos, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Vientiane",
+        "description": "Vientiane is one of the most significant tourist destinations in Laos, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "4000 Islands",
+        "description": "4000 Islands is one of the most significant tourist destinations in Laos, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Bolaven Plateau",
+        "description": "Bolaven Plateau is one of the most significant tourist destinations in Laos, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "VTE"
+    ],
+    "visa_for_indians": "Visa on Arrival / eVisa"
+  },
+  {
+    "id": 66,
+    "name": "Fiji",
+    "description": "Fiji is a South Pacific paradise of over 300 islands, famous for its crystal-clear turquoise waters and the warm 'Bula' hospitality of its people.",
+    "top5": [
+      {
+        "name": "Nadi",
+        "description": "Nadi is one of the most significant tourist destinations in Fiji, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Mamanuca Islands",
+        "description": "Mamanuca Islands is one of the most significant tourist destinations in Fiji, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Yasawa Islands",
+        "description": "Yasawa Islands is one of the most significant tourist destinations in Fiji, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Suva",
+        "description": "Suva is one of the most significant tourist destinations in Fiji, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Coral Coast",
+        "description": "Coral Coast is one of the most significant tourist destinations in Fiji, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "NAN"
+    ],
+    "visa_for_indians": "Visa-free (up to 4 months)"
+  },
+  {
+    "id": 67,
+    "name": "Vanuatu",
+    "description": "Vanuatu is a rugged archipelago in the South Pacific, known for its active volcanoes, vibrant tribal cultures, and world-class diving spots.",
+    "top5": [
+      {
+        "name": "Port Vila",
+        "description": "Port Vila is one of the most significant tourist destinations in Vanuatu, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Tanna Island",
+        "description": "Tanna Island is one of the most significant tourist destinations in Vanuatu, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Espiritu Santo",
+        "description": "Espiritu Santo is one of the most significant tourist destinations in Vanuatu, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Pentecost Island",
+        "description": "Pentecost Island is one of the most significant tourist destinations in Vanuatu, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Malekula",
+        "description": "Malekula is one of the most significant tourist destinations in Vanuatu, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "VLI"
+    ],
+    "visa_for_indians": "Visa-free (up to 30 days)"
+  },
+  {
+    "id": 68,
+    "name": "Samoa",
+    "description": "Samoa is the heart of Polynesia, a land of stunning natural beauty characterized by volcanic landscapes, lush rainforests, and crystal-clear swimming holes.",
+    "top5": [
+      {
+        "name": "Apia",
+        "description": "Apia is one of the most significant tourist destinations in Samoa, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "To Sua Ocean Trench",
+        "description": "To Sua Ocean Trench is one of the most significant tourist destinations in Samoa, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Lalomanu Beach",
+        "description": "Lalomanu Beach is one of the most significant tourist destinations in Samoa, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Savai'i Island",
+        "description": "Savai'i Island is one of the most significant tourist destinations in Samoa, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Piula Cave Pool",
+        "description": "Piula Cave Pool is one of the most significant tourist destinations in Samoa, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "APW"
+    ],
+    "visa_for_indians": "Visa-free (up to 60 days)"
+  },
+  {
+    "id": 69,
+    "name": "Tonga",
+    "description": "Tonga is the 'Friendly Islands,' the only Pacific nation never colonized, maintaining a strong sense of traditional Polynesian culture and monarchical history.",
+    "top5": [
+      {
+        "name": "Nuku'alofa",
+        "description": "Nuku'alofa is one of the most significant tourist destinations in Tonga, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Vava'u",
+        "description": "Vava'u is one of the most significant tourist destinations in Tonga, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Ha'apai",
+        "description": "Ha'apai is one of the most significant tourist destinations in Tonga, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Eua National Park",
+        "description": "Eua National Park is one of the most significant tourist destinations in Tonga, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Pangaimotu",
+        "description": "Pangaimotu is one of the most significant tourist destinations in Tonga, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "TBU"
+    ],
+    "visa_for_indians": "Visa on Arrival (Free)"
+  },
+  {
+    "id": 70,
+    "name": "New Zealand",
+    "description": "New Zealand is a land of breathtaking natural diversity, from dramatic fjords to geothermal wonders, and is a global hub for adventure sports.",
+    "top5": [
+      {
+        "name": "Queenstown",
+        "description": "Queenstown is one of the most significant tourist destinations in New Zealand, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Auckland",
+        "description": "Auckland is one of the most significant tourist destinations in New Zealand, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Rotorua",
+        "description": "Rotorua is one of the most significant tourist destinations in New Zealand, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Milford Sound",
+        "description": "Milford Sound is one of the most significant tourist destinations in New Zealand, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Lake Tekapo",
+        "description": "Lake Tekapo is one of the most significant tourist destinations in New Zealand, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "AKL",
+      "CHC"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 71,
+    "name": "Qatar",
+    "description": "Qatar is a futuristic Gulf nation where modern luxury meets traditional Arabian hospitality, centered around the stunning skyline of Doha and world-class museums.",
+    "top5": [
+      {
+        "name": "Souq Waqif",
+        "description": "Souq Waqif is one of the most significant tourist destinations in Qatar, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Museum of Islamic Art",
+        "description": "Museum of Islamic Art is one of the most significant tourist destinations in Qatar, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Katara Cultural Village",
+        "description": "Katara Cultural Village is one of the most significant tourist destinations in Qatar, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "The Pearl",
+        "description": "The Pearl is one of the most significant tourist destinations in Qatar, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Inland Sea",
+        "description": "Inland Sea is one of the most significant tourist destinations in Qatar, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "DOH"
+    ],
+    "visa_for_indians": "Visa-free (30 days)"
+  },
+  {
+    "id": 72,
+    "name": "Oman",
+    "description": "Oman is a land of dramatic fjords, rugged mountains, and white-washed cities that have preserved their authentic Arabian charm and warm hospitality.",
+    "top5": [
+      {
+        "name": "Muscat",
+        "description": "Muscat is one of the most significant tourist destinations in Oman, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Nizwa Fort",
+        "description": "Nizwa Fort is one of the most significant tourist destinations in Oman, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Wahiba Sands",
+        "description": "Wahiba Sands is one of the most significant tourist destinations in Oman, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Jebel Akhdar",
+        "description": "Jebel Akhdar is one of the most significant tourist destinations in Oman, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Wadi Shab",
+        "description": "Wadi Shab is one of the most significant tourist destinations in Oman, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "MCT",
+      "SLL"
+    ],
+    "visa_for_indians": "Visa-free (14 days with conditions) / eVisa"
+  },
+  {
+    "id": 73,
+    "name": "Kuwait",
+    "description": "Kuwait is a modern desert state known for its unique blend of traditional Islamic heritage and contemporary architecture, most notably the Kuwait Towers.",
+    "top5": [
+      {
+        "name": "Kuwait Towers",
+        "description": "Kuwait Towers is one of the most significant tourist destinations in Kuwait, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "The Avenues Mall",
+        "description": "The Avenues Mall is one of the most significant tourist destinations in Kuwait, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Grand Mosque",
+        "description": "Grand Mosque is one of the most significant tourist destinations in Kuwait, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Souq Al-Mubarakiya",
+        "description": "Souq Al-Mubarakiya is one of the most significant tourist destinations in Kuwait, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Failaka Island",
+        "description": "Failaka Island is one of the most significant tourist destinations in Kuwait, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "KWI"
+    ],
+    "visa_for_indians": "eVisa / Visa Required"
+  },
+  {
+    "id": 74,
+    "name": "Armenia",
+    "description": "Armenia is an ancient land in the Caucasus, known for its stunning medieval monasteries perched in dramatic mountain landscapes and its vibrant capital, Yerevan.",
+    "top5": [
+      {
+        "name": "Yerevan",
+        "description": "Yerevan is one of the most significant tourist destinations in Armenia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Khor Virap",
+        "description": "Khor Virap is one of the most significant tourist destinations in Armenia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Garni Temple",
+        "description": "Garni Temple is one of the most significant tourist destinations in Armenia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Lake Sevan",
+        "description": "Lake Sevan is one of the most significant tourist destinations in Armenia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Tatev Monastery",
+        "description": "Tatev Monastery is one of the most significant tourist destinations in Armenia, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "EVN"
+    ],
+    "visa_for_indians": "eVisa / Visa on Arrival"
+  },
+  {
+    "id": 75,
+    "name": "Georgia",
+    "description": "Georgia is a crossroads of Europe and Asia, famous for its ancient wine tradition, stunning Caucasian mountains, and a warm culture of hospitality in Tbilisi.",
+    "top5": [
+      {
+        "name": "Tbilisi",
+        "description": "Tbilisi is one of the most significant tourist destinations in Georgia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Batumi",
+        "description": "Batumi is one of the most significant tourist destinations in Georgia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Kazbegi",
+        "description": "Kazbegi is one of the most significant tourist destinations in Georgia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Sighnaghi",
+        "description": "Sighnaghi is one of the most significant tourist destinations in Georgia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Mestia",
+        "description": "Mestia is one of the most significant tourist destinations in Georgia, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "TBS",
+      "KUT"
+    ],
+    "visa_for_indians": "eVisa Required"
+  },
+  {
+    "id": 76,
+    "name": "Azerbaijan",
+    "description": "Azerbaijan, the 'Land of Fire,' is a blend of ancient history and rapid modernization, where futuristic towers overlook UNESCO-listed old city streets.",
+    "top5": [
+      {
+        "name": "Baku",
+        "description": "Baku is one of the most significant tourist destinations in Azerbaijan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Gobustan",
+        "description": "Gobustan is one of the most significant tourist destinations in Azerbaijan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Sheki",
+        "description": "Sheki is one of the most significant tourist destinations in Azerbaijan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Gabala",
+        "description": "Gabala is one of the most significant tourist destinations in Azerbaijan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Mud Volcanoes",
+        "description": "Mud Volcanoes is one of the most significant tourist destinations in Azerbaijan, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "GYD"
+    ],
+    "visa_for_indians": "eVisa Required"
+  },
+  {
+    "id": 77,
+    "name": "Lebanon",
+    "description": "Lebanon is a Mediterranean gem with a rich tapestry of history, from ancient Roman ruins to the vibrant, cosmopolitan life of Beirut and stunning coastline.",
+    "top5": [
+      {
+        "name": "Beirut",
+        "description": "Beirut is one of the most significant tourist destinations in Lebanon, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Byblos",
+        "description": "Byblos is one of the most significant tourist destinations in Lebanon, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Baalbek",
+        "description": "Baalbek is one of the most significant tourist destinations in Lebanon, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Jeita Grotto",
+        "description": "Jeita Grotto is one of the most significant tourist destinations in Lebanon, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Sidon",
+        "description": "Sidon is one of the most significant tourist destinations in Lebanon, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "BEY"
+    ],
+    "visa_for_indians": "Visa on Arrival (Free for 1 month)"
+  },
+  {
+    "id": 78,
+    "name": "Iraq",
+    "description": "Iraq is the 'Cradle of Civilization,' home to the ancient lands of Mesopotamia and some of the world's most significant historical sites like Babylon.",
+    "top5": [
+      {
+        "name": "Baghdad",
+        "description": "Baghdad is one of the most significant tourist destinations in Iraq, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Erbil",
+        "description": "Erbil is one of the most significant tourist destinations in Iraq, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Babylon",
+        "description": "Babylon is one of the most significant tourist destinations in Iraq, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Najaf",
+        "description": "Najaf is one of the most significant tourist destinations in Iraq, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Karbala",
+        "description": "Karbala is one of the most significant tourist destinations in Iraq, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "BGW",
+      "EBL"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 79,
+    "name": "Israel",
+    "description": "Israel is a land of profound religious significance and diverse landscapes, from the ancient sites of Jerusalem to the tech-driven energy of Tel Aviv.",
+    "top5": [
+      {
+        "name": "Jerusalem",
+        "description": "Jerusalem is one of the most significant tourist destinations in Israel, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Tel Aviv",
+        "description": "Tel Aviv is one of the most significant tourist destinations in Israel, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Dead Sea",
+        "description": "Dead Sea is one of the most significant tourist destinations in Israel, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Haifa",
+        "description": "Haifa is one of the most significant tourist destinations in Israel, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Eilat",
+        "description": "Eilat is one of the most significant tourist destinations in Israel, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "TLV"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 80,
+    "name": "Palestine",
+    "description": "Palestine is a land of deep historical and spiritual importance, home to iconic religious sites and a resilient heritage in Bethlehem and Ramallah.",
+    "top5": [
+      {
+        "name": "Bethlehem",
+        "description": "Bethlehem is one of the most significant tourist destinations in Palestine, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Jericho",
+        "description": "Jericho is one of the most significant tourist destinations in Palestine, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Ramallah",
+        "description": "Ramallah is one of the most significant tourist destinations in Palestine, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Hebron",
+        "description": "Hebron is one of the most significant tourist destinations in Palestine, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Nablus",
+        "description": "Nablus is one of the most significant tourist destinations in Palestine, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "N/A"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 81,
+    "name": "Kyrgyzstan",
+    "description": "Kyrgyzstan is a land of celestial mountains and pristine alpine lakes, where nomadic traditions are still a living part of the landscape and trekking is world-class.",
+    "top5": [
+      {
+        "name": "Bishkek",
+        "description": "Bishkek is one of the most significant tourist destinations in Kyrgyzstan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Issyk-Kul Lake",
+        "description": "Issyk-Kul Lake is one of the most significant tourist destinations in Kyrgyzstan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Song-Kul",
+        "description": "Song-Kul is one of the most significant tourist destinations in Kyrgyzstan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Ala-Archa",
+        "description": "Ala-Archa is one of the most significant tourist destinations in Kyrgyzstan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Karakol",
+        "description": "Karakol is one of the most significant tourist destinations in Kyrgyzstan, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "FRU"
+    ],
+    "visa_for_indians": "eVisa Required"
+  },
+  {
+    "id": 82,
+    "name": "Tajikistan",
+    "description": "Tajikistan is a rugged mountain kingdom dominated by the spectacular Pamir Highway, offering a journey through remote valleys and ancient Silk Road history.",
+    "top5": [
+      {
+        "name": "Dushanbe",
+        "description": "Dushanbe is one of the most significant tourist destinations in Tajikistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Pamir Highway",
+        "description": "Pamir Highway is one of the most significant tourist destinations in Tajikistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Fann Mountains",
+        "description": "Fann Mountains is one of the most significant tourist destinations in Tajikistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Iskanderkul Lake",
+        "description": "Iskanderkul Lake is one of the most significant tourist destinations in Tajikistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Khujand",
+        "description": "Khujand is one of the most significant tourist destinations in Tajikistan, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "DYU"
+    ],
+    "visa_for_indians": "eVisa Required"
+  },
+  {
+    "id": 83,
+    "name": "Turkmenistan",
+    "description": "Turkmenistan is a mysterious country famous for the 'Door to Hell' gas crater and the grand, white-marble architecture of its capital, Ashgabat.",
+    "top5": [
+      {
+        "name": "Ashgabat",
+        "description": "Ashgabat is one of the most significant tourist destinations in Turkmenistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Darvaza Gas Crater",
+        "description": "Darvaza Gas Crater is one of the most significant tourist destinations in Turkmenistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Merv",
+        "description": "Merv is one of the most significant tourist destinations in Turkmenistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Konye-Urgench",
+        "description": "Konye-Urgench is one of the most significant tourist destinations in Turkmenistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Turkmenbashi",
+        "description": "Turkmenbashi is one of the most significant tourist destinations in Turkmenistan, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "ASB"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 84,
+    "name": "Mongolia",
+    "description": "Mongolia is a land of vast steppes and nomadic spirit, where the legacy of Genghis Khan remains a point of pride and the Gobi Desert offers adventure.",
+    "top5": [
+      {
+        "name": "Ulaanbaatar",
+        "description": "Ulaanbaatar is one of the most significant tourist destinations in Mongolia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Gobi Desert",
+        "description": "Gobi Desert is one of the most significant tourist destinations in Mongolia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Khovsgol Lake",
+        "description": "Khovsgol Lake is one of the most significant tourist destinations in Mongolia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Terelj",
+        "description": "Terelj is one of the most significant tourist destinations in Mongolia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Orkhon Valley",
+        "description": "Orkhon Valley is one of the most significant tourist destinations in Mongolia, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "UBN"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 85,
+    "name": "Iran",
+    "description": "Iran is a treasure trove of Persian history and architectural grandeur, home to stunning Islamic monuments, ruins of Persepolis, and legendary hospitality.",
+    "top5": [
+      {
+        "name": "Tehran",
+        "description": "Tehran is one of the most significant tourist destinations in Iran, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Isfahan",
+        "description": "Isfahan is one of the most significant tourist destinations in Iran, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Shiraz (Persepolis)",
+        "description": "Shiraz (Persepolis) is one of the most significant tourist destinations in Iran, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Yazd",
+        "description": "Yazd is one of the most significant tourist destinations in Iran, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Tabriz",
+        "description": "Tabriz is one of the most significant tourist destinations in Iran, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "IKA"
+    ],
+    "visa_for_indians": "Visa-free (up to 15 days by air)"
+  },
+  {
+    "id": 86,
+    "name": "Pakistan",
+    "description": "Pakistan is a land of dramatic mountain scenery, home to K2 and the Karakoram Highway, alongside ancient ruins and the Mughal architecture of Lahore.",
+    "top5": [
+      {
+        "name": "Islamabad",
+        "description": "Islamabad is one of the most significant tourist destinations in Pakistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Lahore",
+        "description": "Lahore is one of the most significant tourist destinations in Pakistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Hunza Valley",
+        "description": "Hunza Valley is one of the most significant tourist destinations in Pakistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Karachi",
+        "description": "Karachi is one of the most significant tourist destinations in Pakistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Skardu",
+        "description": "Skardu is one of the most significant tourist destinations in Pakistan, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "ISB",
+      "KHI",
+      "LHE"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 87,
+    "name": "Afghanistan",
+    "description": "Afghanistan is a land of rugged beauty and deep resilience, boasting incredible heritage sites like the Minaret of Jam and blue lakes of Band-e-Amir.",
+    "top5": [
+      {
+        "name": "Kabul",
+        "description": "Kabul is one of the most significant tourist destinations in Afghanistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Bamiyan",
+        "description": "Bamiyan is one of the most significant tourist destinations in Afghanistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Herat",
+        "description": "Herat is one of the most significant tourist destinations in Afghanistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Mazar-i-Sharif",
+        "description": "Mazar-i-Sharif is one of the most significant tourist destinations in Afghanistan, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Band-e-Amir",
+        "description": "Band-e-Amir is one of the most significant tourist destinations in Afghanistan, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "KBL"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 88,
+    "name": "Syria",
+    "description": "Syria is a land of ancient civilizations, where the historic cities of Damascus and Aleppo stand as some of the oldest continuously inhabited places on Earth.",
+    "top5": [
+      {
+        "name": "Damascus",
+        "description": "Damascus is one of the most significant tourist destinations in Syria, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Aleppo",
+        "description": "Aleppo is one of the most significant tourist destinations in Syria, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Palmyra",
+        "description": "Palmyra is one of the most significant tourist destinations in Syria, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Krak des Chevaliers",
+        "description": "Krak des Chevaliers is one of the most significant tourist destinations in Syria, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Latakia",
+        "description": "Latakia is one of the most significant tourist destinations in Syria, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "DAM"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 89,
+    "name": "Yemen",
+    "description": "Yemen is a land of unique mud-brick architecture and ancient history, with the alien-like flora of Socotra Island being a world-class natural wonder.",
+    "top5": [
+      {
+        "name": "Sana'a",
+        "description": "Sana'a is one of the most significant tourist destinations in Yemen, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Socotra Island",
+        "description": "Socotra Island is one of the most significant tourist destinations in Yemen, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Shibam",
+        "description": "Shibam is one of the most significant tourist destinations in Yemen, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Aden",
+        "description": "Aden is one of the most significant tourist destinations in Yemen, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Al Mukalla",
+        "description": "Al Mukalla is one of the most significant tourist destinations in Yemen, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "ADE"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 90,
+    "name": "Libya",
+    "description": "Libya is a North African nation with a rich Mediterranean history, boasting some of the best-preserved Roman ruins in the world like Leptis Magna.",
+    "top5": [
+      {
+        "name": "Tripoli",
+        "description": "Tripoli is one of the most significant tourist destinations in Libya, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Leptis Magna",
+        "description": "Leptis Magna is one of the most significant tourist destinations in Libya, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Benghazi",
+        "description": "Benghazi is one of the most significant tourist destinations in Libya, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Ghadames",
+        "description": "Ghadames is one of the most significant tourist destinations in Libya, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Cyrene",
+        "description": "Cyrene is one of the most significant tourist destinations in Libya, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "MJI",
+      "BEN"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 91,
+    "name": "Nigeria",
+    "description": "Nigeria is the 'Giant of Africa,' a country of immense cultural energy and economic dynamism, centered around the sprawling metropolis of Lagos.",
+    "top5": [
+      {
+        "name": "Lagos",
+        "description": "Lagos is one of the most significant tourist destinations in Nigeria, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Abuja",
+        "description": "Abuja is one of the most significant tourist destinations in Nigeria, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Obudu Cattle Ranch",
+        "description": "Obudu Cattle Ranch is one of the most significant tourist destinations in Nigeria, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Olumo Rock",
+        "description": "Olumo Rock is one of the most significant tourist destinations in Nigeria, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Yankari Park",
+        "description": "Yankari Park is one of the most significant tourist destinations in Nigeria, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "LOS",
+      "ABV"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 92,
+    "name": "Ghana",
+    "description": "Ghana is often called 'Africa for Beginners' due to its welcoming atmosphere, rich cultural heritage, and historic slave castles along the coast.",
+    "top5": [
+      {
+        "name": "Accra",
+        "description": "Accra is one of the most significant tourist destinations in Ghana, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Cape Coast Castle",
+        "description": "Cape Coast Castle is one of the most significant tourist destinations in Ghana, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Kakum Park",
+        "description": "Kakum Park is one of the most significant tourist destinations in Ghana, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Kumasi",
+        "description": "Kumasi is one of the most significant tourist destinations in Ghana, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Mole Park",
+        "description": "Mole Park is one of the most significant tourist destinations in Ghana, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "ACC"
+    ],
+    "visa_for_indians": "Visa Required / VoA (conditions)"
+  },
+  {
+    "id": 93,
+    "name": "Rwanda",
+    "description": "Rwanda, the 'Land of a Thousand Hills,' is a model for development and a premier destination for mountain gorilla trekking in pristine forests.",
+    "top5": [
+      {
+        "name": "Kigali",
+        "description": "Kigali is one of the most significant tourist destinations in Rwanda, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Volcanoes Park",
+        "description": "Volcanoes Park is one of the most significant tourist destinations in Rwanda, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Lake Kivu",
+        "description": "Lake Kivu is one of the most significant tourist destinations in Rwanda, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Akagera",
+        "description": "Akagera is one of the most significant tourist destinations in Rwanda, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Nyungwe Forest",
+        "description": "Nyungwe Forest is one of the most significant tourist destinations in Rwanda, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "KGL"
+    ],
+    "visa_for_indians": "Visa on Arrival (Free for 30 days)"
+  },
+  {
+    "id": 94,
+    "name": "Uganda",
+    "description": "Uganda, the 'Pearl of Africa,' is a land of incredible biodiversity, home to the source of the Nile and half of the world's mountain gorillas.",
+    "top5": [
+      {
+        "name": "Bwindi Forest",
+        "description": "Bwindi Forest is one of the most significant tourist destinations in Uganda, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Murchison Falls",
+        "description": "Murchison Falls is one of the most significant tourist destinations in Uganda, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Queen Elizabeth Park",
+        "description": "Queen Elizabeth Park is one of the most significant tourist destinations in Uganda, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Jinja",
+        "description": "Jinja is one of the most significant tourist destinations in Uganda, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Entebbe",
+        "description": "Entebbe is one of the most significant tourist destinations in Uganda, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "EBB"
+    ],
+    "visa_for_indians": "eVisa Required"
+  },
+  {
+    "id": 95,
+    "name": "Zambia",
+    "description": "Zambia is a land of untamed wilderness and the birthplace of the walking safari, home to the spectacular and thunderous Victoria Falls.",
+    "top5": [
+      {
+        "name": "Victoria Falls",
+        "description": "Victoria Falls is one of the most significant tourist destinations in Zambia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "South Luangwa",
+        "description": "South Luangwa is one of the most significant tourist destinations in Zambia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Lower Zambezi",
+        "description": "Lower Zambezi is one of the most significant tourist destinations in Zambia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Lusaka",
+        "description": "Lusaka is one of the most significant tourist destinations in Zambia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Kafue",
+        "description": "Kafue is one of the most significant tourist destinations in Zambia, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "LUN",
+      "LVI"
+    ],
+    "visa_for_indians": "Visa-free (up to 90 days)"
+  },
+  {
+    "id": 96,
+    "name": "Zimbabwe",
+    "description": "Zimbabwe is a country of stunning natural beauty and ancient history, home to the majestic Victoria Falls and ruins of Great Zimbabwe.",
+    "top5": [
+      {
+        "name": "Victoria Falls",
+        "description": "Victoria Falls is one of the most significant tourist destinations in Zimbabwe, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Hwange Park",
+        "description": "Hwange Park is one of the most significant tourist destinations in Zimbabwe, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Great Zimbabwe Ruins",
+        "description": "Great Zimbabwe Ruins is one of the most significant tourist destinations in Zimbabwe, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Matobo",
+        "description": "Matobo is one of the most significant tourist destinations in Zimbabwe, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Mana Pools",
+        "description": "Mana Pools is one of the most significant tourist destinations in Zimbabwe, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "HRE",
+      "VFA"
+    ],
+    "visa_for_indians": "eVisa / Visa on Arrival"
+  },
+  {
+    "id": 97,
+    "name": "Namibia",
+    "description": "Namibia is a land of surreal landscapes, from the red sand dunes of Sossusvlei to the rugged Skeleton Coast and wildlife-rich Etosha Pan.",
+    "top5": [
+      {
+        "name": "Sossusvlei",
+        "description": "Sossusvlei is one of the most significant tourist destinations in Namibia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Etosha Park",
+        "description": "Etosha Park is one of the most significant tourist destinations in Namibia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Swakopmund",
+        "description": "Swakopmund is one of the most significant tourist destinations in Namibia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Skeleton Coast",
+        "description": "Skeleton Coast is one of the most significant tourist destinations in Namibia, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Damaraland",
+        "description": "Damaraland is one of the most significant tourist destinations in Namibia, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "WDH"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 98,
+    "name": "Botswana",
+    "description": "Botswana is Africa's premier wildlife destination, known for its high-end tourism model that has preserved the pristine and vast Okavango Delta.",
+    "top5": [
+      {
+        "name": "Okavango Delta",
+        "description": "Okavango Delta is one of the most significant tourist destinations in Botswana, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Chobe Park",
+        "description": "Chobe Park is one of the most significant tourist destinations in Botswana, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Moremi",
+        "description": "Moremi is one of the most significant tourist destinations in Botswana, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Makgadikgadi Pans",
+        "description": "Makgadikgadi Pans is one of the most significant tourist destinations in Botswana, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Kalahari",
+        "description": "Kalahari is one of the most significant tourist destinations in Botswana, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "GBE",
+      "MUB",
+      "BBK"
+    ],
+    "visa_for_indians": "Visa Required"
+  },
+  {
+    "id": 99,
+    "name": "Madagascar",
+    "description": "Madagascar is a world of its own, an island continent where 90% of the wildlife is unique, including lemurs and the giant Avenue of the Baobabs.",
+    "top5": [
+      {
+        "name": "Avenue of Baobabs",
+        "description": "Avenue of Baobabs is one of the most significant tourist destinations in Madagascar, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Nosy Be",
+        "description": "Nosy Be is one of the most significant tourist destinations in Madagascar, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Isalo Park",
+        "description": "Isalo Park is one of the most significant tourist destinations in Madagascar, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Andasibe",
+        "description": "Andasibe is one of the most significant tourist destinations in Madagascar, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Tsingy",
+        "description": "Tsingy is one of the most significant tourist destinations in Madagascar, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "TNR"
+    ],
+    "visa_for_indians": "Visa on Arrival / eVisa"
+  },
+  {
+    "id": 100,
+    "name": "Mozambique",
+    "description": "Mozambique is a coastal paradise with a rich Afro-Portuguese heritage, boasting some of the most beautiful and secluded beaches in East Africa.",
+    "top5": [
+      {
+        "name": "Bazaruto Archipelago",
+        "description": "Bazaruto Archipelago is one of the most significant tourist destinations in Mozambique, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Quirimbas",
+        "description": "Quirimbas is one of the most significant tourist destinations in Mozambique, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Maputo",
+        "description": "Maputo is one of the most significant tourist destinations in Mozambique, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Tofo Beach",
+        "description": "Tofo Beach is one of the most significant tourist destinations in Mozambique, offering unique cultural and historical experiences."
+      },
+      {
+        "name": "Mozambique Island",
+        "description": "Mozambique Island is one of the most significant tourist destinations in Mozambique, offering unique cultural and historical experiences."
+      }
+    ],
+    "airports": [
+      "MPM"
+    ],
+    "visa_for_indians": "Visa on Arrival (for tourism)"
+  }
+]

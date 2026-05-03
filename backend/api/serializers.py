@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Destination, Itinerary, VisaRule, Transaction, UserProfile, ItineraryDay
+from .models import Country, Destination, Attraction, Itinerary, VisaRule, Transaction, UserProfile, ItineraryDay
 from django.contrib.auth.models import User
 from django.db.models import Q
 
@@ -8,6 +8,40 @@ class ItineraryDaySerializer(serializers.ModelSerializer):
     class Meta:
         model = ItineraryDay
         fields = ['day_number', 'location_name', 'image', 'image_url', 'caption']
+
+class AttractionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attraction
+        fields = '__all__'
+
+class DestinationSerializer(serializers.ModelSerializer):
+    attractions = AttractionSerializer(many=True, read_only=True)
+    class Meta:
+        model = Destination
+        fields = '__all__'
+
+class CountrySerializer(serializers.ModelSerializer):
+    itineraries_count = serializers.IntegerField(source='itineraries.count', read_only=True)
+    itineraries = serializers.SerializerMethodField()
+    destinations = DestinationSerializer(many=True, read_only=True)
+    image = serializers.ImageField(use_url=True, required=False)
+    
+    class Meta:
+        model = Country
+        fields = '__all__'
+
+    def get_itineraries(self, obj):
+        request = self.context.get('request')
+        user = request.user if request else None
+        
+        itineraries = obj.itineraries.all()
+        if not (user and user.is_authenticated and user.is_staff):
+            query = Q(is_custom=False, is_approved=True)
+            if user and user.is_authenticated:
+                query |= Q(is_custom=True, user=user)
+            itineraries = itineraries.filter(query).distinct()
+            
+        return SimpleItinerarySerializer(itineraries, many=True, context=self.context).data
 
 class SimpleItinerarySerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=True, required=False)
@@ -21,7 +55,6 @@ class SimpleItinerarySerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         user = request.user if request else None
         
-        # Rule: Mask thumbnail if not approved, unless staff or owner
         is_owned = False
         if user and user.is_authenticated:
             if instance.user == user:
@@ -34,31 +67,9 @@ class SimpleItinerarySerializer(serializers.ModelSerializer):
             data['image_url'] = None
         return data
 
-class DestinationSerializer(serializers.ModelSerializer):
-    itineraries_count = serializers.IntegerField(source='itineraries.count', read_only=True)
-    itineraries = serializers.SerializerMethodField()
-    image = serializers.ImageField(use_url=True, required=False)
-    
-    class Meta:
-        model = Destination
-        fields = '__all__'
-
-    def get_itineraries(self, obj):
-        request = self.context.get('request')
-        user = request.user if request else None
-        
-        itineraries = obj.itineraries.all()
-        if not (user and user.is_authenticated and user.is_staff):
-            # For non-staff, apply visibility rules
-            query = Q(is_custom=False, is_approved=True)
-            if user and user.is_authenticated:
-                query |= Q(is_custom=True, user=user)
-            itineraries = itineraries.filter(query).distinct()
-            
-        return SimpleItinerarySerializer(itineraries, many=True, context=self.context).data
-
 class ItinerarySerializer(serializers.ModelSerializer):
-    destination_details = DestinationSerializer(source='destination_rel', read_only=True)
+    country_details = CountrySerializer(source='country', read_only=True)
+    destinations_details = DestinationSerializer(source='destinations', many=True, read_only=True)
     day_details = ItineraryDaySerializer(many=True, read_only=True)
     image = serializers.ImageField(use_url=True, required=False)
     is_owned = serializers.SerializerMethodField()

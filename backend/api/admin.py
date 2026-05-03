@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Itinerary, VisaRule, Transaction, Destination, UserProfile, Wishlist, ItineraryDay
+from .models import Itinerary, VisaRule, Transaction, Country, Destination, Attraction, UserProfile, Wishlist, ItineraryDay
 
-@admin.register(Destination)
-class DestinationAdmin(admin.ModelAdmin):
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'itineraries_count', 'created_at')
     search_fields = ('name', 'description', 'visa_process')
     prepopulated_fields = {'slug': ('name',)}
@@ -12,6 +12,20 @@ class DestinationAdmin(admin.ModelAdmin):
         return obj.itineraries.count()
     itineraries_count.short_description = 'Itineraries'
 
+@admin.register(Destination)
+class DestinationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'country', 'slug', 'created_at')
+    list_filter = ('country',)
+    search_fields = ('name', 'description', 'country__name')
+    prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ('created_at', 'updated_at')
+
+@admin.register(Attraction)
+class AttractionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'destination', 'opening_time', 'closing_time')
+    list_filter = ('destination__country', 'destination')
+    search_fields = ('name', 'description', 'destination__name')
+
 class ItineraryDayInline(admin.TabularInline):
     model = ItineraryDay
     extra = 1
@@ -19,9 +33,9 @@ class ItineraryDayInline(admin.TabularInline):
 
 @admin.register(Itinerary)
 class ItineraryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'destination', 'duration_days', 'price', 'is_approved', 'is_custom', 'user', 'created_at')
-    list_filter = ('is_approved', 'is_custom', 'is_premium', 'destination', 'created_at')
-    search_fields = ('title', 'destination', 'description', 'user__username', 'user__email')
+    list_display = ('id', 'title', 'country', 'duration_days', 'price', 'is_approved', 'is_custom', 'user', 'created_at')
+    list_filter = ('is_approved', 'is_custom', 'is_premium', 'country', 'created_at')
+    search_fields = ('title', 'country__name', 'description', 'user__username', 'user__email')
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
     inlines = [ItineraryDayInline]
@@ -39,7 +53,7 @@ class ItineraryAdmin(admin.ModelAdmin):
 @admin.register(ItineraryDay)
 class ItineraryDayAdmin(admin.ModelAdmin):
     list_display = ('itinerary', 'day_number', 'location_name', 'caption')
-    list_filter = ('itinerary__destination', 'day_number')
+    list_filter = ('itinerary__country', 'day_number')
     search_fields = ('itinerary__title', 'location_name', 'caption')
     ordering = ('itinerary', 'day_number')
 

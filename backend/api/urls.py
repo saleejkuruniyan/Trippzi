@@ -3,13 +3,16 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     ItineraryViewSet, GenerateItineraryView, VisaRuleView, 
     AdminStatsView, AdminUserViewSet, AdminTransactionViewSet,
-    DestinationViewSet, AdminVisaRuleViewSet, CreateOrderView, VerifyPaymentView, ProfileView,
+    CountryViewSet, DestinationViewSet, AttractionViewSet,
+    AdminVisaRuleViewSet, CreateOrderView, VerifyPaymentView, ProfileView,
     MyItinerariesView, WishlistToggleView, MyWishlistView, DownloadItineraryPDFView
 )
 
 router = DefaultRouter()
 router.register(r'itineraries', ItineraryViewSet, basename='itinerary')
-router.register(r'destinations', DestinationViewSet, basename='destinations')
+router.register(r'destinations', CountryViewSet, basename='destinations')
+router.register(r'sub-destinations', DestinationViewSet, basename='sub-destinations')
+router.register(r'attractions', AttractionViewSet, basename='attractions')
 router.register(r'admin/users', AdminUserViewSet, basename='admin-users')
 router.register(r'admin/transactions', AdminTransactionViewSet, basename='admin-transactions')
 router.register(r'admin/visa-rules', AdminVisaRuleViewSet, basename='admin-visa-rules')

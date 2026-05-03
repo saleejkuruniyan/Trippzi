@@ -9,7 +9,7 @@ from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from .services.ai_engine import AIEngine
-from .models import Itinerary, VisaRule, Transaction, Destination, Wishlist, ItineraryDay
+from .models import Itinerary, VisaRule, Transaction, Country, Destination, Attraction, Wishlist, ItineraryDay
 from .utils import fetch_unsplash_images, download_image_to_content_file
 from .storage import R2Storage
 from django.conf import settings
@@ -20,23 +20,32 @@ import requests
 import os
 from .serializers import (
     ItinerarySerializer, VisaRuleSerializer, TransactionSerializer, 
-    UserSerializer, DestinationSerializer
+    UserSerializer, CountrySerializer, DestinationSerializer, AttractionSerializer
 )
 
-class DestinationViewSet(viewsets.ReadOnlyModelViewSet):
+class CountryViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         user = self.request.user
-        # Staff see all destinations
         if user.is_authenticated and user.is_staff:
-            return Destination.objects.all()
+            return Country.objects.all()
         
-        # Regular users only see destinations with at least one approved itinerary
-        return Destination.objects.annotate(
+        return Country.objects.annotate(
             approved_count=Count('itineraries', filter=Q(itineraries__is_approved=True))
         ).filter(approved_count__gt=0)
     
+    serializer_class = CountrySerializer
+    lookup_field = 'slug'
+    permission_classes = [AllowAny]
+
+class DestinationViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Destination.objects.all()
     serializer_class = DestinationSerializer
     lookup_field = 'slug'
+    permission_classes = [AllowAny]
+
+class AttractionViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Attraction.objects.all()
+    serializer_class = AttractionSerializer
     permission_classes = [AllowAny]
 
 class ItineraryViewSet(viewsets.ModelViewSet):
@@ -69,7 +78,7 @@ class ItineraryViewSet(viewsets.ModelViewSet):
         
         # Create a copy
         new_itinerary = Itinerary.objects.create(
-            destination_rel=itinerary.destination_rel,
+            country=itinerary.country,
             title=f"Standard: {itinerary.title}",
             destination=itinerary.destination,
             duration_days=itinerary.duration_days,
@@ -131,8 +140,8 @@ class GenerateItineraryView(APIView):
                 "raw": itinerary_data.get("raw")
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        # 1b. Ensure Destination exists or create it
-        dest_obj, created = Destination.objects.get_or_create(
+        # 1b. Ensure Country exists or create it
+        country_obj, created = Country.objects.get_or_create(
             name__iexact=destination,
             defaults={
                 'name': destination,
@@ -141,24 +150,24 @@ class GenerateItineraryView(APIView):
         )
         
         if created:
-            # Enrich new destination with AI guide and Unsplash image
+            # Enrich new country with AI guide and Unsplash image
             guide = ai_engine.generate_destination_guide(destination)
-            dest_obj.description = guide.get('description', dest_obj.description)
-            dest_obj.best_time = guide.get('best_time', '')
-            dest_obj.visa_process = guide.get('visa_process', '')
-            dest_obj.airports = guide.get('airports', [])
-            dest_obj.tips = guide.get('tips', [])
-            dest_obj.days_recommendation = guide.get('days_recommendation', {})
+            country_obj.description = guide.get('description', country_obj.description)
+            country_obj.best_time = guide.get('best_time', '')
+            country_obj.visa_process = guide.get('visa_process', '')
+            country_obj.airports = guide.get('airports', [])
+            country_obj.tips = guide.get('tips', [])
+            country_obj.days_recommendation = guide.get('days_recommendation', {})
             
-            # Fetch destination hero image
+            # Fetch country hero image
             dest_images = fetch_unsplash_images(f"{destination} travel", count=1)
             if dest_images:
-                dest_obj.image_url = dest_images[0]
+                country_obj.image_url = dest_images[0]
                 dest_image_file = download_image_to_content_file(dest_images[0])
                 if dest_image_file:
-                    dest_obj.image.save(f"dest_{dest_obj.slug}.jpg", dest_image_file)
+                    country_obj.image.save(f"country_{country_obj.slug}.jpg", dest_image_file)
             
-            dest_obj.save()
+            country_obj.save()
 
         # 2. Get Visa Info
         visa_info = ai_engine.get_visa_info(source_country, destination)
@@ -172,7 +181,7 @@ class GenerateItineraryView(APIView):
             
             itinerary_obj = Itinerary.objects.create(
                 user=request.user,
-                destination_rel=dest_obj,
+                country=country_obj,
                 is_custom=True,
                 title=itinerary_data.get('title', f"Trip to {destination}"),
                 destination=destination,

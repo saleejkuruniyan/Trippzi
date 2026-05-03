@@ -17,17 +17,17 @@ def itinerary_image_path(instance, filename):
     return f"images/{country}/{itinerary_part}{uuid.uuid4()}.{ext}"
 
 def itinerary_day_image_path(instance, filename):
-    country = slugify(instance.itinerary.destination)
+    country = slugify(instance.itinerary.country.name if instance.itinerary.country else 'generic')
     itinerary_id = instance.itinerary.id
     day_number = instance.day_number
     return f"images/{country}/{itinerary_id}/{day_number}/{uuid.uuid4()}.png"
 
-class Destination(models.Model):
+class Country(models.Model):
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField()
     image = models.ImageField(upload_to=destination_image_path, blank=True, null=True)
-    image_url = models.URLField(max_length=500, blank=True, null=True) # Keep for fallback or external
+    image_url = models.URLField(max_length=500, blank=True, null=True)
     
     # Rich Guide Content
     airports = models.JSONField(default=list, help_text="List of major airports")
@@ -40,7 +40,8 @@ class Destination(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['name']
+        verbose_name_plural = "Countries"
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -50,10 +51,52 @@ class Destination(models.Model):
     def __str__(self):
         return self.name
 
+class Destination(models.Model):
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='destinations', null=True, blank=True)
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(blank=True)
+    description = models.TextField()
+    culture = models.TextField(blank=True)
+    image = models.ImageField(upload_to=destination_image_path, blank=True, null=True)
+    image_url = models.URLField(max_length=500, blank=True, null=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('country', 'slug')
+        ordering = ['name']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.name}, {self.country.name}"
+
+class Attraction(models.Model):
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, related_name='attractions', null=True, blank=True)
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    image = models.ImageField(upload_to=destination_image_path, blank=True, null=True)
+    image_url = models.URLField(max_length=500, blank=True, null=True)
+    
+    opening_time = models.TimeField(null=True, blank=True)
+    closing_time = models.TimeField(null=True, blank=True)
+    suggested_duration = models.DurationField(null=True, blank=True, help_text="Time to spend at this attraction")
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.destination.name})"
+
 class Itinerary(models.Model):
-    destination_rel = models.ForeignKey(Destination, on_delete=models.CASCADE, related_name='itineraries', null=True)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='itineraries', null=True)
+    destinations = models.ManyToManyField(Destination, related_name='itineraries_included')
     title = models.CharField(max_length=255)
-    destination = models.CharField(max_length=255)
+    destination = models.CharField(max_length=255, help_text="Legacy field or primary destination summary")
     duration_days = models.IntegerField()
     
     # Pricing
@@ -63,7 +106,7 @@ class Itinerary(models.Model):
     
     description = models.TextField()
     highlights = models.TextField(blank=True, help_text="Short highlight e.g. 'Kuala Lumpur + Langkawi'")
-    content = models.JSONField(help_text="Day-wise itinerary structure")
+    content = models.JSONField(help_text="Detailed day-wise itinerary with timings and transfers")
     image = models.ImageField(upload_to=itinerary_image_path, blank=True, null=True)
     image_url = models.URLField(max_length=500, blank=True, null=True)
     
@@ -75,8 +118,11 @@ class Itinerary(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name_plural = "Itineraries"
+
     def __str__(self):
-        return f"{self.title} ({self.destination})"
+        return f"{self.title} ({self.country.name if self.country else 'No Country'})"
 
 class ItineraryDay(models.Model):
     itinerary = models.ForeignKey(Itinerary, on_delete=models.CASCADE, related_name='day_details')
