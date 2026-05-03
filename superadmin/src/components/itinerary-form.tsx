@@ -21,6 +21,8 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
     description: initialData?.description || "",
     highlights: initialData?.highlights || "",
     is_premium: initialData?.is_premium || false,
+    is_custom: initialData?.is_custom || false,
+    is_approved: initialData?.is_approved ?? (!initialData?.is_custom),
     image_url: initialData?.image_url || "",
   })
   const [submitting, setSubmitting] = useState(false)
@@ -126,15 +128,39 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
           />
         </div>
 
-        <div className="flex items-center gap-4">
-          <input 
-            type="checkbox"
-            id="is_premium"
-            className="w-5 h-5 rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
-            checked={formData.is_premium}
-            onChange={e => setFormData({...formData, is_premium: e.target.checked})}
-          />
-          <label htmlFor="is_premium" className="text-sm font-medium">Mark as Premium Itinerary</label>
+        <div className="flex flex-wrap gap-8 py-4">
+          <div className="flex items-center gap-3">
+            <input 
+              type="checkbox"
+              id="is_premium"
+              className="w-5 h-5 rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
+              checked={formData.is_premium}
+              onChange={e => setFormData({...formData, is_premium: e.target.checked})}
+            />
+            <label htmlFor="is_premium" className="text-sm font-medium">Premium Itinerary</label>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <input 
+              type="checkbox"
+              id="is_custom"
+              className="w-5 h-5 rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
+              checked={formData.is_custom}
+              onChange={e => setFormData({...formData, is_custom: e.target.checked})}
+            />
+            <label htmlFor="is_custom" className="text-sm font-medium">Custom User Trip</label>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <input 
+              type="checkbox"
+              id="is_approved"
+              className="w-5 h-5 rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
+              checked={formData.is_approved}
+              onChange={e => setFormData({...formData, is_approved: e.target.checked})}
+            />
+            <label htmlFor="is_approved" className="text-sm font-medium text-green-600 font-bold">Approved / Public</label>
+          </div>
         </div>
 
         <div className="flex justify-end gap-4 pt-6 border-t border-zinc-100 dark:border-zinc-800">

@@ -8,12 +8,12 @@ import { StatsCard } from "@/components/stats-card"
 import { DataTable } from "@/components/data-table"
 import { ItineraryForm } from "@/components/itinerary-form"
 import { VisaRuleForm } from "@/components/visa-rule-form"
-import { 
+import {
   fetchStats, fetchTransactions, fetchUsers, fetchItineraries, fetchVisaRules, login,
   createItinerary, updateItinerary, deleteItinerary,
   createVisaRule, updateVisaRule, deleteVisaRule
 } from "@/lib/api"
-import { DollarSign, FileText, Users, Globe } from "lucide-react"
+import { DollarSign, FileText, Users, Globe, Sparkles } from "lucide-react"
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard")
@@ -25,6 +25,8 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
   const [isCreating, setIsCreating] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalCount, setTotalCount] = useState(0)
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -47,22 +49,26 @@ export default function AdminDashboard() {
       const s = await fetchStats()
       if (s) setStats([
         { name: "Total Sales", value: `$${s.total_sales}`, icon: DollarSign, color: "text-green-600" },
-        { name: "Itineraries", value: s.total_itineraries, icon: FileText, color: "text-blue-600" },
+        { name: "Iteneraries", value: s.total_standard, icon: FileText, color: "text-blue-600" },
+        { name: "Custom Trips", value: s.total_custom, icon: Sparkles, color: "text-indigo-600" },
         { name: "Active Users", value: s.total_users, icon: Users, color: "text-purple-600" },
         { name: "Visa Rules", value: s.total_visa_rules, icon: Globe, color: "text-orange-600" },
       ])
     } catch (err) { console.error(err) }
   }
 
-  const loadTabData = async () => {
+  const loadTabData = async (pageNum = currentPage) => {
     setLoading(true)
     try {
       let res: any
-      if (activeTab === 'users') res = await fetchUsers()
-      else if (activeTab === 'itineraries') res = await fetchItineraries()
-      else if (activeTab === 'visa') res = await fetchVisaRules()
-      else if (activeTab === 'sales' || activeTab === 'dashboard') res = await fetchTransactions()
-      setData(Array.isArray(res?.results) ? res.results : (Array.isArray(res) ? res : []))
+      if (activeTab === 'users') res = await fetchUsers(pageNum)
+      else if (activeTab === 'itineraries') res = await fetchItineraries(pageNum, false)
+      else if (activeTab === 'custom') res = await fetchItineraries(pageNum, true)
+      else if (activeTab === 'visa') res = await fetchVisaRules(pageNum)
+      else if (activeTab === 'sales' || activeTab === 'dashboard') res = await fetchTransactions(pageNum)
+
+      setData(res?.results || [])
+      setTotalCount(res?.count || 0)
     } catch (err) { console.error(err) }
     setLoading(false)
   }
@@ -73,12 +79,17 @@ export default function AdminDashboard() {
   }, [])
 
   useEffect(() => {
-    if (isAuthenticated) { loadTabData(); setEditingItem(null); setIsCreating(false) }
+    if (isAuthenticated) {
+      setCurrentPage(1)
+      loadTabData(1)
+      setEditingItem(null)
+      setIsCreating(false)
+    }
   }, [activeTab, isAuthenticated])
 
   const handleSave = async (formData: any) => {
     try {
-      if (activeTab === 'itineraries') {
+      if (activeTab === 'itineraries' || activeTab === 'custom') {
         editingItem ? await updateItinerary(editingItem.id, formData) : await createItinerary(formData)
       } else if (activeTab === 'visa') {
         editingItem ? await updateVisaRule(editingItem.id, formData) : await createVisaRule(formData)
@@ -90,7 +101,7 @@ export default function AdminDashboard() {
   const handleDelete = async (id: number) => {
     if (!confirm("Are you sure?")) return
     try {
-      if (activeTab === 'itineraries') await deleteItinerary(id)
+      if (activeTab === 'itineraries' || activeTab === 'custom') await deleteItinerary(id)
       else if (activeTab === 'visa') await deleteVisaRule(id)
       setEditingItem(null); loadTabData(); loadStats();
     } catch (err) { alert("Failed to delete") }
@@ -101,8 +112,8 @@ export default function AdminDashboard() {
       <div className="w-full max-w-md bg-white dark:bg-zinc-900 p-8 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-2xl">
         <form onSubmit={handleLogin} className="space-y-4">
           <h1 className="text-2xl font-bold text-center mb-8">Trippzi Superadmin</h1>
-          <input type="text" placeholder="Username" required className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800" value={authData.username} onChange={e => setAuthData({...authData, username: e.target.value})} />
-          <input type="password" placeholder="Password" required className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800" value={authData.password} onChange={e => setAuthData({...authData, password: e.target.value})} />
+          <input type="text" placeholder="Username" required className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800" value={authData.username} onChange={e => setAuthData({ ...authData, username: e.target.value })} />
+          <input type="password" placeholder="Password" required className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800" value={authData.password} onChange={e => setAuthData({ ...authData, password: e.target.value })} />
           {authError && <p className="text-red-500 text-xs">{authError}</p>}
           <button type="submit" className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold">Sign In</button>
         </form>
@@ -127,18 +138,26 @@ export default function AdminDashboard() {
           )}
 
           {(editingItem || isCreating) ? (
-            activeTab === 'itineraries' ? <ItineraryForm initialData={editingItem} onSave={handleSave} onCancel={() => {setEditingItem(null); setIsCreating(false)}} onDelete={handleDelete} /> :
-            <VisaRuleForm initialData={editingItem} onSave={handleSave} onCancel={() => {setEditingItem(null); setIsCreating(false)}} onDelete={handleDelete} />
+            (activeTab === 'itineraries' || activeTab === 'custom') ? <ItineraryForm initialData={editingItem} onSave={handleSave} onCancel={() => { setEditingItem(null); setIsCreating(false) }} onDelete={handleDelete} /> :
+              <VisaRuleForm initialData={editingItem} onSave={handleSave} onCancel={() => { setEditingItem(null); setIsCreating(false) }} onDelete={handleDelete} />
           ) : (
-            <DataTable 
-              title={activeTab} 
-              data={data} 
-              loading={loading} 
-              onEdit={setEditingItem} 
-              onAdd={() => setIsCreating(true)} 
-              showAdd={['itineraries', 'visa'].includes(activeTab)} 
-              showEdit={['itineraries', 'visa'].includes(activeTab)} 
-            />
+            activeTab !== 'dashboard' && (
+              <DataTable
+                title={activeTab}
+                data={data}
+                loading={loading}
+                onEdit={setEditingItem}
+                onAdd={() => setIsCreating(true)}
+                showAdd={['itineraries', 'visa'].includes(activeTab)}
+                showEdit={['itineraries', 'visa', 'custom'].includes(activeTab)}
+                currentPage={currentPage}
+                totalCount={totalCount}
+                onPageChange={(p) => {
+                  setCurrentPage(p)
+                  loadTabData(p)
+                }}
+              />
+            )
           )}
         </div>
       </main>

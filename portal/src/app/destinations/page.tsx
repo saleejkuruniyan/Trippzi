@@ -18,7 +18,7 @@ export default function DestinationsPage() {
     async function load() {
       try {
         const data = await fetchDestinations()
-        setDestinations(data)
+        setDestinations(data.results || data)
       } catch (err) {
         console.error("Failed to load destinations", err)
       } finally {
@@ -28,7 +28,8 @@ export default function DestinationsPage() {
     load()
   }, [])
 
-  const filtered = destinations.filter(d => 
+  const destList = Array.isArray(destinations) ? destinations : []
+  const filtered = destList.filter(d => 
     d.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
@@ -93,6 +94,7 @@ export default function DestinationsPage() {
                       src={dest.image || dest.image_url || "/destinations/bali.png"} 
                       alt={dest.name} 
                       fill 
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover group-hover:scale-110 transition-transform duration-700" 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />

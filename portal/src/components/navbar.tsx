@@ -2,36 +2,30 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Sun, Moon } from "lucide-react"
+import { Sun, Moon, ShoppingBag, Bookmark, UserCircle } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
-import { useGoogleLogin } from '@react-oauth/google'
 import { googleLogin } from "@/lib/api"
+import { AuthModal } from "./auth-modal"
 
 export function Navbar() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [showUserModal, setShowUserModal] = useState(false)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    const savedUser = localStorage.getItem('trippzi-user')
-    if (savedUser) setUser(JSON.parse(savedUser))
+    const checkUser = () => {
+      const savedUser = localStorage.getItem('trippzi-user')
+      if (savedUser) setUser(JSON.parse(savedUser))
+      else setUser(null)
+    }
+    checkUser()
+    window.addEventListener('storage', checkUser)
+    return () => window.removeEventListener('storage', checkUser)
   }, [])
-
-  const login = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      try {
-        const data = await googleLogin(tokenResponse.access_token)
-        setUser(data.user)
-        localStorage.setItem('trippzi-user', JSON.stringify(data.user))
-        localStorage.setItem('trippzi-token', data.access_token)
-      } catch (err) {
-        console.error("Login failed", err)
-      }
-    },
-  })
 
   return (
     <nav className="fixed top-0 w-full z-50 border-b border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md">
@@ -79,6 +73,29 @@ export function Navbar() {
                         </p>
                         <p className="text-xs text-zinc-500 truncate">{user.email}</p>
                       </div>
+                      <div className="p-2 border-b border-zinc-100 dark:border-zinc-800">
+                        <Link 
+                          href="/profile"
+                          onClick={() => setShowUserModal(false)}
+                          className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-xl transition-colors font-medium"
+                        >
+                          <UserCircle className="w-4 h-4" /> My Profile
+                        </Link>
+                        <Link 
+                          href="/my-wishlist"
+                          onClick={() => setShowUserModal(false)}
+                          className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-xl transition-colors font-medium"
+                        >
+                          <Bookmark className="w-4 h-4" /> My Wishlist
+                        </Link>
+                        <Link 
+                          href="/my-trips"
+                          onClick={() => setShowUserModal(false)}
+                          className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-xl transition-colors font-medium"
+                        >
+                          <ShoppingBag className="w-4 h-4" /> My Purchases
+                        </Link>
+                      </div>
                       <div className="p-2">
                         <button 
                           onClick={() => {
@@ -86,6 +103,7 @@ export function Navbar() {
                             setShowUserModal(false)
                             localStorage.removeItem('trippzi-user')
                             localStorage.removeItem('trippzi-token')
+                            window.dispatchEvent(new Event('storage'))
                           }}
                           className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors font-medium"
                         >
@@ -97,7 +115,7 @@ export function Navbar() {
                 </div>
               ) : (
                 <button 
-                  onClick={() => login()}
+                  onClick={() => setIsAuthModalOpen(true)}
                   className="hidden sm:flex items-center gap-2 px-4 py-2 border border-zinc-200 dark:border-zinc-800 rounded-full text-sm font-medium hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
@@ -117,6 +135,8 @@ export function Navbar() {
           </div>
         </div>
       </div>
+
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </nav>
   )
 }

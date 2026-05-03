@@ -32,35 +32,38 @@ export async function fetchStats() {
   return res.json();
 }
 
-export async function fetchUsers() {
-  const res = await fetch(`${API_BASE}/admin/users/`, { headers: getHeaders() });
+export async function fetchUsers(page = 1) {
+  const res = await fetch(`${API_BASE}/admin/users/?page=${page}`, { headers: getHeaders() });
   if (!res.ok) {
     console.error("Fetch Users Error:", res.status);
-    return [];
+    return { results: [], count: 0 };
   }
   return res.json();
 }
 
-export async function fetchItineraries() {
-  const res = await fetch(`${API_BASE}/itineraries/`, { headers: getHeaders() });
+export async function fetchItineraries(page = 1, isCustom?: boolean) {
+  let url = `${API_BASE}/itineraries/?page=${page}`;
+  if (isCustom !== undefined) url += `&is_custom=${isCustom}`;
+  const res = await fetch(url, { headers: getHeaders() });
   if (!res.ok) {
     console.error("Fetch Itineraries Error:", res.status);
-    return [];
+    return { results: [], count: 0 };
   }
   return res.json();
 }
 
-export async function fetchVisaRules() {
-  const res = await fetch(`${API_BASE}/admin/visa-rules/`, { headers: getHeaders() });
+export async function fetchVisaRules(page = 1) {
+  const res = await fetch(`${API_BASE}/admin/visa-rules/?page=${page}`, { headers: getHeaders() });
   if (!res.ok) {
     console.error("Fetch Visa Rules Error:", res.status);
-    return [];
+    return { results: [], count: 0 };
   }
   return res.json();
 }
 
-export async function fetchTransactions() {
-  const res = await fetch(`${API_BASE}/admin/transactions/`, { headers: getHeaders() });
+export async function fetchTransactions(page = 1) {
+  const res = await fetch(`${API_BASE}/admin/transactions/?page=${page}`, { headers: getHeaders() });
+  if (!res.ok) return { results: [], count: 0 };
   return res.json();
 }
 

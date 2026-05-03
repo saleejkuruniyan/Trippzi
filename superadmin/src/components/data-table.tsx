@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Plus } from "lucide-react"
+import { Plus, ChevronLeft, ChevronRight } from "lucide-react"
 
 interface DataTableProps {
   title: string
@@ -11,9 +11,18 @@ interface DataTableProps {
   onAdd: () => void
   showAdd?: boolean
   showEdit?: boolean
+  currentPage: number
+  totalCount: number
+  onPageChange: (page: number) => void
 }
 
-export const DataTable = ({ title, data, loading, onEdit, onAdd, showAdd = true, showEdit = true }: DataTableProps) => {
+export const DataTable = ({ 
+  title, data, loading, onEdit, onAdd, 
+  showAdd = true, showEdit = true,
+  currentPage, totalCount, onPageChange
+}: DataTableProps) => {
+  const totalPages = Math.ceil(totalCount / 10) // DRF default is 10
+
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden min-h-[400px]">
       <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex justify-between items-center">
@@ -49,14 +58,23 @@ export const DataTable = ({ title, data, loading, onEdit, onAdd, showAdd = true,
                           <p className="font-medium">
                             {item.first_name || item.last_name 
                               ? `${item.first_name || ""} ${item.last_name || ""}`.trim()
-                              : item.username || item.title || item.destination_country || `Record ${item.id}`}
+                              : item.title || item.itinerary_title || item.username || item.destination_country || `Record ${item.id}`}
                           </p>
-                          <p className="text-xs text-zinc-500">{item.email || item.destination || item.source_country}</p>
+                          <p className="text-xs text-zinc-500">{item.email || item.user_email || item.destination || item.source_country}</p>
                         </td>
                         <td className="px-6 py-4">
-                          <span className="text-xs px-2 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 uppercase font-bold">
-                            {item.status || (item.is_premium ? 'Premium' : 'Standard') || (item.visa_required !== undefined ? (item.visa_required ? 'Required' : 'Free') : 'N/A')}
-                          </span>
+                          <div className="flex flex-wrap gap-2">
+                            {item.is_custom !== undefined && (
+                              <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${item.is_approved ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'}`}>
+                                {item.is_approved ? 'Approved' : 'Pending'}
+                              </span>
+                            )}
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 uppercase font-bold">
+                              {item.status || 
+                               (item.is_custom ? 'Custom' : (item.is_premium ? 'Premium' : 'Standard')) || 
+                               (item.visa_required !== undefined ? (item.visa_required ? 'Required' : 'Free') : 'N/A')}
+                            </span>
+                          </div>
                         </td>
                         {showEdit && (
                           <td className="px-6 py-4 text-right">
@@ -73,6 +91,30 @@ export const DataTable = ({ title, data, loading, onEdit, onAdd, showAdd = true,
             </tbody>
           </table>
           {data.length === 0 && <div className="p-12 text-center text-zinc-500 italic">No records found.</div>}
+          
+          {totalPages > 1 && (
+            <div className="px-6 py-4 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between bg-zinc-50/50 dark:bg-zinc-800/30">
+              <p className="text-xs text-zinc-500 font-medium">
+                Page {currentPage} of {totalPages} <span className="mx-2">•</span> {totalCount} total items
+              </p>
+              <div className="flex gap-2">
+                <button 
+                  disabled={currentPage <= 1}
+                  onClick={() => onPageChange(currentPage - 1)}
+                  className="p-2 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-white dark:hover:bg-zinc-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button 
+                  disabled={currentPage >= totalPages}
+                  onClick={() => onPageChange(currentPage + 1)}
+                  className="p-2 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-white dark:hover:bg-zinc-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

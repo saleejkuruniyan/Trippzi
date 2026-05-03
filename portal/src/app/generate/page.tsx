@@ -1,9 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { generateItinerary } from "@/lib/api"
+import { generateItinerary, googleLogin } from "@/lib/api"
 import { motion, AnimatePresence } from "framer-motion"
-import { Sparkles, MapPin, Calendar, Wallet, Heart, ShieldCheck, Download } from "lucide-react"
+import { Sparkles, MapPin, Calendar, Wallet, Heart, ShieldCheck, Download, Zap } from "lucide-react"
+import { AuthModal } from "@/components/auth-modal"
 
 export default function GeneratePage() {
   const [loading, setLoading] = useState(false)
@@ -17,16 +18,79 @@ export default function GeneratePage() {
     source_country: "India"
   })
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const [owned, setOwned] = useState(false)
+  const [itineraryId, setItineraryId] = useState<number | null>(null)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+
+  const handleSubmit = async (e?: React.FormEvent, force = false) => {
+    if (e) e.preventDefault()
+
+    const token = localStorage.getItem('trippzi-token')
+    const isValidToken = token && token !== 'undefined' && token !== 'null'
+
+    if (!isValidToken && !force) {
+      setIsAuthModalOpen(true)
+      return
+    }
+
     setLoading(true)
     try {
       const data = await generateItinerary(formData)
       setResult(data)
+      setOwned(data.is_owned)
+      setItineraryId(data.itinerary_id)
     } catch (err) {
       console.error(err)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handlePayment = async () => {
+    if (!itineraryId) {
+      setIsAuthModalOpen(true)
+      return
+    }
+    
+    try {
+      const { createRazorpayOrder, verifyRazorpayPayment } = await import("@/lib/api")
+      const order = await createRazorpayOrder(itineraryId)
+      
+      if (order.status === 401) {
+        setIsAuthModalOpen(true)
+        return
+      }
+
+      const options = {
+        key: order.key,
+        amount: order.amount,
+        currency: order.currency,
+        name: "Trippzi",
+        description: "Unlock AI Itinerary",
+        order_id: order.order_id,
+        handler: async (response: any) => {
+          const verify = await verifyRazorpayPayment({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature
+          })
+          
+          if (verify.status === "success") {
+            alert("Payment successful! Full itinerary unlocked.")
+            setOwned(true)
+          }
+        },
+        prefill: {
+          email: order.user_email,
+          contact: order.user_phone
+        },
+        theme: { color: "#2563eb" }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      console.error("Payment failed", err)
     }
   }
 
@@ -137,9 +201,21 @@ export default function GeneratePage() {
                   <h1 className="text-3xl font-bold mb-2">{result.itinerary.title || 'Your Itinerary'}</h1>
                   <p className="text-zinc-500">{result.itinerary.overview}</p>
                 </div>
-                <button className="flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-black px-6 py-3 rounded-2xl font-bold">
-                  <Download className="w-4 h-4" /> Export PDF
-                </button>
+                {owned ? (
+                  <button 
+                    onClick={() => alert("Starting PDF Download...")}
+                    className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-green-700 transition-all"
+                  >
+                    <Download className="w-4 h-4" /> Export PDF
+                  </button>
+                ) : (
+                  <button 
+                    onClick={handlePayment}
+                    className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20"
+                  >
+                    <Zap className="w-4 h-4 fill-current" /> Unlock Full Itinerary (Rs. 99)
+                  </button>
+                )}
               </header>
 
               {/* Visa Alert */}
@@ -150,15 +226,12 @@ export default function GeneratePage() {
                   <p className="text-sm text-orange-700 dark:text-orange-500">
                     {result.visa_info.visa_required ? `Visa Required: ${result.visa_info.visa_type}` : 'No Visa Required / Visa on Arrival available.'}
                   </p>
-                  <ul className="mt-2 text-xs text-orange-600 dark:text-orange-600 flex flex-wrap gap-x-4 gap-y-1">
-                    {result.visa_info.documentation?.map((doc: string) => <li key={doc}>• {doc}</li>)}
-                  </ul>
                 </div>
               </div>
 
               {/* Daily Plan */}
-              <div className="space-y-6">
-                {result.itinerary.days?.map((day: any) => (
+              <div className="relative space-y-6">
+                {result.itinerary.days?.slice(0, owned ? undefined : 1).map((day: any) => (
                   <div key={day.day_number} className="border-l-4 border-blue-500 pl-6 py-2">
                     <h3 className="font-bold text-lg mb-2">Day {day.day_number}: {day.theme}</h3>
                     <div className="space-y-4">
@@ -174,6 +247,14 @@ export default function GeneratePage() {
                     </div>
                   </div>
                 ))}
+                
+                {!owned && (
+                  <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white dark:from-zinc-900 to-transparent flex items-end justify-center pb-4">
+                    <div className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 px-6 py-3 rounded-full text-sm font-bold text-zinc-500 flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-blue-500" /> Pay Rs. 99 to unlock and see all {result.itinerary.days?.length} days
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             
@@ -186,6 +267,11 @@ export default function GeneratePage() {
           </motion.div>
         )}
       </div>
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+        onSuccess={() => handleSubmit(undefined, true)}
+      />
     </div>
   )
 }

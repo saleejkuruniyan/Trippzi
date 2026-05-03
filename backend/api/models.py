@@ -59,6 +59,10 @@ class Itinerary(models.Model):
     image_url = models.URLField(blank=True, null=True)
     
     is_premium = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='custom_itineraries', null=True, blank=True)
+    is_custom = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -88,5 +92,39 @@ class Transaction(models.Model):
     razorpay_payment_id = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    phone_number = models.CharField(max_length=20, blank=True)
+    address = models.TextField(blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    country = models.CharField(max_length=100, blank=True, default='India')
+    zip_code = models.CharField(max_length=20, blank=True)
+
     def __str__(self):
-        return f"Txn: {self.user.username} - {self.itinerary.title}"
+        return f"Profile: {self.user.username}"
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wishlist')
+    itinerary = models.ForeignKey(Itinerary, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'itinerary')
+
+    def __str__(self):
+        return f"{self.user.username} wants {self.itinerary.title}"
+
+# Signals to auto-create profile
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.get_or_create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    if not hasattr(instance, 'profile'):
+        UserProfile.objects.create(user=instance)
+    instance.profile.save()
