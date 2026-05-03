@@ -10,7 +10,7 @@ import { ItineraryForm } from "@/components/itinerary-form"
 import { VisaRuleForm } from "@/components/visa-rule-form"
 import {
   fetchStats, fetchTransactions, fetchUsers, fetchItineraries, fetchVisaRules, login,
-  createItinerary, updateItinerary, deleteItinerary,
+  createItinerary, updateItinerary, deleteItinerary, cloneItinerary,
   createVisaRule, updateVisaRule, deleteVisaRule
 } from "@/lib/api"
 import { DollarSign, FileText, Users, Globe, Sparkles } from "lucide-react"
@@ -107,6 +107,16 @@ export default function AdminDashboard() {
     } catch (err) { alert("Failed to delete") }
   }
 
+  const handleClone = async (id: number) => {
+    if (!confirm("This will create a standard copy for you to review. Proceed?")) return
+    try {
+      const newItem = await cloneItinerary(id)
+      setActiveTab("itineraries") // Switch to standard tab
+      setEditingItem(newItem) // Open edit form for the new item
+      loadStats()
+    } catch (err) { alert("Failed to clone") }
+  }
+
   if (!isAuthenticated) return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950 p-4">
       <div className="w-full max-w-md bg-white dark:bg-zinc-900 p-8 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-2xl">
@@ -156,6 +166,7 @@ export default function AdminDashboard() {
                   setCurrentPage(p)
                   loadTabData(p)
                 }}
+                onClone={handleClone}
               />
             )
           )}

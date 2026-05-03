@@ -102,6 +102,15 @@ export async function deleteItinerary(id: number) {
   return res.ok;
 }
 
+export async function cloneItinerary(id: number) {
+  const res = await fetch(`${API_BASE}/itineraries/${id}/clone_to_standard/`, {
+    method: 'POST',
+    headers: getHeaders(),
+  });
+  if (!res.ok) throw new Error("Cloning failed");
+  return res.json();
+}
+
 // Visa Rule CRUD
 export async function createVisaRule(data: any) {
   const res = await fetch(`${API_BASE}/admin/visa-rules/`, {

@@ -14,12 +14,13 @@ interface DataTableProps {
   currentPage: number
   totalCount: number
   onPageChange: (page: number) => void
+  onClone?: (id: number) => void
 }
 
 export const DataTable = ({ 
   title, data, loading, onEdit, onAdd, 
   showAdd = true, showEdit = true,
-  currentPage, totalCount, onPageChange
+  currentPage, totalCount, onPageChange, onClone
 }: DataTableProps) => {
   const totalPages = Math.ceil(totalCount / 10) // DRF default is 10
 
@@ -77,7 +78,15 @@ export const DataTable = ({
                           </div>
                         </td>
                         {showEdit && (
-                          <td className="px-6 py-4 text-right">
+                          <td className="px-6 py-4 text-right flex items-center justify-end gap-3">
+                            {item.is_custom && onClone && (
+                              <button 
+                                onClick={() => onClone(item.id)}
+                                className="text-green-600 text-sm font-bold hover:underline"
+                              >
+                                Promote
+                              </button>
+                            )}
                             <button 
                               onClick={() => onEdit?.(item)}
                               className="text-blue-600 text-sm font-bold hover:underline"

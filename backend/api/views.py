@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 from django.db.models import Sum, Count, Q
@@ -61,6 +62,44 @@ class ItineraryViewSet(viewsets.ModelViewSet):
             query |= Q(is_custom=True, user=user)
             
         return queryset.filter(query).distinct()
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
+    def clone_to_standard(self, request, pk=None):
+        itinerary = self.get_object()
+        
+        # Create a copy
+        new_itinerary = Itinerary.objects.create(
+            destination_rel=itinerary.destination_rel,
+            title=f"Standard: {itinerary.title}",
+            destination=itinerary.destination,
+            duration_days=itinerary.duration_days,
+            regular_price=itinerary.regular_price,
+            sale_price=itinerary.sale_price,
+            price=itinerary.price,
+            description=itinerary.description,
+            highlights=itinerary.highlights,
+            content=itinerary.content,
+            image=itinerary.image, 
+            image_url=itinerary.image_url,
+            is_premium=itinerary.is_premium,
+            user=None,
+            is_custom=False,
+            is_approved=False
+        )
+        
+        # Clone day details
+        from .models import ItineraryDay
+        for day in itinerary.day_details.all():
+            ItineraryDay.objects.create(
+                itinerary=new_itinerary,
+                day_number=day.day_number,
+                location_name=day.location_name,
+                image=day.image,
+                image_url=day.image_url,
+                caption=day.caption
+            )
+            
+        return Response(ItinerarySerializer(new_itinerary, context={'request': request}).data, status=status.HTTP_201_CREATED)
     
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
