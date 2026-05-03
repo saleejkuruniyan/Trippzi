@@ -1,7 +1,11 @@
 import os
+import warnings
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
+
+# Silence dj-rest-auth deprecation warnings
+warnings.filterwarnings("ignore", category=UserWarning, module='dj_rest_auth')
 
 # Load environment variables from .env file
 load_dotenv()
@@ -199,9 +203,8 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*']
 SOCIALACCOUNT_ADAPTER = 'api.adapter.CustomSocialAccountAdapter'
 
 AUTHENTICATION_BACKENDS = [

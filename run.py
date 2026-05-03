@@ -99,13 +99,14 @@ def setup_backend():
     pip = VENV_DIR / ("bin/pip" if os.name != "nt" else "Scripts/pip")
     
     if not VENV_DIR.exists():
-        run_cmd(["python3.12", "-m", "venv", str(VENV_DIR)])
+        python_cmd = sys.executable if os.name == "nt" else "python3.12"
+        run_cmd([python_cmd, "-m", "venv", str(VENV_DIR)])
     
-    run_cmd([str(pip), "install", "--upgrade", "pip"])
+    run_cmd([str(python), "-m", "pip", "install", "--upgrade", "pip"])
     if (BACKEND / "requirements.txt").exists():
-        run_cmd([str(pip), "install", "-r", "requirements.txt"], cwd=BACKEND)
+        run_cmd([str(python), "-m", "pip", "install", "-r", "requirements.txt"], cwd=BACKEND)
     else:
-        run_cmd([str(pip), "install", "django", "djangorestframework", "django-cors-headers", "langchain-openai", "langchain-community", "python-dotenv", "razorpay", "dj-database-url"], cwd=BACKEND)
+        run_cmd([str(python), "-m", "pip", "install", "django", "djangorestframework", "django-cors-headers", "langchain-openai", "langchain-community", "python-dotenv", "razorpay", "dj-database-url"], cwd=BACKEND)
     
     run_cmd([str(python), "manage.py", "migrate"], cwd=BACKEND)
 
@@ -131,6 +132,7 @@ def main():
 
     python = VENV_DIR / ("bin/python" if os.name != "nt" else "Scripts/python")
     npm = "npm.cmd" if os.name == "nt" else "npm"
+    celery = VENV_DIR / ("bin/celery" if os.name != "nt" else "Scripts/celery")
 
     print("🚀 Starting Django backend...")
     backend = create_process([str(python), "manage.py", "runserver", "8000"], cwd=BACKEND)
@@ -142,10 +144,10 @@ def main():
     admin = create_process([npm, "run", "dev", "--", "-p", "3001"], cwd=SUPERADMIN)
 
     print("🚀 Starting Celery Worker...")
-    worker = create_process([str(VENV_DIR / "bin/celery"), "-A", "core", "worker", "--loglevel=info"], cwd=BACKEND)
+    worker = create_process([str(celery), "-A", "core", "worker", "--loglevel=info", "--concurrency=2"], cwd=BACKEND)
 
     print("🚀 Starting Celery Beat...")
-    beat = create_process([str(VENV_DIR / "bin/celery"), "-A", "core", "beat", "--loglevel=info"], cwd=BACKEND)
+    beat = create_process([str(celery), "-A", "core", "beat", "--loglevel=info"], cwd=BACKEND)
 
     print("\n" + "=" * 60)
     print("✅ Trippzi is running")
