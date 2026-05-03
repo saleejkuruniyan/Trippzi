@@ -1,6 +1,12 @@
 from rest_framework import serializers
-from .models import Destination, Itinerary, VisaRule, Transaction, UserProfile
+from .models import Destination, Itinerary, VisaRule, Transaction, UserProfile, ItineraryDay
 from django.contrib.auth.models import User
+
+class ItineraryDaySerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(use_url=True, required=False)
+    class Meta:
+        model = ItineraryDay
+        fields = ['day_number', 'location_name', 'image', 'image_url', 'caption']
 
 class SimpleItinerarySerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=True, required=False)
@@ -23,6 +29,7 @@ class DestinationSerializer(serializers.ModelSerializer):
 
 class ItinerarySerializer(serializers.ModelSerializer):
     destination_details = DestinationSerializer(source='destination_rel', read_only=True)
+    day_details = ItineraryDaySerializer(many=True, read_only=True)
     image = serializers.ImageField(use_url=True, required=False)
     is_owned = serializers.SerializerMethodField()
     
@@ -30,10 +37,36 @@ class ItinerarySerializer(serializers.ModelSerializer):
         model = Itinerary
         fields = '__all__'
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        request = self.context.get('request')
+        user = request.user if request else None
+        
+        # Check ownership
+        is_owned = False
+        if user and user.is_authenticated:
+            is_owned = Transaction.objects.filter(user=user, itinerary=instance, status='COMPLETED').exists()
+            if not is_owned and instance.user == user:
+                is_owned = True # User is the creator of this custom trip
+
+        # If not owned, mask all days except Day 1
+        if not is_owned:
+            original_content = data.get('content', [])
+            if isinstance(original_content, list) and len(original_content) > 0:
+                data['content'] = original_content[:1] # Only Day 1
+            
+            # Mask day_details too
+            if 'day_details' in data:
+                data['day_details'] = [d for d in data['day_details'] if d.get('day_number') == 1]
+                
+        return data
+
     def get_is_owned(self, obj):
         request = self.context.get('request')
         if request and request.user and request.user.is_authenticated:
-            return Transaction.objects.filter(user=request.user, itinerary=obj, status='COMPLETED').exists()
+            # Re-use logic for consistency
+            is_purchased = Transaction.objects.filter(user=request.user, itinerary=obj, status='COMPLETED').exists()
+            return is_purchased or obj.user == request.user
         return False
 
 class VisaRuleSerializer(serializers.ModelSerializer):

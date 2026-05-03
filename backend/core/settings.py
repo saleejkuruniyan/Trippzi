@@ -232,5 +232,8 @@ S3_ENDPOINT_URL = os.getenv('S3_ENDPOINT_URL')
 S3_SIGNATURE_VERSION = os.getenv('S3_SIGNATURE_VERSION', 's3v4')
 CDN_URL = os.getenv('CDN_URL')
 
+# Unsplash API
+UNSPLASH_ACCESS_KEY = os.getenv('UNSPLASH_ACCESS_KEY')
+
 # Use custom storage by default for media
 DEFAULT_FILE_STORAGE = 'api.storage.R2Storage'

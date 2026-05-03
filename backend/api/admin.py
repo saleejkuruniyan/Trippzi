@@ -1,11 +1,16 @@
 from django.contrib import admin
-from .models import Itinerary, VisaRule, Transaction, Destination, UserProfile, Wishlist
+from .models import Itinerary, VisaRule, Transaction, Destination, UserProfile, Wishlist, ItineraryDay
 
 @admin.register(Destination)
 class DestinationAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'created_at')
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+
+class ItineraryDayInline(admin.TabularInline):
+    model = ItineraryDay
+    extra = 1
+    fields = ('day_number', 'location_name', 'image', 'image_url', 'caption')
 
 @admin.register(Itinerary)
 class ItineraryAdmin(admin.ModelAdmin):
@@ -14,6 +19,7 @@ class ItineraryAdmin(admin.ModelAdmin):
     search_fields = ('title', 'destination', 'description', 'user__username')
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
+    inlines = [ItineraryDayInline]
 
 @admin.register(VisaRule)
 class VisaRuleAdmin(admin.ModelAdmin):

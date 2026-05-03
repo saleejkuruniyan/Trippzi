@@ -1,12 +1,14 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { generateItinerary, googleLogin } from "@/lib/api"
 import { motion, AnimatePresence } from "framer-motion"
 import { Sparkles, MapPin, Calendar, Wallet, Heart, ShieldCheck, Download, Zap } from "lucide-react"
 import { AuthModal } from "@/components/auth-modal"
 
 export default function GeneratePage() {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
   const [formData, setFormData] = useState({
@@ -21,6 +23,7 @@ export default function GeneratePage() {
   const [owned, setOwned] = useState(false)
   const [itineraryId, setItineraryId] = useState<number | null>(null)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const [isDownloading, setIsDownloading] = useState(false)
 
   const handleSubmit = async (e?: React.FormEvent, force = false) => {
     if (e) e.preventDefault()
@@ -36,13 +39,26 @@ export default function GeneratePage() {
     setLoading(true)
     try {
       const data = await generateItinerary(formData)
-      setResult(data)
-      setOwned(data.is_owned)
-      setItineraryId(data.itinerary_id)
+      // Redirect to the premium preview page
+      router.push(`/itinerary/${data.itinerary_id}/preview`)
     } catch (err) {
       console.error(err)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleDownload = async () => {
+    if (!itineraryId) return
+    setIsDownloading(true)
+    try {
+      const { downloadItineraryPDF } = await import("@/lib/api")
+      const { pdf_url } = await downloadItineraryPDF(itineraryId)
+      window.open(pdf_url, '_blank')
+    } catch (err: any) {
+      alert(err.message || "Failed to download PDF. Please try again.")
+    } finally {
+      setIsDownloading(false)
     }
   }
 
@@ -203,10 +219,12 @@ export default function GeneratePage() {
                 </div>
                 {owned ? (
                   <button 
-                    onClick={() => alert("Starting PDF Download...")}
-                    className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-green-700 transition-all"
+                    onClick={handleDownload}
+                    disabled={isDownloading}
+                    className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-green-700 transition-all disabled:opacity-50"
                   >
-                    <Download className="w-4 h-4" /> Export PDF
+                    <Download className={`w-4 h-4 ${isDownloading ? 'animate-bounce' : ''}`} />
+                    {isDownloading ? 'Generating...' : 'Export PDF'}
                   </button>
                 ) : (
                   <button 

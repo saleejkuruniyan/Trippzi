@@ -4,7 +4,7 @@ from .views import (
     ItineraryViewSet, GenerateItineraryView, VisaRuleView, 
     AdminStatsView, AdminUserViewSet, AdminTransactionViewSet,
     DestinationViewSet, AdminVisaRuleViewSet, CreateOrderView, VerifyPaymentView, ProfileView,
-    MyItinerariesView, WishlistToggleView, MyWishlistView
+    MyItinerariesView, WishlistToggleView, MyWishlistView, DownloadItineraryPDFView
 )
 
 router = DefaultRouter()
@@ -25,4 +25,5 @@ urlpatterns = [
     path('wishlist/toggle/', WishlistToggleView.as_view(), name='wishlist-toggle'),
     path('wishlist/', MyWishlistView.as_view(), name='my-wishlist'),
     path('auth/profile/', ProfileView.as_view(), name='profile'),
+    path('itineraries/<int:itinerary_id>/pdf/', DownloadItineraryPDFView.as_view(), name='download-pdf'),
 ]

@@ -4,7 +4,7 @@ import { useEffect, useState, use } from "react"
 import { motion } from "framer-motion"
 import {
   ArrowLeft, Zap, Star, ShieldCheck,
-  Clock, MapPin, Share2, Heart, Download, Sparkles
+  Clock, MapPin, Share2, Heart, Download, Sparkles, Eye
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -24,6 +24,7 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [wishlisted, setWishlisted] = useState(false)
   const [toast, setToast] = useState('')
+  const [isDownloading, setIsDownloading] = useState(false)
 
   const showToast = (msg: string) => {
     setToast(msg)
@@ -73,6 +74,20 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
   const handleShare = () => {
     const url = window.location.href
     navigator.clipboard.writeText(url).then(() => showToast('🔗 Link copied to clipboard!'))
+  }
+
+  const handleDownload = async () => {
+    if (!itinerary.id) return
+    setIsDownloading(true)
+    try {
+      const { downloadItineraryPDF } = await import("@/lib/api")
+      const { pdf_url } = await downloadItineraryPDF(itinerary.id)
+      window.open(pdf_url, '_blank')
+    } catch (err: any) {
+      alert(err.message || "Failed to download PDF. Please try again.")
+    } finally {
+      setIsDownloading(false)
+    }
   }
 
   const handlePurchase = async (force = false) => {
@@ -206,10 +221,12 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
                   <div className="pt-4">
                     {itinerary.is_owned ? (
                       <button
-                        onClick={() => alert("Starting PDF Download...")}
-                        className="group w-full flex items-center justify-center gap-3 bg-green-600 text-white p-6 rounded-[2rem] text-xl font-black hover:bg-green-700 transition-all shadow-2xl shadow-green-500/20 active:scale-95"
+                        onClick={handleDownload}
+                        disabled={isDownloading}
+                        className="group w-full flex items-center justify-center gap-3 bg-green-600 text-white p-6 rounded-[2rem] text-xl font-black hover:bg-green-700 transition-all shadow-2xl shadow-green-500/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <Download className="w-6 h-6" /> DOWNLOAD ITINERARY
+                        <Download className={`w-6 h-6 ${isDownloading ? 'animate-bounce' : ''}`} />
+                        {isDownloading ? 'GENERATING BOOKLET...' : 'DOWNLOAD ITINERARY'}
                       </button>
                     ) : (
                       <button
@@ -228,6 +245,12 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
               </div>
 
               <div className="grid grid-cols-2 gap-4">
+                <Link
+                  href={`/itinerary/${id}/preview`}
+                  className="flex items-center justify-center gap-2 p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 text-sm font-bold hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors col-span-2 bg-zinc-50 dark:bg-zinc-900"
+                >
+                  <Eye className="w-4 h-4" /> Quick Preview
+                </Link>
                 <button
                   onClick={handleWishlist}
                   className={`flex items-center justify-center gap-2 p-4 rounded-2xl border text-sm font-bold transition-all ${
@@ -255,22 +278,45 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
             <h2 className="text-4xl font-black text-center italic tracking-tighter">Day-wise Breakdown</h2>
             <div className="relative">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {(itinerary.content || itinerary.days)?.slice(0, (itinerary.is_custom && !itinerary.is_owned) ? 1 : undefined).map((item: any, i: number) => (
-                  <div key={i} className="p-8 bg-white dark:bg-zinc-900 rounded-[2rem] border border-zinc-200 dark:border-zinc-800">
-                    <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black mb-6">
-                      {item.day || item.day_number}
-                    </div>
-                    <h4 className="text-xl font-bold mb-4">Day {item.day || item.day_number}</h4>
-                    <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                      {item.activity || item.theme}
-                      {item.activities && (
-                        <span className="block mt-2 text-xs opacity-70">
-                          {item.activities.length} activities planned
-                        </span>
+                {(itinerary.content || itinerary.days)?.slice(0, (itinerary.is_custom && !itinerary.is_owned) ? 1 : undefined).map((item: any, i: number) => {
+                  const dayImages = itinerary.day_details?.filter((d: any) => d.day_number === (item.day || item.day_number)) || []
+                  
+                  return (
+                    <div key={i} className="group bg-white dark:bg-zinc-900 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 overflow-hidden hover:shadow-xl transition-all">
+                      {dayImages.length > 0 && (
+                        <div className="relative aspect-video overflow-hidden">
+                          <Image
+                            src={dayImages[0].image || dayImages[0].image_url}
+                            alt={item.theme || item.activity}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
                       )}
-                    </p>
-                  </div>
-                ))}
+                      <div className="p-8">
+                        <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black mb-6">
+                          {item.day || item.day_number}
+                        </div>
+                        <h4 className="text-xl font-bold mb-4">Day {item.day || item.day_number}: {item.theme}</h4>
+                        
+                        <div className="space-y-4">
+                          {item.activities?.map((act: any, idx: number) => (
+                            <div key={idx} className="flex gap-3 text-sm">
+                              <span className="font-bold text-blue-600 shrink-0">{act.time}</span>
+                              <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">{act.activity}</p>
+                            </div>
+                          ))}
+                        </div>
+
+                        {(!item.activities && (item.activity || item.theme)) && (
+                           <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                            {item.activity || item.theme}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
 
               {(itinerary.is_custom && !itinerary.is_owned) && (

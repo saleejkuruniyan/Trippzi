@@ -21,7 +21,7 @@ class Destination(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField()
     image = models.ImageField(upload_to=destination_image_path, blank=True, null=True)
-    image_url = models.URLField(blank=True, null=True) # Keep for fallback or external
+    image_url = models.URLField(max_length=500, blank=True, null=True) # Keep for fallback or external
     
     # Rich Guide Content
     airports = models.JSONField(default=list, help_text="List of major airports")
@@ -32,6 +32,9 @@ class Destination(models.Model):
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -56,7 +59,7 @@ class Itinerary(models.Model):
     highlights = models.TextField(blank=True, help_text="Short highlight e.g. 'Kuala Lumpur + Langkawi'")
     content = models.JSONField(help_text="Day-wise itinerary structure")
     image = models.ImageField(upload_to=itinerary_image_path, blank=True, null=True)
-    image_url = models.URLField(blank=True, null=True)
+    image_url = models.URLField(max_length=500, blank=True, null=True)
     
     is_premium = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='custom_itineraries', null=True, blank=True)
@@ -68,6 +71,21 @@ class Itinerary(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.destination})"
+
+class ItineraryDay(models.Model):
+    itinerary = models.ForeignKey(Itinerary, on_delete=models.CASCADE, related_name='day_details')
+    day_number = models.IntegerField()
+    location_name = models.CharField(max_length=255, blank=True)
+    image = models.ImageField(upload_to='day_images/', blank=True, null=True)
+    image_url = models.URLField(max_length=500, blank=True, null=True)
+    caption = models.CharField(max_length=255, blank=True)
+    
+    class Meta:
+        ordering = ['day_number']
+        unique_together = ('itinerary', 'day_number')
+
+    def __str__(self):
+        return f"{self.itinerary.title} - Day {self.day_number}"
 
 class VisaRule(models.Model):
     source_country = models.CharField(max_length=100)

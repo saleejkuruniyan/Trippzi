@@ -8,7 +8,15 @@ from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from .services.ai_engine import AIEngine
-from .models import Itinerary, VisaRule, Transaction, Destination, Wishlist
+from .models import Itinerary, VisaRule, Transaction, Destination, Wishlist, ItineraryDay
+from .utils import fetch_unsplash_images, download_image_to_content_file
+from .storage import R2Storage
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.core.files.base import ContentFile
+from django.shortcuts import get_object_or_404
+import requests
+import os
 from .serializers import (
     ItinerarySerializer, VisaRuleSerializer, TransactionSerializer, 
     UserSerializer, DestinationSerializer
@@ -51,7 +59,7 @@ class ItineraryViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated()]
 
 class GenerateItineraryView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         destination = request.data.get('destination')
         duration = request.data.get('duration', 5)
@@ -65,9 +73,38 @@ class GenerateItineraryView(APIView):
 
         ai_engine = AIEngine()
         
-        # 1. Generate Itinerary
+        # 1. Generate Itinerary Structure
         itinerary_data = ai_engine.generate_itinerary(destination, duration, budget, style, interests)
         
+        # 1b. Ensure Destination exists or create it
+        dest_obj, created = Destination.objects.get_or_create(
+            name__iexact=destination,
+            defaults={
+                'name': destination,
+                'description': f"A beautiful journey to {destination}."
+            }
+        )
+        
+        if created:
+            # Enrich new destination with AI guide and Unsplash image
+            guide = ai_engine.generate_destination_guide(destination)
+            dest_obj.description = guide.get('description', dest_obj.description)
+            dest_obj.best_time = guide.get('best_time', '')
+            dest_obj.visa_process = guide.get('visa_process', '')
+            dest_obj.airports = guide.get('airports', [])
+            dest_obj.tips = guide.get('tips', [])
+            dest_obj.days_recommendation = guide.get('days_recommendation', {})
+            
+            # Fetch destination hero image
+            dest_images = fetch_unsplash_images(f"{destination} travel", count=1)
+            if dest_images:
+                dest_obj.image_url = dest_images[0]
+                dest_image_file = download_image_to_content_file(dest_images[0])
+                if dest_image_file:
+                    dest_obj.image.save(f"dest_{dest_obj.slug}.jpg", dest_image_file)
+            
+            dest_obj.save()
+
         # 2. Get Visa Info
         visa_info = ai_engine.get_visa_info(source_country, destination)
 
@@ -75,19 +112,12 @@ class GenerateItineraryView(APIView):
         itinerary_id = None
         is_owned = False
         if request.user.is_authenticated:
-            # Flatten day-wise structure to match Itinerary model content field
-            content_data = []
-            for day in itinerary_data.get('days', []):
-                for act in day.get('activities', []):
-                    content_data.append({
-                        "day": day.get('day_number'),
-                        "time": act.get('time'),
-                        "activity": act.get('activity'),
-                        "description": act.get('description')
-                    })
+            # Store the full days structure as-is in content field
+            content_data = itinerary_data.get('days', [])
             
             itinerary_obj = Itinerary.objects.create(
                 user=request.user,
+                destination_rel=dest_obj,
                 is_custom=True,
                 title=itinerary_data.get('title', f"Trip to {destination}"),
                 destination=destination,
@@ -99,6 +129,37 @@ class GenerateItineraryView(APIView):
                 content=content_data
             )
             itinerary_id = itinerary_obj.id
+
+            # 3b. Fetch Itinerary Hero Image (Thumbnail)
+            hero_images = fetch_unsplash_images(f"{destination} {itinerary_obj.title}", count=1)
+            if hero_images:
+                itinerary_obj.image_url = hero_images[0]
+                hero_file = download_image_to_content_file(hero_images[0])
+                if hero_file:
+                    itinerary_obj.image.save(f"itinerary_{itinerary_obj.id}.jpg", hero_file)
+                itinerary_obj.save()
+
+            # 4. Fetch and save day-wise images from Unsplash
+            for day in content_data:
+                day_num = day.get('day_number')
+                theme = day.get('theme', '')
+                query = f"{destination} {theme}"
+                
+                # Fetch up to 2 images per day
+                image_urls = fetch_unsplash_images(query, count=2)
+                
+                for idx, img_url in enumerate(image_urls):
+                    day_detail = ItineraryDay.objects.create(
+                        itinerary=itinerary_obj,
+                        day_number=day_num,
+                        location_name=theme,
+                        image_url=img_url,
+                        caption=f"{theme} - {idx+1}"
+                    )
+                    # Download to local storage (R2/S3) for persistence
+                    image_file = download_image_to_content_file(img_url)
+                    if image_file:
+                        day_detail.image.save(f"day_{day_num}_{idx}.jpg", image_file)
 
         return Response({
             "itinerary": itinerary_data,
@@ -267,3 +328,60 @@ class AdminTransactionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Transaction.objects.all().order_by('-created_at')
     serializer_class = TransactionSerializer
     permission_classes = [IsAdminUser]
+
+class DownloadItineraryPDFView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, itinerary_id):
+        # 1. Verify purchase or ownership
+        itinerary = get_object_or_404(Itinerary, id=itinerary_id)
+        is_purchased = Transaction.objects.filter(
+            user=request.user, itinerary=itinerary, status='COMPLETED'
+        ).exists()
+        is_owner = itinerary.user == request.user and itinerary.is_custom
+        
+        if not (is_purchased or is_owner):
+            return Response({'error': 'Purchase required to download booklet.'}, status=403)
+
+        # 2. Check if PDF already exists in R2
+        r2_key = f"pdfs/itinerary_{itinerary_id}_{request.user.id}.pdf"
+        storage = R2Storage()
+        
+        if storage.exists(r2_key):
+            pdf_url = storage.url(r2_key)
+            return Response({'pdf_url': pdf_url})
+
+        # 3. Generate PDF fresh
+        try:
+            from weasyprint import HTML
+            # Try to build and write PDF to catch OS library errors
+            try:
+                day_images = ItineraryDay.objects.filter(itinerary=itinerary)
+                context = {
+                    'itinerary': itinerary,
+                    'days': itinerary.content,
+                    'day_images': day_images,
+                    'user': request.user,
+                }
+                html_string = render_to_string('itinerary_pdf.html', context)
+                pdf_bytes = HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf()
+            except Exception as e:
+                # Handle missing system libraries (Pango/Cairo/GTK+)
+                err_msg = str(e).lower()
+                if 'dlopen' in err_msg or 'cannot load library' in err_msg or 'pango' in err_msg or 'cairo' in err_msg:
+                    instructions = "Please install GTK3 runtime: https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases" if os.name == 'nt' else "Please run: brew install pango"
+                    return Response({
+                        'error': 'System dependencies missing (Pango/Cairo).',
+                        'details': str(e),
+                        'instructions': instructions
+                    }, status=500)
+                raise e
+
+        except ImportError:
+            return Response({'error': 'WeasyPrint not installed. Run: pip install weasyprint'}, status=500)
+
+        # 4. Upload to R2 and return URL
+        storage.save(r2_key, ContentFile(pdf_bytes))
+        pdf_url = storage.url(r2_key)
+        
+        return Response({'pdf_url': pdf_url})
