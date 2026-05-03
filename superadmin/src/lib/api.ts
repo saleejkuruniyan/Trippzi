@@ -71,3 +71,57 @@ export async function validateItinerary(id: number) {
   });
   return res.json();
 }
+
+// Itinerary CRUD
+export async function createItinerary(data: any) {
+  const res = await fetch(`${API_BASE}/itineraries/`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function updateItinerary(id: number, data: any) {
+  const res = await fetch(`${API_BASE}/itineraries/${id}/`, {
+    method: 'PATCH',
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function deleteItinerary(id: number) {
+  const res = await fetch(`${API_BASE}/itineraries/${id}/`, {
+    method: 'DELETE',
+    headers: getHeaders(),
+  });
+  return res.ok;
+}
+
+// Visa Rule CRUD
+export async function createVisaRule(data: any) {
+  const res = await fetch(`${API_BASE}/admin/visa-rules/`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function updateVisaRule(id: number, data: any) {
+  const res = await fetch(`${API_BASE}/admin/visa-rules/${id}/`, {
+    method: 'PATCH',
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function deleteVisaRule(id: number) {
+  const res = await fetch(`${API_BASE}/admin/visa-rules/${id}/`, {
+    method: 'DELETE',
+    headers: getHeaders(),
+  });
+  return res.ok;
+}

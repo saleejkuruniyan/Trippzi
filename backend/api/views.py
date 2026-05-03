@@ -23,7 +23,11 @@ class DestinationViewSet(viewsets.ReadOnlyModelViewSet):
 class ItineraryViewSet(viewsets.ModelViewSet):
     queryset = Itinerary.objects.all().order_by('-created_at')
     serializer_class = ItinerarySerializer
-    permission_classes = [AllowAny] # Making it AllowAny for now as per destinations page usage
+    
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+        return [IsAdminUser()]
 
 class GenerateItineraryView(APIView):
     permission_classes = [AllowAny]
