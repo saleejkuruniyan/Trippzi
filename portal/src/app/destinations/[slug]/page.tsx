@@ -186,7 +186,13 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
                   className="group bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
                 >
                   <div className="relative aspect-video">
-                    <Image src={itinerary.image || itinerary.image_url || "/destinations/bali.png"} alt={itinerary.title} fill className="object-cover" />
+                    {itinerary.image || itinerary.image_url ? (
+                      <Image src={itinerary.image || itinerary.image_url} alt={itinerary.title} fill className="object-cover" />
+                    ) : (
+                      <div className="w-full h-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+                        <Clock className="w-10 h-10 text-zinc-300 animate-pulse" />
+                      </div>
+                    )}
                     <div className="absolute top-4 right-4 bg-white/90 dark:bg-zinc-900/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold shadow-sm">
                       {itinerary.duration_days} Days
                     </div>

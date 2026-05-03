@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { fetchMyTrips, createRazorpayOrder, verifyRazorpayPayment } from "@/lib/api"
 import { motion } from "framer-motion"
-import { MapPin, Calendar, ArrowRight, Zap, Download, Sparkles } from "lucide-react"
+import { MapPin, Calendar, ArrowRight, Zap, Download, Sparkles, Clock } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -97,13 +97,19 @@ export default function MyTripsPage() {
                 className="group bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image 
-                    src={trip.image_url || "/placeholder.jpg"} 
-                    alt={trip.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
+                  {trip.image_url || trip.image ? (
+                    <Image 
+                      src={trip.image_url || trip.image} 
+                      alt={trip.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+                      <Clock className="w-10 h-10 text-zinc-300" />
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4 text-white">
                     <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">
@@ -111,13 +117,17 @@ export default function MyTripsPage() {
                     </p>
                     <h3 className="text-xl font-bold truncate">{trip.title}</h3>
                   </div>
-                  {trip.is_custom && (
-                    <div className="absolute top-4 left-4">
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${trip.is_owned ? 'bg-green-500 text-white' : 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'}`}>
-                        {trip.is_owned ? 'Owned' : 'Draft'}
+                  <div className="absolute top-4 left-4 flex gap-2">
+                    {trip.is_approved ? (
+                      <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-green-500 text-white">
+                        Approved
                       </span>
-                    </div>
-                  )}
+                    ) : (
+                      <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-amber-500 text-white shadow-lg shadow-amber-500/20">
+                        Pending Approval
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="p-6 flex-1 flex flex-col">

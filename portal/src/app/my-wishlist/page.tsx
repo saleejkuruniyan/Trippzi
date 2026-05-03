@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { fetchMyWishlist } from "@/lib/api"
 import { motion } from "framer-motion"
-import { Heart, MapPin, Calendar, ArrowRight } from "lucide-react"
+import { Heart, MapPin, Calendar, ArrowRight, Clock } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -53,13 +53,19 @@ export default function MyWishlistPage() {
                 className="group bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm hover:shadow-xl transition-all"
               >
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image
-                    src={trip.image_url || trip.image || "/destinations/bali.png"}
-                    alt={trip.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
+                  {trip.image_url || trip.image ? (
+                    <Image
+                      src={trip.image_url || trip.image}
+                      alt={trip.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+                      <Clock className="w-10 h-10 text-zinc-300" />
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute top-4 right-4">
                     <Heart className="w-5 h-5 text-red-400 fill-current drop-shadow" />

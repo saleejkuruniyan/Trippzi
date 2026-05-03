@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Destination, Itinerary, VisaRule, Transaction, UserProfile, ItineraryDay
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 class ItineraryDaySerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=True, required=False)
@@ -15,6 +16,14 @@ class SimpleItinerarySerializer(serializers.ModelSerializer):
         model = Itinerary
         fields = '__all__'
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        # Rule: Mask thumbnail if not approved
+        if not instance.is_approved:
+            data['image'] = None
+            data['image_url'] = None
+        return data
+
 class DestinationSerializer(serializers.ModelSerializer):
     itineraries_count = serializers.IntegerField(source='itineraries.count', read_only=True)
     itineraries = serializers.SerializerMethodField()
@@ -25,7 +34,18 @@ class DestinationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_itineraries(self, obj):
-        return SimpleItinerarySerializer(obj.itineraries.all(), many=True, context=self.context).data
+        request = self.context.get('request')
+        user = request.user if request else None
+        
+        itineraries = obj.itineraries.all()
+        if not (user and user.is_authenticated and user.is_staff):
+            # For non-staff, apply visibility rules
+            query = Q(is_custom=False, is_approved=True)
+            if user and user.is_authenticated:
+                query |= Q(is_custom=True, user=user)
+            itineraries = itineraries.filter(query).distinct()
+            
+        return SimpleItinerarySerializer(itineraries, many=True, context=self.context).data
 
 class ItinerarySerializer(serializers.ModelSerializer):
     destination_details = DestinationSerializer(source='destination_rel', read_only=True)
@@ -58,6 +78,11 @@ class ItinerarySerializer(serializers.ModelSerializer):
             # Mask day_details too
             if 'day_details' in data:
                 data['day_details'] = [d for d in data['day_details'] if d.get('day_number') == 1]
+        
+        # Rule: Mask thumbnail if not approved
+        if not instance.is_approved:
+            data['image'] = None
+            data['image_url'] = None
                 
         return data
 

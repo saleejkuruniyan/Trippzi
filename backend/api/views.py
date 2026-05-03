@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status, viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Q
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
@@ -23,7 +23,17 @@ from .serializers import (
 )
 
 class DestinationViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Destination.objects.all()
+    def get_queryset(self):
+        user = self.request.user
+        # Staff see all destinations
+        if user.is_authenticated and user.is_staff:
+            return Destination.objects.all()
+        
+        # Regular users only see destinations with at least one approved itinerary
+        return Destination.objects.annotate(
+            approved_count=Count('itineraries', filter=Q(itineraries__is_approved=True))
+        ).filter(approved_count__gt=0)
+    
     serializer_class = DestinationSerializer
     lookup_field = 'slug'
     permission_classes = [AllowAny]
@@ -43,13 +53,12 @@ class ItineraryViewSet(viewsets.ModelViewSet):
         if user.is_authenticated and user.is_staff:
             return queryset
         
-        from django.db.models import Q
-        # Show ONLY itineraries that are explicitly approved OR owned by the user
-        # (Already filtered by queryset above if is_custom was passed, but public users 
-        # usually won't pass is_custom. If they do, we still apply approval logic)
-        query = Q(is_approved=True)
+        # Rule: 
+        # 1. Standard (is_custom=False) must be approved.
+        # 2. Custom (is_custom=True) must be owned by the user.
+        query = Q(is_custom=False, is_approved=True)
         if user.is_authenticated:
-            query |= Q(user=user)
+            query |= Q(is_custom=True, user=user)
             
         return queryset.filter(query).distinct()
     
