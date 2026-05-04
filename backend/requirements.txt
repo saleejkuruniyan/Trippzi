@@ -95,3 +95,8 @@ django-templated-mail
 django-environ
 xhtml2pdf
 fpdf2
+
+# Note: PDF generation libraries (WeasyPrint, xhtml2pdf, pycairo) 
+# require system dependencies: cairo, pango, pkg-config, etc.
+# On macOS, use 'brew install cairo pango pkg-config libffi'
+# On Linux, use 'apt-get install libcairo2-dev libpango1.0-dev pkg-config'

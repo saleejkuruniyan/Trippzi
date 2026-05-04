@@ -24,6 +24,8 @@ RUN apt-get update && apt-get install -y \
     libpangoft2-1.0-0 \
     libpangocairo-1.0-0 \
     libcairo2 \
+    libcairo2-dev \
+    pkg-config \
     libharfbuzz0b \
     libgdk-pixbuf2.0-0 \
     shared-mime-info \

@@ -95,6 +95,26 @@ signal.signal(signal.SIGTERM, handle_exit)
 # =============================
 def setup_backend():
     print("⚙️ Setting up Backend...")
+    
+    # macOS specific: Install system dependencies for PDF generation (Cairo, Pango, etc.)
+    if sys.platform == "darwin":
+        print("🍎 Detected macOS. Checking for system dependencies (Cairo, Pango, etc.)...")
+        try:
+            # Check if brew is installed
+            subprocess.run(["brew", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+            
+            # Packages needed for WeasyPrint/xhtml2pdf
+            packages = ["pkg-config", "cairo", "pango", "gdk-pixbuf", "libffi", "libxml2", "libxslt", "shared-mime-info"]
+            
+            # Check if they are installed, if not install them
+            for pkg in packages:
+                res = subprocess.run(["brew", "list", pkg], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                if res.returncode != 0:
+                    print(f"📦 Installing missing dependency: {pkg}...")
+                    subprocess.run(["brew", "install", pkg], check=True)
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            print("⚠️ Homebrew not found or failed to install dependencies. Please install Cairo, Pango, and pkg-config manually.")
+
     python = VENV_DIR / ("bin/python" if os.name != "nt" else "Scripts/python")
     pip = VENV_DIR / ("bin/pip" if os.name != "nt" else "Scripts/pip")
     
