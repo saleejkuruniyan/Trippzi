@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { LayoutDashboard, FileText, Globe, DollarSign, Users, Lock, LucideIcon, Sparkles, Settings } from "lucide-react"
+import { LayoutDashboard, FileText, Globe, DollarSign, Users, Lock, LucideIcon, Sparkles, Settings, MapPin, Camera } from "lucide-react"
 
 interface SidebarProps {
   activeTab: string
@@ -19,7 +19,9 @@ export const Sidebar = ({ activeTab, setActiveTab, onLogout }: SidebarProps) => 
     { id: "users", label: "Users", icon: Users },
     { id: "itineraries", label: "Itineraries", icon: FileText },
     { id: "custom", label: "Custom Trips", icon: Sparkles },
-    { id: "visa", label: "Visa Rules", icon: Globe },
+    { id: "countries", label: "Countries", icon: Globe },
+    { id: "destinations", label: "Destinations", icon: MapPin },
+    { id: "attractions", label: "Attractions", icon: Camera },
     { id: "sales", label: "Sales", icon: DollarSign },
     { id: "settings", label: "Settings", icon: Settings },
   ]

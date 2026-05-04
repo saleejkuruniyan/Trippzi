@@ -95,6 +95,7 @@ django-templated-mail
 django-environ
 xhtml2pdf
 fpdf2
+tavily-python
 
 # Note: PDF generation libraries (WeasyPrint, xhtml2pdf, pycairo) 
 # require system dependencies: cairo, pango, pkg-config, etc.

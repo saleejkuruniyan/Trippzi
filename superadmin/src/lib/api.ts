@@ -51,8 +51,8 @@ export async function fetchStats() {
   return res.json();
 }
 
-export async function fetchUsers(page = 1) {
-  const res = await apiRequest(`${API_BASE}/admin/users/?page=${page}`, { headers: getHeaders() });
+export async function fetchUsers(page = 1, search = "") {
+  const res = await apiRequest(`${API_BASE}/admin/users/?page=${page}&search=${search}`, { headers: getHeaders() });
   if (!res.ok) {
     console.error("Fetch Users Error:", res.status);
     return { results: [], count: 0 };
@@ -60,8 +60,8 @@ export async function fetchUsers(page = 1) {
   return res.json();
 }
 
-export async function fetchItineraries(page = 1, isCustom?: boolean) {
-  let url = `${API_BASE}/itineraries/?page=${page}`;
+export async function fetchItineraries(page = 1, isCustom?: boolean, search = "") {
+  let url = `${API_BASE}/itineraries/?page=${page}&search=${search}`;
   if (isCustom !== undefined) url += `&is_custom=${isCustom}`;
   const res = await apiRequest(url, { headers: getHeaders() });
   if (!res.ok) {
@@ -71,17 +71,8 @@ export async function fetchItineraries(page = 1, isCustom?: boolean) {
   return res.json();
 }
 
-export async function fetchVisaRules(page = 1) {
-  const res = await apiRequest(`${API_BASE}/admin/visa-rules/?page=${page}`, { headers: getHeaders() });
-  if (!res.ok) {
-    console.error("Fetch Visa Rules Error:", res.status);
-    return { results: [], count: 0 };
-  }
-  return res.json();
-}
-
-export async function fetchTransactions(page = 1) {
-  const res = await apiRequest(`${API_BASE}/admin/transactions/?page=${page}`, { headers: getHeaders() });
+export async function fetchTransactions(page = 1, search = "") {
+  const res = await apiRequest(`${API_BASE}/admin/transactions/?page=${page}&search=${search}`, { headers: getHeaders() });
   if (!res.ok) return { results: [], count: 0 };
   return res.json();
 }
@@ -131,33 +122,6 @@ export async function cloneItinerary(id: number, copyPdf: boolean = false) {
   return res.json();
 }
 
-// Visa Rule CRUD
-export async function createVisaRule(data: any) {
-  const res = await apiRequest(`${API_BASE}/admin/visa-rules/`, {
-    method: 'POST',
-    headers: getHeaders(),
-    body: JSON.stringify(data),
-  });
-  return res.json();
-}
-
-export async function updateVisaRule(id: number, data: any) {
-  const res = await apiRequest(`${API_BASE}/admin/visa-rules/${id}/`, {
-    method: 'PATCH',
-    headers: getHeaders(),
-    body: JSON.stringify(data),
-  });
-  return res.json();
-}
-
-export async function deleteVisaRule(id: number) {
-  const res = await apiRequest(`${API_BASE}/admin/visa-rules/${id}/`, {
-    method: 'DELETE',
-    headers: getHeaders(),
-  });
-  return res.ok;
-}
-
 export async function fetchSettings() {
   const res = await apiRequest(`${API_BASE}/admin/settings/`, { headers: getHeaders() });
   if (!res.ok) return null;
@@ -171,4 +135,66 @@ export async function updateSettings(data: any) {
     body: JSON.stringify(data),
   });
   return res.json();
+}
+
+// Country CRUD (Backend path is 'destinations')
+export async function fetchCountries(page = 1, search = "") {
+  const res = await apiRequest(`${API_BASE}/destinations/?page=${page}&search=${search}`, { headers: getHeaders() });
+  return res.json();
+}
+export async function fetchAllCountries() {
+  const res = await apiRequest(`${API_BASE}/destinations/list_all/`, { headers: getHeaders() });
+  return res.json();
+}
+export async function createCountry(data: any) {
+  const res = await apiRequest(`${API_BASE}/destinations/`, { method: 'POST', headers: getHeaders(), body: JSON.stringify(data) });
+  return res.json();
+}
+export async function updateCountry(id: number, data: any) {
+  const res = await apiRequest(`${API_BASE}/destinations/${id}/`, { method: 'PATCH', headers: getHeaders(), body: JSON.stringify(data) });
+  return res.json();
+}
+export async function deleteCountry(id: number) {
+  const res = await apiRequest(`${API_BASE}/destinations/${id}/`, { method: 'DELETE', headers: getHeaders() });
+  return res.ok;
+}
+
+// Destination CRUD (Backend path is 'sub-destinations')
+export async function fetchDestinations(page = 1, search = "") {
+  const res = await apiRequest(`${API_BASE}/sub-destinations/?page=${page}&search=${search}`, { headers: getHeaders() });
+  return res.json();
+}
+export async function fetchAllDestinations() {
+  const res = await apiRequest(`${API_BASE}/sub-destinations/list_all/`, { headers: getHeaders() });
+  return res.json();
+}
+export async function createDestination(data: any) {
+  const res = await apiRequest(`${API_BASE}/sub-destinations/`, { method: 'POST', headers: getHeaders(), body: JSON.stringify(data) });
+  return res.json();
+}
+export async function updateDestination(id: number, data: any) {
+  const res = await apiRequest(`${API_BASE}/sub-destinations/${id}/`, { method: 'PATCH', headers: getHeaders(), body: JSON.stringify(data) });
+  return res.json();
+}
+export async function deleteDestination(id: number) {
+  const res = await apiRequest(`${API_BASE}/sub-destinations/${id}/`, { method: 'DELETE', headers: getHeaders() });
+  return res.ok;
+}
+
+// Attraction CRUD
+export async function fetchAttractions(page = 1, search = "") {
+  const res = await apiRequest(`${API_BASE}/attractions/?page=${page}&search=${search}`, { headers: getHeaders() });
+  return res.json();
+}
+export async function createAttraction(data: any) {
+  const res = await apiRequest(`${API_BASE}/attractions/`, { method: 'POST', headers: getHeaders(), body: JSON.stringify(data) });
+  return res.json();
+}
+export async function updateAttraction(id: number, data: any) {
+  const res = await apiRequest(`${API_BASE}/attractions/${id}/`, { method: 'PATCH', headers: getHeaders(), body: JSON.stringify(data) });
+  return res.json();
+}
+export async function deleteAttraction(id: number) {
+  const res = await apiRequest(`${API_BASE}/attractions/${id}/`, { method: 'DELETE', headers: getHeaders() });
+  return res.ok;
 }

@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
@@ -9,7 +9,7 @@ from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from .services.ai_engine import AIEngine
-from .models import Itinerary, VisaRule, Transaction, Country, Destination, Attraction, Wishlist, ItineraryDay, SiteSettings
+from .models import Itinerary, Transaction, Country, Destination, Attraction, Wishlist, ItineraryDay, SiteSettings
 from .utils import fetch_unsplash_images, download_image_to_content_file
 from .storage import R2Storage
 from django.conf import settings
@@ -19,39 +19,61 @@ from django.shortcuts import get_object_or_404
 import requests
 import os
 from .serializers import (
-    ItinerarySerializer, VisaRuleSerializer, TransactionSerializer, 
+    ItinerarySerializer, TransactionSerializer, 
     UserSerializer, CountrySerializer, DestinationSerializer, AttractionSerializer
 )
 
-class CountryViewSet(viewsets.ReadOnlyModelViewSet):
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_authenticated and user.is_staff:
-            return Country.objects.all()
-        
-        return Country.objects.all() # Show all countries in generate page
-    
+class CountryViewSet(viewsets.ModelViewSet):
+    queryset = Country.objects.all().order_by('name')
     serializer_class = CountrySerializer
-    pagination_class = None # Disable pagination for countries
-    lookup_field = 'slug'
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'description']
     permission_classes = [AllowAny]
 
+    def get_object(self):
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        val = self.kwargs.get(lookup_url_kwarg)
+        if val.isdigit():
+            return get_object_or_404(Country, pk=val)
+        return get_object_or_404(Country, slug=val)
+
     @action(detail=True, methods=['get'])
-    def destinations(self, request, slug=None):
+    def destinations(self, request, pk=None):
         country = self.get_object()
         destinations = country.destinations.all()
         serializer = DestinationSerializer(destinations, many=True)
         return Response(serializer.data)
 
-class DestinationViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Destination.objects.all()
+    @action(detail=False, methods=['get'])
+    def list_all(self, request):
+        countries = self.get_queryset()
+        serializer = self.get_serializer(countries, many=True)
+        return Response(serializer.data)
+
+class DestinationViewSet(viewsets.ModelViewSet):
+    queryset = Destination.objects.all().order_by('name')
     serializer_class = DestinationSerializer
-    lookup_field = 'slug'
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'description', 'country__name']
     permission_classes = [AllowAny]
 
-class AttractionViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Attraction.objects.all()
+    def get_object(self):
+        val = self.kwargs.get('pk')
+        if val.isdigit():
+            return get_object_or_404(Destination, pk=val)
+        return get_object_or_404(Destination, slug=val)
+
+    @action(detail=False, methods=['get'])
+    def list_all(self, request):
+        destinations = self.get_queryset()
+        serializer = self.get_serializer(destinations, many=True)
+        return Response(serializer.data)
+
+class AttractionViewSet(viewsets.ModelViewSet):
+    queryset = Attraction.objects.all().order_by('name')
     serializer_class = AttractionSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'description', 'destination__name']
     permission_classes = [AllowAny]
 
 class ItineraryViewSet(viewsets.ModelViewSet):
@@ -169,6 +191,20 @@ class GenerateItineraryView(APIView):
 
         ai_engine = AIEngine()
         
+        # 0. Refresh Country Guide Data (Tavily optimization)
+        ai_engine.refresh_country_data(country_obj)
+
+        # 0b. Process Destinations (Add new ones & refresh culture)
+        final_dest_objects = []
+        for name in dest_names:
+            dest_obj, created = Destination.objects.get_or_create(
+                name=name, 
+                country=country_obj,
+                defaults={'description': f"Explore {name} in {country_obj.name}"}
+            )
+            ai_engine.refresh_destination_data(dest_obj)
+            final_dest_objects.append(dest_obj)
+        
         # 1. Generate Itinerary Structure
         itinerary_data = ai_engine.generate_itinerary(
             country=country_obj.name,
@@ -186,8 +222,7 @@ class GenerateItineraryView(APIView):
                 "raw": itinerary_data.get("raw")
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        # 2. Get Visa Info
-        visa_info = ai_engine.get_visa_info(source_country, country_obj.name)
+        # 2. Save to DB
 
         # 3. Save to DB
         content_data = itinerary_data.get('days', [])
@@ -208,7 +243,7 @@ class GenerateItineraryView(APIView):
             description=itinerary_data.get('overview', ''),
             content=content_data
         )
-        itinerary_obj.destinations.set(destinations)
+        itinerary_obj.destinations.set(final_dest_objects)
         
         # 3b. Fetch Itinerary Hero Image
         hero_images = fetch_unsplash_images(f"{country_obj.name} travel {dest_names[0]}", count=1)
@@ -225,6 +260,31 @@ class GenerateItineraryView(APIView):
             activities = day.get('activities', [])
             
             for idx, act in enumerate(activities):
+                # Growth Loop: Save/Update Attraction in DB
+                try:
+                    act_location = act.get('location', '')
+                    # Heuristic: try to find which destination this activity belongs to
+                    dest_for_act = final_dest_objects[0] # Default to first
+                    for d in final_dest_objects:
+                        if d.name.lower() in act_location.lower():
+                            dest_for_act = d
+                            break
+
+                    attraction_obj, a_created = Attraction.objects.get_or_create(
+                        name=act.get('activity'),
+                        destination=dest_for_act
+                    )
+                    # Refresh if stale or new
+                    ai_engine.refresh_attraction_data(attraction_obj)
+                    
+                    # Inject DB data back into the itinerary JSON for the user
+                    act['opening_time'] = attraction_obj.opening_time or act.get('opening_time')
+                    act['closing_time'] = attraction_obj.closing_time or act.get('closing_time')
+                    act['ticket_price'] = attraction_obj.ticket_price
+                    act['closing_days'] = attraction_obj.closing_days
+                except Exception as e:
+                    print(f"Error in attraction growth loop: {str(e)}")
+
                 # Use AI provided unsplash query
                 query = act.get('unsplash_query') or f"{act.get('activity')} {act.get('location')}"
                 image_urls = fetch_unsplash_images(query, count=1)
@@ -252,7 +312,12 @@ class GenerateItineraryView(APIView):
 
         return Response({
             "itinerary": itinerary_data,
-            "visa_info": visa_info,
+            "visa_info": {
+                "visa_process": country_obj.visa_process,
+                "best_time": country_obj.best_time,
+                "tips": country_obj.tips,
+                "airports": country_obj.airports
+            },
             "itinerary_id": itinerary_obj.id,
             "is_owned": False # Initially not owned until payment, but they can see preview
         }, status=status.HTTP_200_OK)
@@ -260,14 +325,20 @@ class GenerateItineraryView(APIView):
 class VisaRuleView(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
-        source = request.query_params.get('source')
+        source = request.query_params.get('source', 'India')
         dest = request.query_params.get('destination')
         
-        rule = VisaRule.objects.filter(source_country=source, destination_country=dest).first()
-        if rule:
-            return Response(VisaRuleSerializer(rule).data)
+        # Check if we have this destination in our Country guide
+        country = Country.objects.filter(name__icontains=dest).first()
+        if country and country.visa_process:
+            return Response({
+                "source_country": source,
+                "destination_country": country.name,
+                "requirements": country.visa_process,
+                "visa_required": "Refer to guide"
+            })
         
-        # Fallback to AI if no rule found in DB
+        # Fallback to AI if not in DB
         ai_engine = AIEngine()
         visa_info = ai_engine.get_visa_info(source, dest)
         return Response(visa_info)
@@ -286,15 +357,15 @@ class AdminStatsView(APIView):
         total_standard = Itinerary.objects.filter(is_custom=False).count()
         total_custom = Itinerary.objects.filter(is_custom=True).count()
         total_users = User.objects.count()
-        total_visa_rules = VisaRule.objects.count()
-        
         return Response({
             "total_sales": total_sales,
             "total_itineraries": total_standard + total_custom,
             "total_standard": total_standard,
             "total_custom": total_custom,
             "total_users": total_users,
-            "total_visa_rules": total_visa_rules
+            "total_countries": Country.objects.count(),
+            "total_destinations": Destination.objects.count(),
+            "total_attractions": Attraction.objects.count()
         })
 
 from .services.payment_service import PaymentService
@@ -404,18 +475,19 @@ class MyWishlistView(APIView):
         return Response(serializer.data)
 
 class AdminUserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().order_by('-date_joined')
+    queryset = User.objects.filter(is_staff=False).order_by('-date_joined')
     serializer_class = UserSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'email', 'first_name', 'last_name']
     permission_classes = [IsAdminUser]
 
-class AdminVisaRuleViewSet(viewsets.ModelViewSet):
-    queryset = VisaRule.objects.all().order_by('destination_country')
-    serializer_class = VisaRuleSerializer
     permission_classes = [IsAdminUser]
 
 class AdminTransactionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Transaction.objects.all().order_by('-created_at')
     serializer_class = TransactionSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['user__username', 'user__email', 'razorpay_payment_id', 'razorpay_order_id']
     permission_classes = [IsAdminUser]
 
 class DownloadItineraryPDFView(APIView):

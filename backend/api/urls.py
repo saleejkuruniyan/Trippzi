@@ -4,7 +4,7 @@ from .views import (
     ItineraryViewSet, GenerateItineraryView, VisaRuleView, 
     AdminStatsView, AdminUserViewSet, AdminTransactionViewSet,
     CountryViewSet, DestinationViewSet, AttractionViewSet,
-    AdminVisaRuleViewSet, CreateOrderView, VerifyPaymentView, ProfileView,
+    CreateOrderView, VerifyPaymentView, ProfileView,
     MyItinerariesView, WishlistToggleView, MyWishlistView, DownloadItineraryPDFView,
     SiteSettingsView
 )
@@ -16,7 +16,6 @@ router.register(r'sub-destinations', DestinationViewSet, basename='sub-destinati
 router.register(r'attractions', AttractionViewSet, basename='attractions')
 router.register(r'admin/users', AdminUserViewSet, basename='admin-users')
 router.register(r'admin/transactions', AdminTransactionViewSet, basename='admin-transactions')
-router.register(r'admin/visa-rules', AdminVisaRuleViewSet, basename='admin-visa-rules')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -7,14 +7,19 @@ import { Sidebar } from "@/components/sidebar"
 import { StatsCard } from "@/components/stats-card"
 import { DataTable } from "@/components/data-table"
 import { ItineraryForm } from "@/components/itinerary-form"
-import { VisaRuleForm } from "@/components/visa-rule-form"
 import {
-  fetchStats, fetchTransactions, fetchUsers, fetchItineraries, fetchVisaRules, login,
+  fetchStats, fetchTransactions, fetchUsers, fetchItineraries, login,
   createItinerary, updateItinerary, deleteItinerary, cloneItinerary,
-  createVisaRule, updateVisaRule, deleteVisaRule, fetchSettings, updateSettings
+  fetchSettings, updateSettings,
+  fetchCountries, updateCountry, deleteCountry, createCountry,
+  fetchDestinations, updateDestination, deleteDestination, createDestination,
+  fetchAttractions, updateAttraction, deleteAttraction, createAttraction
 } from "@/lib/api"
 import { SettingsForm } from "@/components/settings-form"
-import { IndianRupee, FileText, Users, Globe, Sparkles } from "lucide-react"
+import { CountryForm } from "@/components/country-form"
+import { DestinationForm } from "@/components/destination-form"
+import { AttractionForm } from "@/components/attraction-form"
+import { IndianRupee, FileText, Users, Globe, Sparkles, MapPin, Camera } from "lucide-react"
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard")
@@ -24,6 +29,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<any[]>([])
   const [data, setData] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
   const [editingItem, setEditingItem] = useState<any>(null)
   const [isCreating, setIsCreating] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
@@ -62,23 +68,28 @@ export default function AdminDashboard() {
       const s = await fetchStats()
       if (s) setStats([
         { name: "Total Sales", value: `₹${s.total_sales}`, icon: IndianRupee, color: "text-green-600" },
-        { name: "Iteneraries", value: s.total_standard, icon: FileText, color: "text-blue-600" },
-        { name: "Custom Trips", value: s.total_custom, icon: Sparkles, color: "text-indigo-600" },
-        { name: "Active Users", value: s.total_users, icon: Users, color: "text-purple-600" },
-        { name: "Visa Rules", value: s.total_visa_rules, icon: Globe, color: "text-orange-600" },
+        { name: "Total Itineraries", value: s.total_itineraries, icon: FileText, color: "text-blue-600" },
+        { name: "Standard Trips", value: s.total_standard, icon: FileText, color: "text-indigo-600" },
+        { name: "Custom Trips", value: s.total_custom, icon: Sparkles, color: "text-purple-600" },
+        { name: "Active Users", value: s.total_users, icon: Users, color: "text-orange-600" },
+        { name: "Countries", value: s.total_countries, icon: Globe, color: "text-emerald-600" },
+        { name: "Destinations", value: s.total_destinations, icon: MapPin, color: "text-pink-600" },
+        { name: "Attractions", value: s.total_attractions, icon: Camera, color: "text-indigo-600" },
       ])
     } catch (err) { console.error(err) }
   }
 
-  const loadTabData = async (pageNum = currentPage) => {
+  const loadTabData = async (pageNum = 1, search = searchQuery) => {
     setLoading(true)
     try {
       let res: any
-      if (activeTab === 'users') res = await fetchUsers(pageNum)
-      else if (activeTab === 'itineraries') res = await fetchItineraries(pageNum, false)
-      else if (activeTab === 'custom') res = await fetchItineraries(pageNum, true)
-      else if (activeTab === 'visa') res = await fetchVisaRules(pageNum)
-      else if (activeTab === 'sales' || activeTab === 'dashboard') res = await fetchTransactions(pageNum)
+      if (activeTab === 'users') res = await fetchUsers(pageNum, search)
+      else if (activeTab === 'itineraries') res = await fetchItineraries(pageNum, false, search)
+      else if (activeTab === 'custom') res = await fetchItineraries(pageNum, true, search)
+      else if (activeTab === 'countries') res = await fetchCountries(pageNum, search)
+      else if (activeTab === 'destinations') res = await fetchDestinations(pageNum, search)
+      else if (activeTab === 'attractions') res = await fetchAttractions(pageNum, search)
+      else if (activeTab === 'sales' || activeTab === 'dashboard') res = await fetchTransactions(pageNum, search)
       else if (activeTab === 'settings') {
         const s = await fetchSettings()
         setSettings(s)
@@ -110,8 +121,12 @@ export default function AdminDashboard() {
     try {
       if (activeTab === 'itineraries' || activeTab === 'custom') {
         editingItem ? await updateItinerary(editingItem.id, formData) : await createItinerary(formData)
-      } else if (activeTab === 'visa') {
-        editingItem ? await updateVisaRule(editingItem.id, formData) : await createVisaRule(formData)
+      } else if (activeTab === 'countries') {
+        editingItem ? await updateCountry(editingItem.id, formData) : await createCountry(formData)
+      } else if (activeTab === 'destinations') {
+        editingItem ? await updateDestination(editingItem.id, formData) : await createDestination(formData)
+      } else if (activeTab === 'attractions') {
+        editingItem ? await updateAttraction(editingItem.id, formData) : await createAttraction(formData)
       }
       setEditingItem(null); setIsCreating(false); loadTabData(); loadStats();
     } catch (err) { alert("Failed to save data") }
@@ -121,7 +136,9 @@ export default function AdminDashboard() {
     if (!confirm("Are you sure?")) return
     try {
       if (activeTab === 'itineraries' || activeTab === 'custom') await deleteItinerary(id)
-      else if (activeTab === 'visa') await deleteVisaRule(id)
+      else if (activeTab === 'countries') await deleteCountry(id)
+      else if (activeTab === 'destinations') await deleteDestination(id)
+      else if (activeTab === 'attractions') await deleteAttraction(id)
       setEditingItem(null); loadTabData(); loadStats();
     } catch (err) { alert("Failed to delete") }
   }
@@ -190,7 +207,9 @@ export default function AdminDashboard() {
 
           {(editingItem || isCreating) ? (
             (activeTab === 'itineraries' || activeTab === 'custom') ? <ItineraryForm initialData={editingItem} onSave={handleSave} onCancel={() => { setEditingItem(null); setIsCreating(false) }} onDelete={handleDelete} /> :
-              <VisaRuleForm initialData={editingItem} onSave={handleSave} onCancel={() => { setEditingItem(null); setIsCreating(false) }} onDelete={handleDelete} />
+            activeTab === 'countries' ? <CountryForm initialData={editingItem} onSave={handleSave} onCancel={() => { setEditingItem(null); setIsCreating(false) }} onDelete={handleDelete} /> :
+            activeTab === 'destinations' ? <DestinationForm initialData={editingItem} onSave={handleSave} onCancel={() => { setEditingItem(null); setIsCreating(false) }} onDelete={handleDelete} /> :
+            <AttractionForm initialData={editingItem} onSave={handleSave} onCancel={() => { setEditingItem(null); setIsCreating(false) }} onDelete={handleDelete} />
           ) : activeTab === 'settings' ? (
             <SettingsForm initialData={settings} onSave={async (d) => { await updateSettings(d); loadTabData() }} />
           ) : (
@@ -201,13 +220,18 @@ export default function AdminDashboard() {
                 loading={loading}
                 onEdit={setEditingItem}
                 onAdd={() => setIsCreating(true)}
-                showAdd={['itineraries', 'visa'].includes(activeTab)}
-                showEdit={['itineraries', 'visa', 'custom'].includes(activeTab)}
+                showAdd={['itineraries', 'countries', 'destinations', 'attractions'].includes(activeTab)}
+                showEdit={['itineraries', 'custom', 'countries', 'destinations', 'attractions'].includes(activeTab)}
                 currentPage={currentPage}
                 totalCount={totalCount}
                 onPageChange={(p) => {
                   setCurrentPage(p)
                   loadTabData(p)
+                }}
+                onSearch={(q) => {
+                  setSearchQuery(q)
+                  setCurrentPage(1)
+                  loadTabData(1, q)
                 }}
                 onClone={handleClone}
               />

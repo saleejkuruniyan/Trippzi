@@ -421,6 +421,16 @@ export default function ItineraryProductPage() {
                                         ⏱ {act.duration_at_spot}
                                       </div>
                                     )}
+                                    {act.ticket_price && (
+                                      <div className="flex items-center gap-1 text-[10px] font-bold text-green-600 uppercase tracking-tighter bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-md">
+                                        🎫 {act.ticket_price}
+                                      </div>
+                                    )}
+                                    {act.closing_days && (
+                                      <div className="flex items-center gap-1 text-[10px] font-bold text-red-500 uppercase tracking-tighter bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-md">
+                                        ⚠️ Closed: {act.closing_days}
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                               </div>
@@ -444,6 +454,61 @@ export default function ItineraryProductPage() {
                 })}
               </div>
             </div>
+            
+            {/* Country Guide Section (Optimized cached data) */}
+            {itinerary.country_details && (
+              <div className="mt-32 space-y-12">
+                <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+                  <h2 className="text-4xl font-black italic tracking-tighter">Country Essentials</h2>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  {/* Visa Process */}
+                  <div className="lg:col-span-2 bg-white dark:bg-zinc-900 p-8 md:p-12 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-8">
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 text-blue-600">
+                        <ShieldCheck className="w-6 h-6" />
+                        <h4 className="text-2xl font-black italic uppercase tracking-tight">Visa Process</h4>
+                      </div>
+                      <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed whitespace-pre-line">
+                        {itinerary.country_details.visa_process}
+                      </p>
+                    </div>
+
+                    <div className="pt-8 border-t border-zinc-100 dark:border-zinc-800 grid grid-cols-1 md:grid-cols-2 gap-8">
+                       <div className="space-y-4">
+                          <h5 className="text-xs font-black text-zinc-400 uppercase tracking-widest">Best Time to Visit</h5>
+                          <p className="text-sm font-medium leading-relaxed">{itinerary.country_details.best_time}</p>
+                       </div>
+                       <div className="space-y-4">
+                          <h5 className="text-xs font-black text-zinc-400 uppercase tracking-widest">Major Hubs</h5>
+                          <div className="flex flex-wrap gap-2">
+                             {itinerary.country_details.airports?.map((apt: string, idx: number) => (
+                               <span key={idx} className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-lg text-[10px] font-bold">{apt}</span>
+                             ))}
+                          </div>
+                       </div>
+                    </div>
+                  </div>
+
+                  {/* Pro Tips Side Card */}
+                  <div className="bg-zinc-950 text-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl space-y-8 flex flex-col">
+                    <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
+                      <Sparkles className="w-6 h-6 text-white" />
+                    </div>
+                    <h4 className="text-2xl font-black italic uppercase tracking-tight">Pro Tips</h4>
+                    <ul className="space-y-4 flex-1">
+                      {itinerary.country_details.tips?.map((tip: string, idx: number) => (
+                        <li key={idx} className="flex items-start gap-3 text-sm text-zinc-400 leading-relaxed group">
+                          <span className="text-blue-500 font-black mt-0.5 opacity-40 group-hover:opacity-100 transition-opacity">0{idx+1}</span>
+                          {tip}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="mt-40 space-y-12">

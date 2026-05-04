@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Itinerary, VisaRule, Transaction, Country, Destination, Attraction, UserProfile, Wishlist, ItineraryDay, SiteSettings
+from .models import Itinerary, Transaction, Country, Destination, Attraction, UserProfile, Wishlist, ItineraryDay, SiteSettings
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
@@ -56,13 +56,6 @@ class ItineraryDayAdmin(admin.ModelAdmin):
     list_filter = ('itinerary__country', 'day_number')
     search_fields = ('itinerary__title', 'location_name', 'caption')
     ordering = ('itinerary', 'day_number')
-
-@admin.register(VisaRule)
-class VisaRuleAdmin(admin.ModelAdmin):
-    list_display = ('source_country', 'destination_country', 'visa_required', 'last_updated')
-    list_filter = ('visa_required', 'source_country', 'destination_country')
-    search_fields = ('source_country', 'destination_country', 'requirements')
-    ordering = ('source_country', 'destination_country')
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):

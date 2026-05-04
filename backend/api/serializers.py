@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Country, Destination, Attraction, Itinerary, VisaRule, Transaction, UserProfile, ItineraryDay, SiteSettings
+from .models import Country, Destination, Attraction, Itinerary, Transaction, UserProfile, ItineraryDay, SiteSettings
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, Sum
 
 class ItineraryDaySerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=True, required=False)
@@ -10,12 +10,15 @@ class ItineraryDaySerializer(serializers.ModelSerializer):
         fields = ['day_number', 'location_name', 'image', 'image_url', 'caption']
 
 class AttractionSerializer(serializers.ModelSerializer):
+    destination_name = serializers.CharField(source='destination.name', read_only=True)
+    country_name = serializers.CharField(source='destination.country.name', read_only=True)
     class Meta:
         model = Attraction
         fields = '__all__'
 
 class DestinationSerializer(serializers.ModelSerializer):
     attractions = AttractionSerializer(many=True, read_only=True)
+    country_name = serializers.CharField(source='country.name', read_only=True)
     class Meta:
         model = Destination
         fields = '__all__'
@@ -146,10 +149,6 @@ class ItinerarySerializer(serializers.ModelSerializer):
             return Transaction.objects.filter(user=request.user, itinerary=obj, status='COMPLETED').exists()
         return False
 
-class VisaRuleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = VisaRule
-        fields = '__all__'
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -160,17 +159,41 @@ class UserSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
     profile = UserProfileSerializer(read_only=True)
 
+    custom_itineraries_count = serializers.SerializerMethodField()
+    purchases_count = serializers.SerializerMethodField()
+    total_spent = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'full_name', 'is_staff', 'date_joined', 'profile']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'full_name', 'is_staff', 'date_joined', 'profile', 'custom_itineraries_count', 'purchases_count', 'total_spent']
 
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}".strip() or obj.username
 
+    def get_custom_itineraries_count(self, obj):
+        return obj.custom_itineraries.filter(is_custom=True).count()
+
+    def get_purchases_count(self, obj):
+        return obj.transaction_set.filter(status='COMPLETED').count()
+
+    def get_total_spent(self, obj):
+        return obj.transaction_set.filter(status='COMPLETED').aggregate(Sum('amount'))['amount__sum'] or 0
+
 class TransactionSerializer(serializers.ModelSerializer):
+    user_email = serializers.EmailField(source='user.email', read_only=True)
+    user_full_name = serializers.SerializerMethodField()
+    itinerary_title = serializers.CharField(source='itinerary.title', read_only=True)
+    itinerary_id = serializers.IntegerField(source='itinerary.id', read_only=True)
+    itinerary_is_custom = serializers.BooleanField(source='itinerary.is_custom', read_only=True)
+
     class Meta:
         model = Transaction
         fields = '__all__'
+
+    def get_user_full_name(self, obj):
+        if obj.user:
+            return f"{obj.user.first_name} {obj.user.last_name}".strip() or obj.user.username
+        return "Unknown User"
 
 class SiteSettingsSerializer(serializers.ModelSerializer):
     class Meta:

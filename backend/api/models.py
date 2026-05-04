@@ -83,9 +83,11 @@ class Attraction(models.Model):
     image = models.ImageField(upload_to=destination_image_path, blank=True, null=True)
     image_url = models.URLField(max_length=500, blank=True, null=True)
     
-    opening_time = models.TimeField(null=True, blank=True)
-    closing_time = models.TimeField(null=True, blank=True)
-    suggested_duration = models.DurationField(null=True, blank=True, help_text="Time to spend at this attraction")
+    opening_time = models.CharField(max_length=50, null=True, blank=True)
+    closing_time = models.CharField(max_length=50, null=True, blank=True)
+    suggested_duration = models.CharField(max_length=100, null=True, blank=True, help_text="Time to spend at this attraction")
+    ticket_price = models.CharField(max_length=255, null=True, blank=True, help_text="Latest ticket price or fee info")
+    closing_days = models.CharField(max_length=255, null=True, blank=True, help_text="Days when this attraction is closed")
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -138,20 +140,6 @@ class ItineraryDay(models.Model):
 
     def __str__(self):
         return f"{self.itinerary.title} - Day {self.day_number}"
-
-class VisaRule(models.Model):
-    source_country = models.CharField(max_length=100)
-    destination_country = models.CharField(max_length=100)
-    visa_required = models.BooleanField(default=True)
-    requirements = models.TextField(blank=True)
-    documentation = models.JSONField(help_text="Required documents list", default=list)
-    last_updated = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = ('source_country', 'destination_country')
-
-    def __str__(self):
-        return f"Visa: {self.source_country} -> {self.destination_country}"
 
 class Transaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

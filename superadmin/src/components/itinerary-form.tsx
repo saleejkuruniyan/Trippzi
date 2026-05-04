@@ -17,6 +17,8 @@ interface Activity {
   time_to_next?: string
   distance_to_next?: string
   unsplash_query?: string
+  ticket_price?: string
+  closing_days?: string
 }
 
 interface Day {
@@ -344,6 +346,17 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
                               <div className="space-y-1">
                                  <label className="text-[9px] font-bold uppercase text-zinc-400 flex items-center gap-1"><Search className="w-2.5 h-2.5" /> Image Query</label>
                                  <input className="text-[10px] w-full p-1 border rounded dark:bg-zinc-800 outline-none" value={act.unsplash_query || ""} onChange={e => updateActivity(activeDayIndex, idx, 'unsplash_query', e.target.value)} placeholder="Search query..." />
+                              </div>
+                           </div>
+
+                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                              <div className="space-y-1">
+                                 <label className="text-[9px] font-bold uppercase text-zinc-400">🎫 Ticket Price</label>
+                                 <input className="text-[10px] w-full p-2 border rounded dark:bg-zinc-800 outline-none" value={act.ticket_price || ""} onChange={e => updateActivity(activeDayIndex, idx, 'ticket_price', e.target.value)} placeholder="e.g. 500 THB" />
+                              </div>
+                              <div className="space-y-1">
+                                 <label className="text-[9px] font-bold uppercase text-zinc-400 text-red-500">⚠️ Closing Days</label>
+                                 <input className="text-[10px] w-full p-2 border rounded dark:bg-zinc-800 outline-none" value={act.closing_days || ""} onChange={e => updateActivity(activeDayIndex, idx, 'closing_days', e.target.value)} placeholder="e.g. Mondays" />
                               </div>
                            </div>
                         </div>

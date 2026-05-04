@@ -207,6 +207,39 @@
         </div>
     </div>
 
+    <!-- Destinations Overview Page -->
+    {% if itinerary.destinations.all %}
+    <div class="day-page">
+        <div class="day-header">
+            <div class="day-number">D</div>
+            <h2 class="day-title">Destinations Overview</h2>
+        </div>
+
+        {% for dest in itinerary.destinations.all %}
+        <div class="tips-section" style="margin-bottom: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <h3 style="color: #2563eb; margin: 0; font-size: 24px;">{{ dest.name }}</h3>
+                <span style="font-size: 10px; color: #71717a; text-transform: uppercase; letter-spacing: 1px;">{{ itinerary.country.name }}</span>
+            </div>
+            
+            <p style="font-size: 14px; margin-top: 15px; color: #fafafa; line-height: 1.6;">{{ dest.description }}</p>
+            
+            {% if dest.culture %}
+            <div style="margin-top: 15px; padding: 15px; background: #09090b; border-radius: 12px; border-left: 4px solid #2563eb;">
+                <h4 style="margin: 0 0 8px 0; font-size: 12px; color: #2563eb; text-transform: uppercase;">Heritage & Culture</h4>
+                <p style="margin: 0; font-size: 13px; color: #a1a1aa; line-height: 1.5;">{{ dest.culture }}</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="footer">
+            <div>Trippzi Travel Guide — Destinations Guide</div>
+            <div>Page 1</div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Daily Pages -->
     {% for day in days %}
     <div class="day-page">
@@ -255,6 +288,13 @@
                                 HOURS: {{ act.opening_time }} - {{ act.closing_time }}
                             </div>
                             {% endif %}
+                            
+                            {% if act.ticket_price or act.closing_days %}
+                            <div style="font-size: 10px; margin-top: 5px; color: #2563eb;">
+                                {% if act.ticket_price %}🎫 Price: {{ act.ticket_price }}{% endif %}
+                                {% if act.closing_days %} | ⚠️ Closed: {{ act.closing_days }}{% endif %}
+                            </div>
+                            {% endif %}
                         </div>
                         {% if act.image_url %}
                         <div style="width: 150px; height: 100px; border-radius: 8px; overflow: hidden; shrink-0;">
@@ -290,5 +330,43 @@
         </div>
     </div>
     {% endfor %}
+
+    <!-- Visa Information Page -->
+    {% if itinerary.country %}
+    <div class="day-page">
+        <div class="day-header">
+            <div class="day-number">V</div>
+            <h2 class="day-title">Country Guide: {{ itinerary.country.name }}</h2>
+        </div>
+
+        <div class="tips-section" style="background: #1e1b4b; border-color: #312e81;">
+            <h4 style="color: #60a5fa;">Visa Process</h4>
+            <div style="font-size: 13px; line-height: 1.6;">
+                {{ itinerary.country.visa_process|linebreaks }}
+            </div>
+        </div>
+
+        <div class="tips-section" style="margin-top: 25px; background: #18181b; border-color: #27272a;">
+            <h4 style="color: #2563eb;">Best Time to Visit</h4>
+            <p style="font-size: 13px;">{{ itinerary.country.best_time }}</p>
+        </div>
+
+        {% if itinerary.country.tips %}
+        <div class="tips-section" style="margin-top: 25px;">
+            <h4 style="color: #2563eb;">Pro Travel Tips</h4>
+            <ul class="tips-list">
+                {% for tip in itinerary.country.tips %}
+                <li>{{ tip }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <div class="footer">
+            <div>Trippzi Travel Guide — Official Country Appendix</div>
+            <div>Final Page</div>
+        </div>
+    </div>
+    {% endif %}
 </body>
 </html>

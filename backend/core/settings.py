@@ -236,5 +236,8 @@ CDN_URL = os.getenv('CDN_URL')
 # Unsplash API
 UNSPLASH_ACCESS_KEY = os.getenv('UNSPLASH_ACCESS_KEY')
 
+# Tavily API
+TAVILY_API_KEY = os.getenv('TAVILY_API_KEY')
+
 # Use custom storage by default for media
 DEFAULT_FILE_STORAGE = 'api.storage.R2Storage'
