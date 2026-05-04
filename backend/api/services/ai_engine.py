@@ -9,11 +9,19 @@ from .search_service import SearchService
 
 class AIEngine:
     def __init__(self):
+        # Main model for creative planning
         self.llm = ChatOpenAI(
             model=settings.OPENAI_MODEL,
             api_key=settings.OPENAI_API_KEY,
             base_url=settings.OPENAI_API_BASE,
             temperature=0.7,
+        )
+        # Low-cost model for data enrichment/extraction
+        self.low_cost_llm = ChatOpenAI(
+            model=settings.OPENAI_MODEL_LOWCOST,
+            api_key=settings.OPENAI_API_KEY,
+            base_url=settings.OPENAI_API_BASE,
+            temperature=0.3, # Lower temp for extraction
         )
         self.search_service = SearchService()
 
@@ -136,7 +144,7 @@ class AIEngine:
             current_date=current_date_str,
             search_context=search_context
         )
-        response = self.llm.invoke(messages)
+        response = self.low_cost_llm.invoke(messages)
         
         # Simple parsing logic for this demonstration
         import json
@@ -175,7 +183,7 @@ class AIEngine:
                 Return JSON with: description, best_time, visa_process, airports, tips, days_recommendation.
             """)
             messages = prompt.format_messages(country=country_obj.name, current_date=current_date, search_context=search_context)
-            data = self._extract_json(self.llm.invoke(messages).content)
+            data = self._extract_json(self.low_cost_llm.invoke(messages).content)
             if data:
                 country_obj.description = data.get('description', country_obj.description)
                 country_obj.best_time = data.get('best_time', country_obj.best_time)
@@ -195,7 +203,7 @@ class AIEngine:
                 Return JSON: {{ "description": "...", "culture": "..." }}
             """)
             messages = prompt.format_messages(destination=destination_obj.name, country=destination_obj.country.name if destination_obj.country else "")
-            data = self._extract_json(self.llm.invoke(messages).content)
+            data = self._extract_json(self.low_cost_llm.invoke(messages).content)
             if data:
                 destination_obj.description = data.get('description', destination_obj.description)
                 destination_obj.culture = data.get('culture', destination_obj.culture)
@@ -216,7 +224,7 @@ class AIEngine:
                 context = "\n".join([r.get('content') for r in search_result.get('results', [])])
                 prompt = ChatPromptTemplate.from_template("Extract JSON (opening_time, closing_time, suggested_duration, ticket_price, closing_days) for {attraction} from: {context}")
                 messages = prompt.format_messages(attraction=attraction_obj.name, context=context)
-                data = self._extract_json(self.llm.invoke(messages).content)
+                data = self._extract_json(self.low_cost_llm.invoke(messages).content)
                 if data:
                     for key in data: setattr(attraction_obj, key, data[key])
                     attraction_obj.save()
