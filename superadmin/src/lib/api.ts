@@ -8,13 +8,32 @@ function getHeaders() {
   };
 }
 
+async function handleResponse(res: Response) {
+  if (res.status === 401) {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('trippzi-token');
+      // Only logout if we actually had a token (to avoid loops on failed login)
+      if (token) {
+        localStorage.removeItem('trippzi-token');
+        window.location.href = '/';
+      }
+    }
+  }
+  return res;
+}
+
+async function apiRequest(url: string, options: RequestInit = {}) {
+  const res = await fetch(url, options);
+  return handleResponse(res);
+}
+
 export async function login(data: { username: string, password: string }) {
   const payload = {
     username: data.username,
     password: data.password
   };
   console.log("Sending Login Payload:", payload);
-  const res = await fetch(`${API_BASE}/auth/login/`, {
+  const res = await apiRequest(`${API_BASE}/auth/login/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -27,13 +46,13 @@ export async function login(data: { username: string, password: string }) {
 }
 
 export async function fetchStats() {
-  const res = await fetch(`${API_BASE}/admin/stats/`, { headers: getHeaders() });
+  const res = await apiRequest(`${API_BASE}/admin/stats/`, { headers: getHeaders() });
   if (!res.ok) return null;
   return res.json();
 }
 
 export async function fetchUsers(page = 1) {
-  const res = await fetch(`${API_BASE}/admin/users/?page=${page}`, { headers: getHeaders() });
+  const res = await apiRequest(`${API_BASE}/admin/users/?page=${page}`, { headers: getHeaders() });
   if (!res.ok) {
     console.error("Fetch Users Error:", res.status);
     return { results: [], count: 0 };
@@ -44,7 +63,7 @@ export async function fetchUsers(page = 1) {
 export async function fetchItineraries(page = 1, isCustom?: boolean) {
   let url = `${API_BASE}/itineraries/?page=${page}`;
   if (isCustom !== undefined) url += `&is_custom=${isCustom}`;
-  const res = await fetch(url, { headers: getHeaders() });
+  const res = await apiRequest(url, { headers: getHeaders() });
   if (!res.ok) {
     console.error("Fetch Itineraries Error:", res.status);
     return { results: [], count: 0 };
@@ -53,7 +72,7 @@ export async function fetchItineraries(page = 1, isCustom?: boolean) {
 }
 
 export async function fetchVisaRules(page = 1) {
-  const res = await fetch(`${API_BASE}/admin/visa-rules/?page=${page}`, { headers: getHeaders() });
+  const res = await apiRequest(`${API_BASE}/admin/visa-rules/?page=${page}`, { headers: getHeaders() });
   if (!res.ok) {
     console.error("Fetch Visa Rules Error:", res.status);
     return { results: [], count: 0 };
@@ -62,13 +81,13 @@ export async function fetchVisaRules(page = 1) {
 }
 
 export async function fetchTransactions(page = 1) {
-  const res = await fetch(`${API_BASE}/admin/transactions/?page=${page}`, { headers: getHeaders() });
+  const res = await apiRequest(`${API_BASE}/admin/transactions/?page=${page}`, { headers: getHeaders() });
   if (!res.ok) return { results: [], count: 0 };
   return res.json();
 }
 
 export async function validateItinerary(id: number) {
-  const res = await fetch(`${API_BASE}/itineraries/${id}/validate/`, {
+  const res = await apiRequest(`${API_BASE}/itineraries/${id}/validate/`, {
     method: 'POST',
     headers: getHeaders(),
   });
@@ -77,7 +96,7 @@ export async function validateItinerary(id: number) {
 
 // Itinerary CRUD
 export async function createItinerary(data: any) {
-  const res = await fetch(`${API_BASE}/itineraries/`, {
+  const res = await apiRequest(`${API_BASE}/itineraries/`, {
     method: 'POST',
     headers: getHeaders(),
     body: JSON.stringify(data),
@@ -86,7 +105,7 @@ export async function createItinerary(data: any) {
 }
 
 export async function updateItinerary(id: number, data: any) {
-  const res = await fetch(`${API_BASE}/itineraries/${id}/`, {
+  const res = await apiRequest(`${API_BASE}/itineraries/${id}/`, {
     method: 'PATCH',
     headers: getHeaders(),
     body: JSON.stringify(data),
@@ -95,7 +114,7 @@ export async function updateItinerary(id: number, data: any) {
 }
 
 export async function deleteItinerary(id: number) {
-  const res = await fetch(`${API_BASE}/itineraries/${id}/`, {
+  const res = await apiRequest(`${API_BASE}/itineraries/${id}/`, {
     method: 'DELETE',
     headers: getHeaders(),
   });
@@ -103,7 +122,7 @@ export async function deleteItinerary(id: number) {
 }
 
 export async function cloneItinerary(id: number, copyPdf: boolean = false) {
-  const res = await fetch(`${API_BASE}/itineraries/${id}/clone_to_standard/`, {
+  const res = await apiRequest(`${API_BASE}/itineraries/${id}/clone_to_standard/`, {
     method: 'POST',
     headers: getHeaders(),
     body: JSON.stringify({ copy_pdf: copyPdf })
@@ -114,7 +133,7 @@ export async function cloneItinerary(id: number, copyPdf: boolean = false) {
 
 // Visa Rule CRUD
 export async function createVisaRule(data: any) {
-  const res = await fetch(`${API_BASE}/admin/visa-rules/`, {
+  const res = await apiRequest(`${API_BASE}/admin/visa-rules/`, {
     method: 'POST',
     headers: getHeaders(),
     body: JSON.stringify(data),
@@ -123,7 +142,7 @@ export async function createVisaRule(data: any) {
 }
 
 export async function updateVisaRule(id: number, data: any) {
-  const res = await fetch(`${API_BASE}/admin/visa-rules/${id}/`, {
+  const res = await apiRequest(`${API_BASE}/admin/visa-rules/${id}/`, {
     method: 'PATCH',
     headers: getHeaders(),
     body: JSON.stringify(data),
@@ -132,7 +151,7 @@ export async function updateVisaRule(id: number, data: any) {
 }
 
 export async function deleteVisaRule(id: number) {
-  const res = await fetch(`${API_BASE}/admin/visa-rules/${id}/`, {
+  const res = await apiRequest(`${API_BASE}/admin/visa-rules/${id}/`, {
     method: 'DELETE',
     headers: getHeaders(),
   });
@@ -140,13 +159,13 @@ export async function deleteVisaRule(id: number) {
 }
 
 export async function fetchSettings() {
-  const res = await fetch(`${API_BASE}/admin/settings/`, { headers: getHeaders() });
+  const res = await apiRequest(`${API_BASE}/admin/settings/`, { headers: getHeaders() });
   if (!res.ok) return null;
   return res.json();
 }
 
 export async function updateSettings(data: any) {
-  const res = await fetch(`${API_BASE}/admin/settings/`, {
+  const res = await apiRequest(`${API_BASE}/admin/settings/`, {
     method: 'PATCH',
     headers: getHeaders(),
     body: JSON.stringify(data),

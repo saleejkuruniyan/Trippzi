@@ -205,7 +205,7 @@ export default function ItineraryPreviewPage() {
                     onClick={handlePurchase}
                     className="w-full bg-blue-600 text-white py-4 rounded-2xl text-lg font-black hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 active:scale-95"
                   >
-                    UNLOCK — Rs. {itinerary.sale_price}
+                    UNLOCK — ₹{itinerary.sale_price}
                   </button>
                   <p className="mt-6 flex items-center justify-center gap-2 text-[10px] text-zinc-600 font-bold uppercase tracking-widest">
                     <ShieldCheck className="w-4 h-4 text-green-600" /> Instant Access
@@ -255,7 +255,7 @@ export default function ItineraryPreviewPage() {
               </div>
               <div>
                 <h5 className="font-bold group-hover:text-blue-400 transition-colors">{item.title}</h5>
-                <p className="text-sm text-blue-600 font-black italic">Rs. {item.sale_price}</p>
+                <p className="text-sm text-blue-600 font-black italic">₹{item.sale_price}</p>
               </div>
             </Link>
           ))}

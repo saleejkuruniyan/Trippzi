@@ -14,7 +14,7 @@ import {
   createVisaRule, updateVisaRule, deleteVisaRule, fetchSettings, updateSettings
 } from "@/lib/api"
 import { SettingsForm } from "@/components/settings-form"
-import { DollarSign, FileText, Users, Globe, Sparkles } from "lucide-react"
+import { IndianRupee, FileText, Users, Globe, Sparkles } from "lucide-react"
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard")
@@ -30,18 +30,29 @@ export default function AdminDashboard() {
   const [totalCount, setTotalCount] = useState(0)
   const [settings, setSettings] = useState<any>(null)
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setAuthError("")
+    
+    // Use FormData to ensure we capture autofilled values that React state might miss
+    const formData = new FormData(e.currentTarget)
+    const username = formData.get('username') as string || authData.username
+    const password = formData.get('password') as string || authData.password
+
+    if (!username || !password) {
+      setAuthError("Username and password are required.")
+      return
+    }
+
     try {
-      const res = await login(authData)
+      const res = await login({ username, password })
       const token = res.access_token || res.access || res.key
       if (token) {
         localStorage.setItem('trippzi-token', token)
         setIsAuthenticated(true)
         loadStats()
       } else {
-        setAuthError("Invalid credentials or access denied.")
+        setAuthError(res.detail || res.error || "Invalid credentials or access denied.")
       }
     } catch (err) { setAuthError("Login failed.") }
   }
@@ -50,7 +61,7 @@ export default function AdminDashboard() {
     try {
       const s = await fetchStats()
       if (s) setStats([
-        { name: "Total Sales", value: `$${s.total_sales}`, icon: DollarSign, color: "text-green-600" },
+        { name: "Total Sales", value: `₹${s.total_sales}`, icon: IndianRupee, color: "text-green-600" },
         { name: "Iteneraries", value: s.total_standard, icon: FileText, color: "text-blue-600" },
         { name: "Custom Trips", value: s.total_custom, icon: Sparkles, color: "text-indigo-600" },
         { name: "Active Users", value: s.total_users, icon: Users, color: "text-purple-600" },
@@ -136,10 +147,26 @@ export default function AdminDashboard() {
       <div className="w-full max-w-md bg-white dark:bg-zinc-900 p-8 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-2xl">
         <form onSubmit={handleLogin} className="space-y-4">
           <h1 className="text-2xl font-bold text-center mb-8">Trippzi Superadmin</h1>
-          <input type="text" placeholder="Username" required className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800" value={authData.username} onChange={e => setAuthData({ ...authData, username: e.target.value })} />
-          <input type="password" placeholder="Password" required className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800" value={authData.password} onChange={e => setAuthData({ ...authData, password: e.target.value })} />
-          {authError && <p className="text-red-500 text-xs">{authError}</p>}
-          <button type="submit" className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold">Sign In</button>
+          <input 
+            type="text" 
+            name="username"
+            placeholder="Username" 
+            required 
+            className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800" 
+            value={authData.username} 
+            onChange={e => setAuthData({ ...authData, username: e.target.value })} 
+          />
+          <input 
+            type="password" 
+            name="password"
+            placeholder="Password" 
+            required 
+            className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800" 
+            value={authData.password} 
+            onChange={e => setAuthData({ ...authData, password: e.target.value })} 
+          />
+          {authError && <p className="text-red-500 text-xs text-center font-medium bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">{authError}</p>}
+          <button type="submit" className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-transform">Sign In</button>
         </form>
       </div>
     </div>

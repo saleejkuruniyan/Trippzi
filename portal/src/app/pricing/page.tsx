@@ -9,21 +9,21 @@ export default function Pricing() {
   const plans = [
     {
       name: "Single Trip",
-      price: "$9",
+      price: "₹750",
       features: ["1 Custom Itinerary", "PDF Download", "Visa Requirements", "24h Support"],
       button: "Buy Now",
       popular: false
     },
     {
       name: "Explorer Pro",
-      price: "$29",
+      price: "₹2,500",
       features: ["Unlimited Itineraries", "Premium PDF Layouts", "Visa Assistance", "Priority AI Engine"],
       button: "Start Free Trial",
       popular: true
     },
     {
       name: "Business",
-      price: "$99",
+      price: "₹8,000",
       features: ["Custom Branding", "API Access", "Bulk Generation", "Account Manager"],
       button: "Contact Sales",
       popular: false

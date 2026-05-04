@@ -285,8 +285,8 @@ export default function ItineraryProductPage() {
                 {!itinerary.is_owned && (
                   <div className="flex items-end gap-4">
                     <div className="space-y-1">
-                      <span className="text-zinc-400 line-through text-sm italic">Regular price Rs. {itinerary.regular_price}</span>
-                      <div className="text-5xl font-black text-blue-600 italic">Rs. {itinerary.sale_price}</div>
+                      <span className="text-zinc-400 line-through text-sm italic">Regular price ₹{itinerary.regular_price}</span>
+                      <div className="text-5xl font-black text-blue-600 italic">₹{itinerary.sale_price}</div>
                     </div>
                     {itinerary.regular_price && itinerary.sale_price && (
                       <span className="bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-3 py-1 rounded-lg text-xs font-bold mb-2">
@@ -472,7 +472,7 @@ export default function ItineraryProductPage() {
                   </div>
                   <div>
                     <h5 className="font-bold group-hover:text-blue-600 transition-colors">{item.title}</h5>
-                    <p className="text-sm text-blue-600 font-black italic">Rs. {item.sale_price}</p>
+                    <p className="text-sm text-blue-600 font-black italic">₹{item.sale_price}</p>
                   </div>
                 </Link>
               ))}

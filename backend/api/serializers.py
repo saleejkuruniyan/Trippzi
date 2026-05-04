@@ -109,8 +109,8 @@ class ItinerarySerializer(serializers.ModelSerializer):
             is_paid = Transaction.objects.filter(user=user, itinerary=instance, status='COMPLETED').exists()
             is_owner = instance.user == user
 
-        # If not paid AND not owner, mask all days except Day 1
-        if not is_paid and not is_owner:
+        # If not paid AND not owner AND not staff, mask all days except Day 1
+        if not is_paid and not is_owner and not (user and user.is_staff):
             original_content = data.get('content', [])
             if isinstance(original_content, list) and len(original_content) > 0:
                 data['content'] = original_content[:1] # Only Day 1

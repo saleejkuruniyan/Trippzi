@@ -201,8 +201,8 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
                     <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-6 line-clamp-2">{itinerary.description}</p>
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
-                        <span className="text-xs text-zinc-400 line-through">Rs. {itinerary.regular_price}</span>
-                        <span className="text-2xl font-black text-blue-600 italic">Rs. {itinerary.sale_price}</span>
+                        <span className="text-xs text-zinc-400 line-through">₹{itinerary.regular_price}</span>
+                        <span className="text-2xl font-black text-blue-600 italic">₹{itinerary.sale_price}</span>
                       </div>
                       <Link 
                         href={`/itinerary/${itinerary.id}`} 

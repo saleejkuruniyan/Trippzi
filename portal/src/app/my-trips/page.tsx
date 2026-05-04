@@ -253,7 +253,7 @@ export default function MyTripsPage() {
                           onClick={() => handleUnlock(trip.id)}
                           className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20"
                         >
-                          <Zap className="w-4 h-4 fill-current" /> Unlock Full Plan (Rs. {trip.sale_price})
+                          <Zap className="w-4 h-4 fill-current" /> Unlock Full Plan (₹{trip.sale_price})
                         </button>
                       )}
                     </div>

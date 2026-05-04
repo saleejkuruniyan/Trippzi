@@ -1,20 +1,41 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
 export async function fetchDestinations() {
-  const res = await fetch(`${API_BASE}/destinations/`);
+  const res = await apiRequest(`${API_BASE}/destinations/`);
   return res.json();
 }
 
 export async function fetchDestinationBySlug(slug: string) {
-  const res = await fetch(`${API_BASE}/destinations/${slug}/`);
+  const res = await apiRequest(`${API_BASE}/destinations/${slug}/`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.detail || "Destination not found");
   return data;
 }
 
 export async function fetchSubDestinations(countrySlug: string) {
-  const res = await fetch(`${API_BASE}/destinations/${countrySlug}/destinations/`);
+  const res = await apiRequest(`${API_BASE}/destinations/${countrySlug}/destinations/`);
   return res.json();
+}
+
+async function handleResponse(res: Response) {
+  if (res.status === 401) {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('trippzi-token');
+      // Only logout if we actually had a token (to avoid loops)
+      if (token) {
+        localStorage.removeItem('trippzi-token');
+        localStorage.removeItem('trippzi-user');
+        window.dispatchEvent(new Event('storage')); // Notify other components
+        window.location.href = '/'; 
+      }
+    }
+  }
+  return res;
+}
+
+async function apiRequest(url: string, options: RequestInit = {}) {
+  const res = await fetch(url, options);
+  return handleResponse(res);
 }
 
 // Helper for Auth Headers
@@ -28,13 +49,13 @@ function getAuthHeaders() {
 }
 
 export async function fetchMyTrips() {
-  const res = await fetch(`${API_BASE}/my-trips/`, { headers: getAuthHeaders() });
+  const res = await apiRequest(`${API_BASE}/my-trips/`, { headers: getAuthHeaders() });
   if (!res.ok) return [];
   return res.json();
 }
 
 export async function toggleWishlist(itineraryId: number) {
-  const res = await fetch(`${API_BASE}/wishlist/toggle/`, {
+  const res = await apiRequest(`${API_BASE}/wishlist/toggle/`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ itinerary_id: itineraryId }),
@@ -44,19 +65,19 @@ export async function toggleWishlist(itineraryId: number) {
 }
 
 export async function fetchMyWishlist() {
-  const res = await fetch(`${API_BASE}/wishlist/`, { headers: getAuthHeaders() });
+  const res = await apiRequest(`${API_BASE}/wishlist/`, { headers: getAuthHeaders() });
   if (!res.ok) return [];
   return res.json();
 }
 
 export async function fetchItineraries() {
-  const res = await fetch(`${API_BASE}/itineraries/`, { headers: getAuthHeaders() });
+  const res = await apiRequest(`${API_BASE}/itineraries/`, { headers: getAuthHeaders() });
   const data = await res.json();
   return Array.isArray(data) ? data : (data.results && Array.isArray(data.results) ? data.results : []);
 }
 
 export async function fetchItineraryById(id: string | number) {
-  const res = await fetch(`${API_BASE}/itineraries/${id}/`, { headers: getAuthHeaders() });
+  const res = await apiRequest(`${API_BASE}/itineraries/${id}/`, { headers: getAuthHeaders() });
   if (!res.ok) return null;
   return res.json();
 }
@@ -71,7 +92,7 @@ export async function generateItinerary(data: {
   source_country?: string;
   custom_destination?: string;
 }) {
-  const res = await fetch(`${API_BASE}/generate/`, {
+  const res = await apiRequest(`${API_BASE}/generate/`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify(data),
@@ -82,12 +103,12 @@ export async function generateItinerary(data: {
 }
 
 export async function fetchVisaInfo(source: string, destination: string) {
-  const res = await fetch(`${API_BASE}/visa/?source=${source}&destination=${destination}`);
+  const res = await apiRequest(`${API_BASE}/visa/?source=${source}&destination=${destination}`);
   return res.json();
 }
 
 export async function googleLogin(accessToken: string) {
-  const res = await fetch(`${API_BASE}/auth/google/`, {
+  const res = await apiRequest(`${API_BASE}/auth/google/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ access_token: accessToken }),
@@ -97,7 +118,7 @@ export async function googleLogin(accessToken: string) {
 
 
 export async function createRazorpayOrder(itineraryId: number) {
-  const res = await fetch(`${API_BASE}/payments/checkout/`, {
+  const res = await apiRequest(`${API_BASE}/payments/checkout/`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ itinerary_id: itineraryId }),
@@ -112,7 +133,7 @@ export async function verifyRazorpayPayment(data: {
   razorpay_payment_id: string;
   razorpay_signature: string;
 }) {
-  const res = await fetch(`${API_BASE}/payments/verify/`, {
+  const res = await apiRequest(`${API_BASE}/payments/verify/`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify(data),
@@ -123,7 +144,7 @@ export async function verifyRazorpayPayment(data: {
 }
 
 export async function fetchProfile() {
-  const res = await fetch(`${API_BASE}/auth/profile/`, {
+  const res = await apiRequest(`${API_BASE}/auth/profile/`, {
     headers: getAuthHeaders(),
   });
   const data = await res.json();
@@ -132,7 +153,7 @@ export async function fetchProfile() {
 }
 
 export async function updateProfile(data: any) {
-  const res = await fetch(`${API_BASE}/auth/profile/`, {
+  const res = await apiRequest(`${API_BASE}/auth/profile/`, {
     method: 'PATCH',
     headers: getAuthHeaders(),
     body: JSON.stringify(data),
@@ -143,7 +164,7 @@ export async function updateProfile(data: any) {
 }
 
 export async function downloadItineraryPDF(itineraryId: number) {
-  const res = await fetch(`${API_BASE}/itineraries/${itineraryId}/pdf/`, {
+  const res = await apiRequest(`${API_BASE}/itineraries/${itineraryId}/pdf/`, {
     headers: getAuthHeaders(),
   });
   
