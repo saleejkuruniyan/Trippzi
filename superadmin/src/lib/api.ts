@@ -102,10 +102,11 @@ export async function deleteItinerary(id: number) {
   return res.ok;
 }
 
-export async function cloneItinerary(id: number) {
+export async function cloneItinerary(id: number, copyPdf: boolean = false) {
   const res = await fetch(`${API_BASE}/itineraries/${id}/clone_to_standard/`, {
     method: 'POST',
     headers: getHeaders(),
+    body: JSON.stringify({ copy_pdf: copyPdf })
   });
   if (!res.ok) throw new Error("Cloning failed");
   return res.json();
@@ -136,4 +137,19 @@ export async function deleteVisaRule(id: number) {
     headers: getHeaders(),
   });
   return res.ok;
+}
+
+export async function fetchSettings() {
+  const res = await fetch(`${API_BASE}/admin/settings/`, { headers: getHeaders() });
+  if (!res.ok) return null;
+  return res.json();
+}
+
+export async function updateSettings(data: any) {
+  const res = await fetch(`${API_BASE}/admin/settings/`, {
+    method: 'PATCH',
+    headers: getHeaders(),
+    body: JSON.stringify(data),
+  });
+  return res.json();
 }

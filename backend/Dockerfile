@@ -15,13 +15,19 @@ RUN apt-get update && apt-get install -y \
     gcc \
     curl \
     # WeasyPrint dependencies
+    python3-dev \
+    libffi-dev \
+    libjpeg-dev \
+    libopenjp2-7-dev \
+    zlib1g-dev \
     libpango-1.0-0 \
-    libharfbuzz0b \
     libpangoft2-1.0-0 \
     libpangocairo-1.0-0 \
     libcairo2 \
+    libharfbuzz0b \
     libgdk-pixbuf2.0-0 \
     shared-mime-info \
+    libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create and activate virtual environment

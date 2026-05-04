@@ -81,7 +81,7 @@ export const DataTable = ({
                           <td className="px-6 py-4 text-right flex items-center justify-end gap-3">
                             {item.is_custom && onClone && (
                               <button 
-                                onClick={() => onClone(item.id)}
+                                onClick={() => onClone(item)}
                                 className="text-green-600 text-sm font-bold hover:underline"
                               >
                                 Promote

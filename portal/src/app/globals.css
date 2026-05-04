@@ -35,3 +35,11 @@
 .glass-panel {
   @apply bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md border border-white/20 dark:border-zinc-800/50;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

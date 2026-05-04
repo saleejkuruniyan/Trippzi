@@ -28,6 +28,7 @@ class Country(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to=destination_image_path, blank=True, null=True)
     image_url = models.URLField(max_length=500, blank=True, null=True)
+    flag_url = models.URLField(max_length=500, blank=True, null=True)
     
     # Rich Guide Content
     airports = models.JSONField(default=list, help_text="List of major airports")
@@ -182,6 +183,21 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f"{self.user.username} wants {self.itinerary.title}"
+
+class SiteSettings(models.Model):
+    custom_itinerary_price = models.DecimalField(max_digits=10, decimal_places=2, default=99.00)
+    custom_itinerary_regular_price = models.DecimalField(max_digits=10, decimal_places=2, default=199.00)
+
+    class Meta:
+        verbose_name_plural = "Site Settings"
+
+    def __str__(self):
+        return "Global Site Settings"
+
+    @classmethod
+    def get_settings(cls):
+        obj, created = cls.objects.get_or_create(id=1)
+        return obj
 
 # Signals to auto-create profile
 from django.db.models.signals import post_save

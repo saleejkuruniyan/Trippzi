@@ -7,6 +7,13 @@ export async function fetchDestinations() {
 
 export async function fetchDestinationBySlug(slug: string) {
   const res = await fetch(`${API_BASE}/destinations/${slug}/`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || "Destination not found");
+  return data;
+}
+
+export async function fetchSubDestinations(countrySlug: string) {
+  const res = await fetch(`${API_BASE}/destinations/${countrySlug}/destinations/`);
   return res.json();
 }
 
@@ -55,19 +62,23 @@ export async function fetchItineraryById(id: string | number) {
 }
 
 export async function generateItinerary(data: {
-  destination: string;
+  country_id: number;
+  destination_ids: number[];
   duration?: number;
   budget?: string;
   style?: string;
   interests?: string;
   source_country?: string;
+  custom_destination?: string;
 }) {
   const res = await fetch(`${API_BASE}/generate/`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify(data),
   });
-  return res.json();
+  const resData = await res.json();
+  if (!res.ok) throw new Error(resData.error || "Generation failed");
+  return resData;
 }
 
 export async function fetchVisaInfo(source: string, destination: string) {
@@ -129,4 +140,25 @@ export async function updateProfile(data: any) {
   const resData = await res.json();
   if (!res.ok) return { error: resData.detail || "Update failed", status: res.status };
   return resData;
+}
+
+export async function downloadItineraryPDF(itineraryId: number) {
+  const res = await fetch(`${API_BASE}/itineraries/${itineraryId}/pdf/`, {
+    headers: getAuthHeaders(),
+  });
+  
+  const contentType = res.headers.get("content-type");
+  if (contentType && contentType.indexOf("application/json") !== -1) {
+    const data = await res.json();
+    if (!res.ok) {
+      const error: any = new Error(data.error || "Failed to generate PDF");
+      if (data.instructions) error.instructions = data.instructions;
+      throw error;
+    }
+    return data;
+  } else {
+    const text = await res.text();
+    console.error("PDF Generation failed with non-JSON response:", text);
+    throw new Error("Failed to generate PDF. The server returned an unexpected response.");
+  }
 }

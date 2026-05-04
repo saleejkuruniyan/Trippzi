@@ -34,14 +34,14 @@ class AIEngine:
             except:
                 return None
 
-    def generate_itinerary(self, destination, duration, budget, style, interests):
+    def generate_itinerary(self, country, selected_destinations, duration, budget, style, interests):
         """
         Generates a day-wise itinerary structure using AI.
         """
         response_schemas = [
             ResponseSchema(name="title", description="A catchy title for the trip"),
             ResponseSchema(name="overview", description="A brief overview of the trip"),
-            ResponseSchema(name="days", description="An array of daily plans. Each day should have a 'day_number', 'theme', and 'activities' (array of {time, activity, description, location, cost_estimate})."),
+            ResponseSchema(name="days", description="An array of daily plans. Each day should have a 'day_number', 'theme', and 'activities' (array of {time, activity, description, location, cost_estimate, opening_time, closing_time, duration_at_spot, distance_to_next, time_to_next, transport_to_next, unsplash_query})."),
             ResponseSchema(name="budget_breakdown", description="Estimated costs for transport, food, activities, and stay."),
             ResponseSchema(name="packing_list", description="Suggested packing items based on destination and duration."),
             ResponseSchema(name="local_tips", description="Important local customs or hacks.")
@@ -52,7 +52,9 @@ class AIEngine:
 
         prompt = ChatPromptTemplate.from_template(
             """
-            You are an expert travel consultant. Generate a highly detailed {duration}-day travel itinerary for {destination}.
+            You are an expert travel consultant. Generate a highly detailed {duration}-day travel itinerary for {country}.
+            
+            Strictly use ONLY these destinations within {country}: {selected_destinations}.
             
             User Preferences:
             - Budget: {budget}
@@ -61,12 +63,20 @@ class AIEngine:
             
             {format_instructions}
             
+            For each activity:
+            1. Include opening_time and closing_time (e.g., '09:00 AM', '05:00 PM').
+            2. Include duration_at_spot (e.g., '2 hours').
+            3. Include distance_to_next, time_to_next, and transport_to_next (e.g., '3km', '15 mins', 'Taxi/Walking').
+            4. Provide an 'unsplash_query' which is a specific 3-4 word search term for Unsplash to find a high-quality photo of this specific attraction (e.g. 'Mount Fuji landscape').
+            
             Ensure the itinerary is realistic, accounts for travel time between attractions, and includes specific food recommendations for each day.
+            Include major attractions in the selected destinations as well as hidden gems that fit the user's interests.
             """
         )
 
         messages = prompt.format_messages(
-            destination=destination,
+            country=country,
+            selected_destinations=", ".join(selected_destinations),
             duration=duration,
             budget=budget,
             style=style,

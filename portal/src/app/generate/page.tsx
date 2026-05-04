@@ -1,46 +1,50 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { generateItinerary, googleLogin } from "@/lib/api"
+import { generateItinerary, fetchDestinations, fetchSubDestinations } from "@/lib/api"
 import { motion, AnimatePresence } from "framer-motion"
-import { Sparkles, MapPin, Calendar, Wallet, Heart, ShieldCheck, Download, Zap } from "lucide-react"
+import { Sparkles, MapPin, Calendar, Wallet, Zap, Check, ShieldCheck, Heart } from "lucide-react"
 import { AuthModal } from "@/components/auth-modal"
+import { CountryDropdown } from "@/components/country-dropdown"
+import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
 
 export default function GeneratePage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<any>(null)
+  const [countries, setCountries] = useState<any[]>([])
+  const [availableDestinations, setAvailableDestinations] = useState<any[]>([])
+  
+  const [selectedCountry, setSelectedCountry] = useState<any>(null)
+  const [selectedDestinations, setSelectedDestinations] = useState<number[]>([])
+
   const [formData, setFormData] = useState({
-    destination: "",
     duration: 5,
     budget: "Budget",
     style: "Backpacking",
     interests: "",
-    source_country: "India"
+    source_country: "India",
+    custom_destination: ""
   })
 
-  const [owned, setOwned] = useState(false)
-  const [itineraryId, setItineraryId] = useState<number | null>(null)
+  const [isOtherOpen, setIsOtherOpen] = useState(false)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
-  const [isDownloading, setIsDownloading] = useState(false)
 
-  const handleSubmit = async (e?: React.FormEvent, force = false) => {
-    if (e) e.preventDefault()
+  useEffect(() => {
+    fetchDestinations().then(data => {
+      setCountries(Array.isArray(data) ? data : data.results || [])
+    })
+  }, [])
 
-    const token = localStorage.getItem('trippzi-token')
-    const isValidToken = token && token !== 'undefined' && token !== 'null'
-
-    if (!isValidToken && !force) {
-      setIsAuthModalOpen(true)
-      return
-    }
-
+  const handleCountryChange = async (country: any) => {
+    setSelectedCountry(country)
+    setSelectedDestinations([])
+    setAvailableDestinations([])
     setLoading(true)
     try {
-      const data = await generateItinerary(formData)
-      // Redirect to the premium preview page
-      router.push(`/itinerary/${data.itinerary_id}/preview`)
+      const data = await fetchSubDestinations(country.slug)
+      setAvailableDestinations(Array.isArray(data) ? data : [])
     } catch (err) {
       console.error(err)
     } finally {
@@ -48,251 +52,187 @@ export default function GeneratePage() {
     }
   }
 
-  const handleDownload = async () => {
-    if (!itineraryId) return
-    setIsDownloading(true)
-    try {
-      const { downloadItineraryPDF } = await import("@/lib/api")
-      const { pdf_url } = await downloadItineraryPDF(itineraryId)
-      window.open(pdf_url, '_blank')
-    } catch (err: any) {
-      alert(err.message || "Failed to download PDF. Please try again.")
-    } finally {
-      setIsDownloading(false)
-    }
+  const toggleDestination = (id: number) => {
+    setSelectedDestinations(prev => 
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    )
   }
 
-  const handlePayment = async () => {
-    if (!itineraryId) {
+  const handleSubmit = async (e?: React.FormEvent, force = false) => {
+    if (e) e.preventDefault()
+    if (!selectedCountry || (selectedDestinations.length === 0 && !formData.custom_destination)) {
+      alert("Please select a destination or enter a custom one")
+      return
+    }
+
+    const token = localStorage.getItem('trippzi-token')
+    if (!token && !force) {
       setIsAuthModalOpen(true)
       return
     }
-    
+
+    setLoading(true)
     try {
-      const { createRazorpayOrder, verifyRazorpayPayment } = await import("@/lib/api")
-      const order = await createRazorpayOrder(itineraryId)
-      
-      if (order.status === 401) {
-        setIsAuthModalOpen(true)
-        return
-      }
-
-      const options = {
-        key: order.key,
-        amount: order.amount,
-        currency: order.currency,
-        name: "Trippzi",
-        description: "Unlock AI Itinerary",
-        order_id: order.order_id,
-        handler: async (response: any) => {
-          const verify = await verifyRazorpayPayment({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature
-          })
-          
-          if (verify.status === "success") {
-            alert("Payment successful! Full itinerary unlocked.")
-            setOwned(true)
-          }
-        },
-        prefill: {
-          email: order.user_email,
-          contact: order.user_phone
-        },
-        theme: { color: "#2563eb" }
-      };
-
-      const rzp = new (window as any).Razorpay(options);
-      rzp.open();
-    } catch (err) {
-      console.error("Payment failed", err)
+      const data = await generateItinerary({
+        ...formData,
+        country_id: selectedCountry.id,
+        destination_ids: selectedDestinations
+      })
+      router.push(`/itinerary/${data.itinerary_id}/preview`)
+    } catch (err: any) {
+      alert(err.message || "Failed to generate itinerary")
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 pt-24 pb-20 px-4">
-      <div className="max-w-4xl mx-auto">
-        {!result ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 p-8 shadow-xl"
-          >
-            <div className="flex items-center gap-3 mb-8">
-              <div className="p-3 rounded-2xl bg-blue-100 dark:bg-blue-900/30 text-blue-600">
-                <Sparkles className="w-6 h-6" />
-              </div>
-              <h1 className="text-3xl font-bold">AI Trip Planner</h1>
-            </div>
+    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
+      <Navbar />
+      <main className="flex-1 pt-24 pb-20">
+        <div className="max-w-3xl mx-auto px-4">
+          <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden p-8 md:p-12 space-y-10">
+            <HeaderSection />
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-bold mb-2 text-zinc-900 dark:text-zinc-50">Destination</label>
-                  <div className="relative">
-                    <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
-                    <input 
-                      required
-                      type="text"
-                      className="w-full pl-12 pr-4 py-3 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-transparent focus:ring-2 focus:ring-blue-500 text-zinc-900 dark:text-zinc-50"
-                      placeholder="e.g. Tokyo, Japan"
-                      value={formData.destination}
-                      onChange={e => setFormData({...formData, destination: e.target.value})}
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <CountryDropdown 
+                label="1. Your Passport Country"
+                icon={<ShieldCheck className="w-4 h-4 text-blue-500" />}
+                selectedCountryName={formData.source_country}
+                countries={countries}
+                onSelect={(c) => setFormData({...formData, source_country: c.name})}
+              />
+
+              <CountryDropdown 
+                label="2. Select Target Country"
+                icon={<MapPin className="w-4 h-4 text-blue-500" />}
+                selectedCountryName={selectedCountry?.name}
+                countries={countries}
+                onSelect={handleCountryChange}
+                placeholder="Where are you heading?"
+              />
+
+              <AnimatePresence>
+                {selectedCountry && (
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+                    <DestinationSection 
+                      destinations={availableDestinations}
+                      selected={selectedDestinations}
+                      onToggle={toggleDestination}
+                      isOtherOpen={isOtherOpen}
+                      onOtherToggle={() => setIsOtherOpen(!isOtherOpen)}
+                      customValue={formData.custom_destination}
+                      onCustomChange={(val) => setFormData({...formData, custom_destination: val})}
                     />
-                  </div>
-                </div>
 
-                <div>
-                  <label className="block text-sm font-bold mb-2 text-zinc-900 dark:text-zinc-50">Passport Country</label>
-                  <input 
-                    required
-                    type="text"
-                    className="w-full px-4 py-3 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-transparent focus:ring-2 focus:ring-blue-500 text-zinc-900 dark:text-zinc-50"
-                    placeholder="For visa rules"
-                    value={formData.source_country}
-                    onChange={e => setFormData({...formData, source_country: e.target.value})}
-                  />
-                </div>
+                    <div className="grid grid-cols-2 gap-6">
+                      <FormInput label="Duration" icon={<Calendar className="w-4 h-4 text-blue-500" />} type="number" value={formData.duration} onChange={(val) => setFormData({...formData, duration: parseInt(val) || 0})} />
+                      <FormSelect label="Budget" icon={<Wallet className="w-4 h-4 text-blue-500" />} value={formData.budget} options={["Budget", "Mid-range", "Luxury"]} onChange={(val) => setFormData({...formData, budget: val})} />
+                    </div>
 
-                <div>
-                  <label className="block text-sm font-bold mb-2 flex items-center gap-2 text-zinc-900 dark:text-zinc-50">
-                    <Calendar className="w-4 h-4" /> Duration (Days)
-                  </label>
-                  <input 
-                    type="number" min="1" max="30"
-                    className="w-full px-4 py-3 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-transparent focus:ring-2 focus:ring-blue-500 text-zinc-900 dark:text-zinc-50"
-                    value={formData.duration || ""}
-                    onChange={e => {
-                      const val = parseInt(e.target.value);
-                      setFormData({...formData, duration: isNaN(val) ? 0 : val});
-                    }}
-                  />
-                </div>
+                    <div className="space-y-3">
+                      <label className="block text-sm font-bold flex items-center gap-2"><Heart className="w-4 h-4 text-pink-500" /> Your Interests</label>
+                      <textarea 
+                        className="w-full px-6 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border border-transparent focus:border-blue-500 outline-none font-sans font-bold h-24 transition-all"
+                        placeholder="e.g. Anime, street food, temples, nightlife..."
+                        value={formData.interests}
+                        onChange={e => setFormData({...formData, interests: e.target.value})}
+                      />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-                <div>
-                  <label className="block text-sm font-bold mb-2 flex items-center gap-2 text-zinc-900 dark:text-zinc-50">
-                    <Wallet className="w-4 h-4" /> Budget Style
-                  </label>
-                  <select 
-                    className="w-full px-4 py-3 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-transparent focus:ring-2 focus:ring-blue-500 text-zinc-900 dark:text-zinc-50"
-                    value={formData.budget}
-                    onChange={e => setFormData({...formData, budget: e.target.value})}
-                  >
-                    <option>Budget</option>
-                    <option>Mid-range</option>
-                    <option>Luxury</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold mb-2 flex items-center gap-2 text-zinc-900 dark:text-zinc-50">
-                  <Heart className="w-4 h-4" /> Interests
-                </label>
-                <textarea 
-                  className="w-full px-4 py-3 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-transparent focus:ring-2 focus:ring-blue-500 h-24 text-zinc-900 dark:text-zinc-50"
-                  placeholder="e.g. Anime, street food, temples, nightlife"
-                  value={formData.interests}
-                  onChange={e => setFormData({...formData, interests: e.target.value})}
-                ></textarea>
-              </div>
-
-              <button 
-                type="submit"
-                disabled={loading}
-                className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              <button
+                type="submit" disabled={loading}
+                className="w-full py-6 rounded-[2rem] bg-blue-600 text-white font-black text-xl italic tracking-tighter hover:bg-blue-700 transition-all shadow-2xl shadow-blue-500/20 active:scale-95 flex items-center justify-center gap-3"
               >
-                {loading ? <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> Crafting your trip...</> : 'Generate Personalized Itinerary'}
+                {loading ? <Zap className="w-6 h-6 animate-spin" /> : <Zap className="w-6 h-6 fill-current" />}
+                {loading ? "GENERATING..." : "GENERATE ITINERARY"}
               </button>
             </form>
-          </motion.div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="space-y-8"
-          >
-            {/* Result Display */}
-            <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 p-8 shadow-xl">
-              <header className="flex flex-col md:flex-row justify-between items-start gap-4 mb-8">
-                <div>
-                  <h1 className="text-3xl font-bold mb-2">{result.itinerary.title || 'Your Itinerary'}</h1>
-                  <p className="text-zinc-500">{result.itinerary.overview}</p>
-                </div>
-                {owned ? (
-                  <button 
-                    onClick={handleDownload}
-                    disabled={isDownloading}
-                    className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-green-700 transition-all disabled:opacity-50"
-                  >
-                    <Download className={`w-4 h-4 ${isDownloading ? 'animate-bounce' : ''}`} />
-                    {isDownloading ? 'Generating...' : 'Export PDF'}
-                  </button>
-                ) : (
-                  <button 
-                    onClick={handlePayment}
-                    className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20"
-                  >
-                    <Zap className="w-4 h-4 fill-current" /> Unlock Full Itinerary (Rs. 99)
-                  </button>
-                )}
-              </header>
+          </div>
+        </div>
+      </main>
+      <Footer />
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} onSuccess={() => handleSubmit(undefined, true)} />
+    </div>
+  )
+}
 
-              {/* Visa Alert */}
-              <div className="p-4 rounded-2xl bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800/50 flex gap-4 mb-8">
-                <ShieldCheck className="w-6 h-6 text-orange-600 shrink-0" />
-                <div>
-                  <p className="font-bold text-orange-800 dark:text-orange-400">Visa Requirements for {formData.source_country} citizens</p>
-                  <p className="text-sm text-orange-700 dark:text-orange-500">
-                    {result.visa_info.visa_required ? `Visa Required: ${result.visa_info.visa_type}` : 'No Visa Required / Visa on Arrival available.'}
-                  </p>
-                </div>
-              </div>
-
-              {/* Daily Plan */}
-              <div className="relative space-y-6">
-                {result.itinerary.days?.slice(0, owned ? undefined : 1).map((day: any) => (
-                  <div key={day.day_number} className="border-l-4 border-blue-500 pl-6 py-2">
-                    <h3 className="font-bold text-lg mb-2">Day {day.day_number}: {day.theme}</h3>
-                    <div className="space-y-4">
-                      {day.activities?.map((act: any, idx: number) => (
-                        <div key={idx} className="flex gap-4">
-                          <span className="text-xs font-bold text-zinc-400 w-12">{act.time}</span>
-                          <div>
-                            <p className="font-semibold text-sm">{act.activity}</p>
-                            <p className="text-xs text-zinc-500">{act.description}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-                
-                {!owned && (
-                  <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white dark:from-zinc-900 to-transparent flex items-end justify-center pb-4">
-                    <div className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 px-6 py-3 rounded-full text-sm font-bold text-zinc-500 flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-blue-500" /> Pay Rs. 99 to unlock and see all {result.itinerary.days?.length} days
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            
-            <button 
-              onClick={() => setResult(null)}
-              className="text-zinc-500 hover:text-zinc-900 dark:hover:text-white font-medium"
-            >
-              ← Start Over
-            </button>
-          </motion.div>
-        )}
+function HeaderSection() {
+  return (
+    <div className="text-center space-y-4">
+      <div className="w-20 h-20 bg-blue-600 rounded-3xl flex items-center justify-center mx-auto shadow-2xl shadow-blue-500/20">
+        <Sparkles className="w-10 h-10 text-white" />
       </div>
-      <AuthModal 
-        isOpen={isAuthModalOpen} 
-        onClose={() => setIsAuthModalOpen(false)} 
-        onSuccess={() => handleSubmit(undefined, true)}
+      <h1 className="text-4xl font-black italic tracking-tighter uppercase">AI Trip Planner</h1>
+      <p className="text-zinc-500 font-medium max-w-sm mx-auto">Create a personalized, high-end itinerary in seconds.</p>
+    </div>
+  )
+}
+
+function DestinationSection({ destinations, selected, onToggle, isOtherOpen, onOtherToggle, customValue, onCustomChange }: any) {
+  return (
+    <div className="space-y-4">
+      <label className="block text-sm font-bold flex items-center gap-2">
+        <Sparkles className="w-4 h-4 text-blue-500" /> 3. Select Destinations
+      </label>
+      <div className="flex flex-wrap gap-2">
+        {destinations.map((dest: any) => (
+          <button
+            key={dest.id} type="button" onClick={() => onToggle(dest.id)}
+            className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
+              selected.includes(dest.id) ? 'bg-blue-600 text-white' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400'
+            }`}
+          >
+            {selected.includes(dest.id) && <Check className="w-4 h-4" />}
+            {dest.name}
+          </button>
+        ))}
+        <button
+          type="button" onClick={onOtherToggle}
+          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all border-2 border-dashed ${
+            isOtherOpen ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 dark:border-zinc-800 text-zinc-400'
+          }`}
+        >
+          Other +
+        </button>
+      </div>
+      {isOtherOpen && (
+        <motion.input 
+          initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
+          type="text" placeholder="Enter custom destination name..."
+          className="w-full px-6 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border-2 border-dashed border-zinc-200 dark:border-zinc-700 outline-none font-bold italic"
+          value={customValue} onChange={e => onCustomChange(e.target.value)}
+        />
+      )}
+    </div>
+  )
+}
+
+function FormInput({ label, icon, type, value, onChange }: any) {
+  return (
+    <div className="space-y-3">
+      <label className="block text-sm font-bold flex items-center gap-2">{icon} {label}</label>
+      <input 
+        type={type} className="w-full px-6 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800 font-bold"
+        value={value} onChange={e => onChange(e.target.value)}
       />
+    </div>
+  )
+}
+
+function FormSelect({ label, icon, value, options, onChange }: any) {
+  return (
+    <div className="space-y-3">
+      <label className="block text-sm font-bold flex items-center gap-2">{icon} {label}</label>
+      <select 
+        className="w-full px-6 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800 font-sans font-bold appearance-none outline-none focus:ring-2 focus:ring-blue-500"
+        value={value} onChange={e => onChange(e.target.value)}
+      >
+        {options.map((opt: string) => <option key={opt} className="font-sans">{opt}</option>)}
+      </select>
     </div>
   )
 }

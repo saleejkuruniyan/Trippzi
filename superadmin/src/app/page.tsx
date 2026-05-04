@@ -11,8 +11,9 @@ import { VisaRuleForm } from "@/components/visa-rule-form"
 import {
   fetchStats, fetchTransactions, fetchUsers, fetchItineraries, fetchVisaRules, login,
   createItinerary, updateItinerary, deleteItinerary, cloneItinerary,
-  createVisaRule, updateVisaRule, deleteVisaRule
+  createVisaRule, updateVisaRule, deleteVisaRule, fetchSettings, updateSettings
 } from "@/lib/api"
+import { SettingsForm } from "@/components/settings-form"
 import { DollarSign, FileText, Users, Globe, Sparkles } from "lucide-react"
 
 export default function AdminDashboard() {
@@ -27,6 +28,7 @@ export default function AdminDashboard() {
   const [isCreating, setIsCreating] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalCount, setTotalCount] = useState(0)
+  const [settings, setSettings] = useState<any>(null)
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -66,6 +68,12 @@ export default function AdminDashboard() {
       else if (activeTab === 'custom') res = await fetchItineraries(pageNum, true)
       else if (activeTab === 'visa') res = await fetchVisaRules(pageNum)
       else if (activeTab === 'sales' || activeTab === 'dashboard') res = await fetchTransactions(pageNum)
+      else if (activeTab === 'settings') {
+        const s = await fetchSettings()
+        setSettings(s)
+        setLoading(false)
+        return
+      }
 
       setData(res?.results || [])
       setTotalCount(res?.count || 0)
@@ -107,10 +115,16 @@ export default function AdminDashboard() {
     } catch (err) { alert("Failed to delete") }
   }
 
-  const handleClone = async (id: number) => {
-    if (!confirm("This will create a standard copy for you to review. Proceed?")) return
+  const handleClone = async (item: any) => {
+    let copyPdf = false
+    if (item.has_pdf) {
+      copyPdf = confirm("An existing PDF Booklet was found for this custom trip. Would you like to copy it to the new standard itinerary?")
+    } else {
+      if (!confirm("This will create a standard copy for you to review. Proceed?")) return
+    }
+    
     try {
-      const newItem = await cloneItinerary(id)
+      const newItem = await cloneItinerary(item.id, copyPdf)
       setActiveTab("itineraries") // Switch to standard tab
       setEditingItem(newItem) // Open edit form for the new item
       loadStats()
@@ -150,6 +164,8 @@ export default function AdminDashboard() {
           {(editingItem || isCreating) ? (
             (activeTab === 'itineraries' || activeTab === 'custom') ? <ItineraryForm initialData={editingItem} onSave={handleSave} onCancel={() => { setEditingItem(null); setIsCreating(false) }} onDelete={handleDelete} /> :
               <VisaRuleForm initialData={editingItem} onSave={handleSave} onCancel={() => { setEditingItem(null); setIsCreating(false) }} onDelete={handleDelete} />
+          ) : activeTab === 'settings' ? (
+            <SettingsForm initialData={settings} onSave={async (d) => { await updateSettings(d); loadTabData() }} />
           ) : (
             activeTab !== 'dashboard' && (
               <DataTable

@@ -9,7 +9,7 @@ from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from .services.ai_engine import AIEngine
-from .models import Itinerary, VisaRule, Transaction, Country, Destination, Attraction, Wishlist, ItineraryDay
+from .models import Itinerary, VisaRule, Transaction, Country, Destination, Attraction, Wishlist, ItineraryDay, SiteSettings
 from .utils import fetch_unsplash_images, download_image_to_content_file
 from .storage import R2Storage
 from django.conf import settings
@@ -29,13 +29,19 @@ class CountryViewSet(viewsets.ReadOnlyModelViewSet):
         if user.is_authenticated and user.is_staff:
             return Country.objects.all()
         
-        return Country.objects.annotate(
-            approved_count=Count('itineraries', filter=Q(itineraries__is_approved=True))
-        ).filter(approved_count__gt=0)
+        return Country.objects.all() # Show all countries in generate page
     
     serializer_class = CountrySerializer
+    pagination_class = None # Disable pagination for countries
     lookup_field = 'slug'
     permission_classes = [AllowAny]
+
+    @action(detail=True, methods=['get'])
+    def destinations(self, request, slug=None):
+        country = self.get_object()
+        destinations = country.destinations.all()
+        serializer = DestinationSerializer(destinations, many=True)
+        return Response(serializer.data)
 
 class DestinationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Destination.objects.all()
@@ -62,19 +68,18 @@ class ItineraryViewSet(viewsets.ModelViewSet):
 
         if user.is_authenticated and user.is_staff:
             return queryset
-        
-        # Rule: 
-        # 1. Standard (is_custom=False) must be approved.
-        # 2. Custom (is_custom=True) must be owned by the user.
-        query = Q(is_custom=False, is_approved=True)
-        if user.is_authenticated:
-            query |= Q(is_custom=True, user=user)
             
-        return queryset.filter(query).distinct()
+        # For 'list' action (Homepage, Destinations), only show approved standard trips
+        if self.action == 'list':
+            return queryset.filter(is_custom=False, is_approved=True)
+            
+        # For 'retrieve' (direct link), we allow all - Serializer handles content masking
+        return queryset
 
     @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
     def clone_to_standard(self, request, pk=None):
         itinerary = self.get_object()
+        copy_pdf = request.data.get('copy_pdf', False)
         
         # Create a copy
         new_itinerary = Itinerary.objects.create(
@@ -108,6 +113,29 @@ class ItineraryViewSet(viewsets.ModelViewSet):
                 caption=day.caption
             )
             
+        # Copy PDF if requested and exists
+        if copy_pdf:
+            from django.core.files.storage import default_storage
+            from django.utils.text import slugify
+            from django.core.files.base import ContentFile
+            
+            country_slug = slugify(itinerary.country.name if itinerary.country else 'generic')
+            src_prefix = f"itinerary/{country_slug}/{itinerary.id}/"
+            dest_prefix = f"itinerary/{country_slug}/{new_itinerary.id}/"
+            
+            try:
+                # List all files in the source prefix
+                directories, files = default_storage.listdir(src_prefix)
+                for filename in files:
+                    if filename.endswith('.pdf'):
+                        # Read and copy
+                        with default_storage.open(f"{src_prefix}{filename}") as f:
+                            content = f.read()
+                            default_storage.save(f"{dest_prefix}{filename}", ContentFile(content))
+                print(f"Copied PDFs from {src_prefix} to {dest_prefix}")
+            except Exception as e:
+                print(f"Failed to copy PDFs: {str(e)}")
+
         return Response(ItinerarySerializer(new_itinerary, context={'request': request}).data, status=status.HTTP_201_CREATED)
     
     def get_permissions(self):
@@ -118,20 +146,38 @@ class ItineraryViewSet(viewsets.ModelViewSet):
 class GenerateItineraryView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
-        destination = request.data.get('destination')
+        country_id = request.data.get('country_id')
+        destination_ids = request.data.get('destination_ids', [])
         duration = request.data.get('duration', 5)
         budget = request.data.get('budget', 'Budget')
         style = request.data.get('style', 'Backpacking')
         interests = request.data.get('interests', 'Food, Culture')
         source_country = request.data.get('source_country', 'India')
+        custom_destination = request.data.get('custom_destination', '')
 
-        if not destination:
-            return Response({"error": "Destination is required"}, status=status.HTTP_400_BAD_REQUEST)
+        if not country_id:
+            return Response({"error": "Country is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        country_obj = get_object_or_404(Country, id=country_id)
+        destinations = Destination.objects.filter(id__in=destination_ids, country=country_obj)
+        dest_names = [d.name for d in destinations]
+        if custom_destination:
+            dest_names.append(custom_destination)
+
+        if not dest_names:
+            return Response({"error": "At least one destination is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         ai_engine = AIEngine()
         
         # 1. Generate Itinerary Structure
-        itinerary_data = ai_engine.generate_itinerary(destination, duration, budget, style, interests)
+        itinerary_data = ai_engine.generate_itinerary(
+            country=country_obj.name,
+            selected_destinations=dest_names,
+            duration=duration,
+            budget=budget,
+            style=style,
+            interests=interests
+        )
         
         if "error" in itinerary_data:
             return Response({
@@ -139,104 +185,76 @@ class GenerateItineraryView(APIView):
                 "details": itinerary_data.get("error"),
                 "raw": itinerary_data.get("raw")
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
-        # 1b. Ensure Country exists or create it
-        country_obj, created = Country.objects.get_or_create(
-            name__iexact=destination,
-            defaults={
-                'name': destination,
-                'description': f"A beautiful journey to {destination}."
-            }
-        )
-        
-        if created:
-            # Enrich new country with AI guide and Unsplash image
-            guide = ai_engine.generate_destination_guide(destination)
-            country_obj.description = guide.get('description', country_obj.description)
-            country_obj.best_time = guide.get('best_time', '')
-            country_obj.visa_process = guide.get('visa_process', '')
-            country_obj.airports = guide.get('airports', [])
-            country_obj.tips = guide.get('tips', [])
-            country_obj.days_recommendation = guide.get('days_recommendation', {})
-            
-            # Fetch country hero image
-            dest_images = fetch_unsplash_images(f"{destination} travel", count=1)
-            if dest_images:
-                country_obj.image_url = dest_images[0]
-                dest_image_file = download_image_to_content_file(dest_images[0])
-                if dest_image_file:
-                    country_obj.image.save(f"country_{country_obj.slug}.jpg", dest_image_file)
-            
-            country_obj.save()
 
         # 2. Get Visa Info
-        visa_info = ai_engine.get_visa_info(source_country, destination)
+        visa_info = ai_engine.get_visa_info(source_country, country_obj.name)
 
-        # 3. Save to DB if authenticated
-        itinerary_id = None
-        is_owned = False
-        if request.user.is_authenticated:
-            # Store the full days structure as-is in content field
-            content_data = itinerary_data.get('days', [])
+        # 3. Save to DB
+        content_data = itinerary_data.get('days', [])
+        
+        # Get dynamic pricing from settings
+        site_settings = SiteSettings.get_settings()
+        
+        itinerary_obj = Itinerary.objects.create(
+            user=request.user,
+            country=country_obj,
+            is_custom=True,
+            title=itinerary_data.get('title', f"Trip to {country_obj.name}"),
+            destination=", ".join(dest_names),
+            duration_days=duration,
+            price=site_settings.custom_itinerary_price,
+            sale_price=site_settings.custom_itinerary_price,
+            regular_price=site_settings.custom_itinerary_regular_price,
+            description=itinerary_data.get('overview', ''),
+            content=content_data
+        )
+        itinerary_obj.destinations.set(destinations)
+        
+        # 3b. Fetch Itinerary Hero Image
+        hero_images = fetch_unsplash_images(f"{country_obj.name} travel {dest_names[0]}", count=1)
+        if hero_images:
+            itinerary_obj.image_url = hero_images[0]
+            hero_file = download_image_to_content_file(hero_images[0])
+            if hero_file:
+                itinerary_obj.image.save(f"itinerary_{itinerary_obj.id}.jpg", hero_file)
+            itinerary_obj.save()
+
+        # 4. Fetch and save day-wise images + Enrichment
+        for day in content_data:
+            day_num = day.get('day_number')
+            activities = day.get('activities', [])
             
-            itinerary_obj = Itinerary.objects.create(
-                user=request.user,
-                country=country_obj,
-                is_custom=True,
-                title=itinerary_data.get('title', f"Trip to {destination}"),
-                destination=destination,
-                duration_days=duration,
-                price=99.00,
-                sale_price=99.00,
-                regular_price=199.00,
-                description=itinerary_data.get('overview', ''),
-                content=content_data
-            )
-            itinerary_id = itinerary_obj.id
-
-            # 3b. Fetch Itinerary Hero Image (Thumbnail)
-            hero_images = fetch_unsplash_images(f"{destination} {itinerary_obj.title}", count=1)
-            if hero_images:
-                itinerary_obj.image_url = hero_images[0]
-                hero_file = download_image_to_content_file(hero_images[0])
-                if hero_file:
-                    itinerary_obj.image.save(f"itinerary_{itinerary_obj.id}.jpg", hero_file)
-                itinerary_obj.save()
-
-            # 4. Fetch and save day-wise images from Unsplash
-            for day in content_data:
-                day_num = day.get('day_number')
-                theme = day.get('theme', '')
-                query = f"{destination} {theme}"
+            for idx, act in enumerate(activities):
+                # Use AI provided unsplash query
+                query = act.get('unsplash_query') or f"{act.get('activity')} {act.get('location')}"
+                image_urls = fetch_unsplash_images(query, count=1)
                 
-                # Fetch images for top 3 activities/spots in each day
-                activities = day.get('activities', [])[:3]
-                
-                for idx, act in enumerate(activities):
-                    spot_name = act.get('activity', '')
-                    location = act.get('location', theme)
-                    query = f"{destination} {location} {spot_name}"
+                if image_urls:
+                    img_url = image_urls[0]
+                    act['image_url'] = img_url # Add to content JSON
                     
-                    image_urls = fetch_unsplash_images(query, count=1)
-                    if image_urls:
-                        img_url = image_urls[0]
+                    # Also save as ItineraryDay for backward compatibility or special uses
+                    if idx == 0: # Save first activity of each day as the day's thumbnail
                         day_detail = ItineraryDay.objects.create(
                             itinerary=itinerary_obj,
                             day_number=day_num,
-                            location_name=location,
+                            location_name=act.get('location', ''),
                             image_url=img_url,
-                            caption=spot_name
+                            caption=act.get('activity', '')
                         )
-                        # Download to local storage (R2/S3)
                         image_file = download_image_to_content_file(img_url)
                         if image_file:
                             day_detail.image.save(f"day_{day_num}_spot_{idx}.jpg", image_file)
+        
+        # Save updated content with image URLs
+        itinerary_obj.content = content_data
+        itinerary_obj.save()
 
         return Response({
             "itinerary": itinerary_data,
             "visa_info": visa_info,
-            "itinerary_id": itinerary_id,
-            "is_owned": is_owned
+            "itinerary_id": itinerary_obj.id,
+            "is_owned": False # Initially not owned until payment, but they can see preview
         }, status=status.HTTP_200_OK)
 
 class VisaRuleView(APIView):
@@ -409,24 +427,34 @@ class DownloadItineraryPDFView(APIView):
         is_purchased = Transaction.objects.filter(
             user=request.user, itinerary=itinerary, status='COMPLETED'
         ).exists()
-        is_owner = itinerary.user == request.user and itinerary.is_custom
         
-        if not (is_purchased or is_owner):
+        if not is_purchased:
             return Response({'error': 'Purchase required to download booklet.'}, status=403)
 
         # 2. Check if PDF already exists in R2
-        r2_key = f"pdfs/itinerary_{itinerary_id}_{request.user.id}.pdf"
         storage = R2Storage()
+        country_slug = itinerary.country.slug if itinerary.country else "global"
         
-        if storage.exists(r2_key):
-            pdf_url = storage.url(r2_key)
-            return Response({'pdf_url': pdf_url})
+        # Check if we already have a generated PDF for this itinerary/user combination
+        # We'll look into the specific directory for any .pdf file to reuse
+        prefix = f"itinerary/{country_slug}/{itinerary_id}/"
+        try:
+            dirs, files = storage.listdir(prefix)
+            pdf_files = [f for f in files if f.endswith('.pdf')]
+            if pdf_files:
+                pdf_url = storage.url(f"{prefix}{pdf_files[0]}")
+                return Response({'pdf_url': pdf_url})
+        except:
+            pass
 
         # 3. Generate PDF fresh
         try:
-            from weasyprint import HTML
-            # Try to build and write PDF to catch OS library errors
+            import uuid
+            pdf_bytes = None
+            
+            # Attempt WeasyPrint first (better CSS support)
             try:
+                from weasyprint import HTML
                 day_images = ItineraryDay.objects.filter(itinerary=itinerary)
                 context = {
                     'itinerary': itinerary,
@@ -436,23 +464,107 @@ class DownloadItineraryPDFView(APIView):
                 }
                 html_string = render_to_string('itinerary_pdf.html', context)
                 pdf_bytes = HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf()
-            except Exception as e:
-                # Handle missing system libraries (Pango/Cairo/GTK+)
-                err_msg = str(e).lower()
-                if 'dlopen' in err_msg or 'cannot load library' in err_msg or 'pango' in err_msg or 'cairo' in err_msg:
-                    instructions = "Please install GTK3 runtime: https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases" if os.name == 'nt' else "Please run: brew install pango"
-                    return Response({
-                        'error': 'System dependencies missing (Pango/Cairo).',
-                        'details': str(e),
-                        'instructions': instructions
-                    }, status=500)
-                raise e
+            except (ImportError, OSError, Exception) as e:
+                # Fallback to xhtml2pdf or fpdf2
+                print(f"WeasyPrint failed: {str(e)}")
+                try:
+                    # Try xhtml2pdf (HTML support)
+                    from xhtml2pdf import pisa
+                    from io import BytesIO
+                    day_images = ItineraryDay.objects.filter(itinerary=itinerary)
+                    context = {
+                        'itinerary': itinerary,
+                        'days': itinerary.content,
+                        'day_images': day_images,
+                        'user': request.user,
+                    }
+                    html_string = render_to_string('itinerary_pdf.html', context)
+                    result = BytesIO()
+                    pisa_status = pisa.CreatePDF(html_string, dest=result)
+                    if pisa_status.err:
+                        raise Exception("xhtml2pdf failed")
+                    pdf_bytes = result.getvalue()
+                except Exception as ex:
+                        # FINAL FALLBACK: fpdf2 (Pure Python, no HTML, very robust)
+                        print(f"xhtml2pdf failed: {str(ex)}. Using fpdf2 fallback.")
+                        try:
+                            from fpdf import FPDF
+                            
+                            class SafePDF(FPDF):
+                                def safe_text(self, text):
+                                    if not text: return ""
+                                    # Convert to latin-1 and replace unknown chars with '?' to avoid UnicodeEncodeError
+                                    return str(text).encode('latin-1', 'replace').decode('latin-1')
 
-        except ImportError:
-            return Response({'error': 'WeasyPrint not installed. Run: pip install weasyprint'}, status=500)
+                            pdf = SafePDF()
+                            pdf.add_page()
+                            pdf.set_font("Helvetica", 'B', 16)
+                            pdf.cell(0, 10, pdf.safe_text(f"Itinerary: {itinerary.title}"), ln=True)
+                            pdf.ln(5)
+                            
+                            pdf.set_font("Helvetica", '', 12)
+                            pdf.cell(0, 10, pdf.safe_text(f"Destination: {itinerary.destination}"), ln=True)
+                            pdf.cell(0, 10, pdf.safe_text(f"Duration: {itinerary.duration_days} Days"), ln=True)
+                            pdf.ln(5)
+                            
+                            pdf.set_font("Helvetica", 'I', 10)
+                            pdf.multi_cell(0, 10, pdf.safe_text(itinerary.description))
+                            pdf.ln(10)
+                            
+                            for day in (itinerary.content or []):
+                                pdf.set_font("Helvetica", 'B', 14)
+                                day_num = day.get('day', day.get('day_number', ''))
+                                theme = day.get('theme', '')
+                                pdf.cell(0, 10, pdf.safe_text(f"Day {day_num}: {theme}"), ln=True)
+                                pdf.ln(2)
+                                
+                                pdf.set_font("Helvetica", '', 10)
+                                for act in day.get('activities', []):
+                                    time = act.get('time', '')
+                                    activity = act.get('activity', '')
+                                    desc = act.get('description', '')
+                                    
+                                    pdf.set_font("Helvetica", 'B', 10)
+                                    pdf.cell(0, 8, pdf.safe_text(f"- {time}: {activity}"), ln=True)
+                                    pdf.set_font("Helvetica", '', 10)
+                                    pdf.multi_cell(0, 6, pdf.safe_text(desc))
+                                    pdf.ln(2)
+                                pdf.ln(5)
+                            
+                            pdf_bytes = pdf.output()
+                        except Exception as final_ex:
+                            instructions = "Please install GTK3 runtime for better PDFs: https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases" if os.name == 'nt' else "Please run: brew install pango"
+                            return Response({
+                                'error': 'All PDF Engines failed to load.',
+                                'details': f"WeasyPrint: {str(e)} | xhtml2pdf: {str(ex)} | fpdf2: {str(final_ex)}",
+                                'instructions': instructions
+                            }, status=500)
+
+        except Exception as e:
+            return Response({'error': f'PDF Generation failed: {str(e)}'}, status=500)
 
         # 4. Upload to R2 and return URL
+        new_uuid = uuid.uuid4()
+        r2_key = f"{prefix}{new_uuid}.pdf"
         storage.save(r2_key, ContentFile(pdf_bytes))
         pdf_url = storage.url(r2_key)
         
         return Response({'pdf_url': pdf_url})
+
+from .serializers import SiteSettingsSerializer
+
+class SiteSettingsView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        site_settings = SiteSettings.get_settings()
+        serializer = SiteSettingsSerializer(site_settings)
+        return Response(serializer.data)
+
+    def patch(self, request):
+        site_settings = SiteSettings.get_settings()
+        serializer = SiteSettingsSerializer(site_settings, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

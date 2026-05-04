@@ -1,5 +1,7 @@
 import json
 import os
+import urllib.request
+import urllib.parse
 from django.core.management.base import BaseCommand
 from api.models import Country, Destination, Attraction, Itinerary, ItineraryDay
 from django.utils.text import slugify
@@ -22,17 +24,34 @@ class Command(BaseCommand):
         with open(json_path, 'r') as f:
             countries_data = json.load(f)
 
+        def get_iso_code(name):
+            try:
+                # Common overrides
+                overrides = {"USA": "us", "UK": "gb", "UAE": "ae", "South Korea": "kr", "Vietnam": "vn"}
+                if name in overrides: return overrides[name]
+
+                url = f"https://restcountries.com/v3.1/name/{urllib.parse.quote(name)}?fullText=true"
+                with urllib.request.urlopen(url) as response:
+                    data = json.loads(response.read().decode())
+                    return data[0]['cca2'].lower()
+            except:
+                return "un"
+
         for c_data in countries_data:
+            name = c_data['name']
+            iso_code = get_iso_code(name)
+            
             country = Country.objects.create(
-                name=c_data['name'],
-                slug=slugify(c_data['name']),
+                name=name,
+                slug=slugify(name),
                 description=c_data['description'],
                 visa_process=c_data['visa_for_indians'],
                 airports=c_data['airports'],
-                image_url=f"https://source.unsplash.com/featured/?{slugify(c_data['name'])},tourism"
+                image_url=f"https://source.unsplash.com/featured/?{slugify(name)},tourism",
+                flag_url=f"https://flagcdn.com/w160/{iso_code}.png"
             )
             
-            self.stdout.write(f"Created Country: {country.name}")
+            self.stdout.write(f"Created Country: {country.name} (Flag: {iso_code})")
 
             # Create Destinations
             for d_data in c_data['top5']:

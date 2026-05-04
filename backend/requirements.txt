@@ -93,3 +93,5 @@ zstandard==0.25.0
 weasyprint
 django-templated-mail
 django-environ
+xhtml2pdf
+fpdf2

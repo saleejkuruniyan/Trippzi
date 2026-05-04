@@ -149,7 +149,15 @@ export default function ProfilePage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-bold text-zinc-500 uppercase">Zip Code</label>
+                        <label className="text-xs font-bold text-zinc-500 uppercase">Country</label>
+                        <input 
+                          className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500 outline-none"
+                          value={profile.profile?.country || ""}
+                          onChange={e => setProfile({...profile, profile: {...profile.profile, country: e.target.value}})}
+                        />
+                      </div>
+                      <div className="space-y-2 col-span-2">
+                        <label className="text-xs font-bold text-zinc-500 uppercase">Pincode / ZIP Code</label>
                         <input 
                           className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500 outline-none"
                           value={profile.profile?.zip_code || ""}

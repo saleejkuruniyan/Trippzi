@@ -81,38 +81,7 @@ export default function DestinationsPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
               {filtered.map((dest, i) => (
-                <motion.div
-                  key={dest.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="group relative flex flex-col bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 overflow-hidden hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500"
-                >
-                  <div className="aspect-[4/5] relative overflow-hidden">
-                    <Image 
-                      src={dest.image || dest.image_url || "/destinations/bali.png"} 
-                      alt={dest.name} 
-                      fill 
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover group-hover:scale-110 transition-transform duration-700" 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-                    
-                    <div className="absolute top-6 left-6 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full flex items-center gap-2">
-                      <Globe className="w-3 h-3 text-blue-400" />
-                      <span className="text-[10px] font-bold text-white uppercase tracking-wider">{dest.itineraries_count || 0} Itineraries</span>
-                    </div>
-
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <h3 className="text-3xl font-extrabold text-white mb-2 leading-tight">{dest.name}</h3>
-                      <p className="text-white/70 text-sm line-clamp-2 mb-4">{dest.description}</p>
-                      <Link href={`/destinations/${dest.slug}`} className="inline-flex items-center gap-2 text-blue-400 font-bold text-sm hover:text-blue-300 transition-colors">
-                        View Travel Guide <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    </div>
-                  </div>
-                </motion.div>
+                <DestinationCard key={dest.id} dest={dest} index={i} />
               ))}
             </div>
           )}
@@ -127,5 +96,48 @@ export default function DestinationsPage() {
 
       <Footer />
     </div>
+  )
+}
+
+function DestinationCard({ dest, index }: { dest: any, index: number }) {
+  const initialSrc = (dest.image && typeof dest.image === 'string' && dest.image.length > 10) ? dest.image : 
+                   (dest.image_url && typeof dest.image_url === 'string' && dest.image_url.length > 10) ? dest.image_url : 
+                   "/placeholder.png";
+  
+  const [imgSrc, setImgSrc] = useState(initialSrc);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1 }}
+      className="group relative flex flex-col bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 overflow-hidden hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500"
+    >
+      <div className="aspect-[4/5] relative overflow-hidden">
+        <Image 
+          src={imgSrc} 
+          alt={dest.name} 
+          fill 
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover group-hover:scale-110 transition-transform duration-700" 
+          onError={() => setImgSrc("/placeholder.png")}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+        
+        <div className="absolute top-6 left-6 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full flex items-center gap-2">
+          <Globe className="w-3 h-3 text-blue-400" />
+          <span className="text-[10px] font-bold text-white uppercase tracking-wider">{dest.itineraries_count || 0} Itineraries</span>
+        </div>
+
+        <div className="absolute bottom-6 left-6 right-6">
+          <h3 className="text-3xl font-extrabold text-white mb-2 leading-tight">{dest.name}</h3>
+          <p className="text-white/70 text-sm line-clamp-2 mb-4">{dest.description}</p>
+          <Link href={`/destinations/${dest.slug}`} className="inline-flex items-center gap-2 text-blue-400 font-bold text-sm hover:text-blue-300 transition-colors">
+            View Travel Guide <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+    </motion.div>
   )
 }

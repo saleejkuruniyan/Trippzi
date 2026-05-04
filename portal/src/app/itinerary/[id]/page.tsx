@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useState, use } from "react"
+import { useEffect, useState } from "react"
+import { useParams } from "next/navigation"
 import { motion } from "framer-motion"
 import {
   ArrowLeft, Zap, Star, ShieldCheck,
@@ -13,9 +14,11 @@ import { Footer } from "@/components/footer"
 import { fetchItineraries } from "@/lib/api"
 import { googleLogin } from "@/lib/api"
 import { AuthModal } from "@/components/auth-modal"
+import { AddressModal } from "@/components/address-modal"
+import { PaymentStatusModal } from "@/components/payment-status-modal"
 
-export default function ItineraryProductPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params)
+export default function ItineraryProductPage() {
+  const { id } = useParams()
   const [itinerary, setItinerary] = useState<any>(null)
   const [related, setRelated] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -84,23 +87,85 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
       const { pdf_url } = await downloadItineraryPDF(itinerary.id)
       window.open(pdf_url, '_blank')
     } catch (err: any) {
-      alert(err.message || "Failed to download PDF. Please try again.")
+      const msg = err.instructions ? `${err.message}\n\nTIP: ${err.instructions}` : err.message;
+      alert(msg || "Failed to download PDF. Please try again.");
     } finally {
       setIsDownloading(false)
     }
   }
 
-  const handlePurchase = async (force = false) => {
-    if (!isAuthenticated && !force) {
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false)
+  const [pendingPurchaseId, setPendingPurchaseId] = useState<number | null>(null)
+  const [currentUserProfile, setCurrentUserProfile] = useState<any>(null)
+  
+  const [paymentModal, setPaymentModal] = useState<{
+    isOpen: boolean,
+    status: 'success' | 'failure' | 'processing',
+    message?: string
+  }>({ isOpen: false, status: 'processing' })
+
+  const handlePurchase = async (force: any = false) => {
+    const isForced = force === true;
+    if (!isAuthenticated && !isForced) {
       setIsAuthModalOpen(true)
       return
     }
 
     try {
+      const { fetchProfile } = await import("@/lib/api")
+      const profile = await fetchProfile()
+      const p = profile.profile || {}
+      
+      setCurrentUserProfile({
+        phone_number: p.phone_number || "",
+        address: p.address || "",
+        city: p.city || "",
+        country: p.country || "",
+        zip_code: p.zip_code || ""
+      })
+      
+      if (!p.address || !p.city || !p.country || !p.zip_code || !p.phone_number) {
+        setPendingPurchaseId(parseInt(id))
+        setIsAddressModalOpen(true)
+        return
+      }
+
+      await triggerPayment(parseInt(id))
+    } catch (err) {
+      console.error("Purchase check failed", err)
+    }
+  }
+
+  const handleAddressSave = async (addressData: any) => {
+    try {
+      const { updateProfile } = await import("@/lib/api")
+      await updateProfile({
+        profile: {
+          phone_number: addressData.phone_number,
+          address: addressData.address,
+          city: addressData.city,
+          country: addressData.country,
+          zip_code: addressData.zip_code
+        }
+      })
+      setIsAddressModalOpen(false)
+      if (pendingPurchaseId) {
+        await triggerPayment(pendingPurchaseId)
+        setPendingPurchaseId(null)
+      }
+    } catch (err) {
+      alert("Failed to update address. Please try again.")
+    }
+  }
+
+  const triggerPayment = async (itineraryId: number) => {
+    setPaymentModal({ isOpen: true, status: 'processing', message: 'Initializing secure payment...' })
+    try {
       const { createRazorpayOrder, verifyRazorpayPayment } = await import("@/lib/api")
-      const order = await createRazorpayOrder(parseInt(id))
+      const order = await createRazorpayOrder(itineraryId)
 
       if (order.status === 401) {
+        setPaymentModal({ isOpen: false, status: 'processing' })
         localStorage.removeItem('trippzi-token')
         localStorage.removeItem('trippzi-user')
         setIsAuthenticated(false)
@@ -109,7 +174,12 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
       }
 
       if (order.error) {
-        alert("Failed to create order: " + order.error)
+        setPaymentModal({ isOpen: true, status: 'failure', message: order.error })
+        return
+      }
+
+      if (order.status === 'mock_success') {
+        setPaymentModal({ isOpen: true, status: 'success', message: 'Success! Mock payment completed.' })
         return
       }
 
@@ -121,6 +191,7 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
         description: `Itinerary: ${order.itinerary_title}`,
         order_id: order.order_id,
         handler: async (response: any) => {
+          setPaymentModal({ isOpen: true, status: 'processing', message: 'Verifying your payment...' })
           const verify = await verifyRazorpayPayment({
             razorpay_order_id: response.razorpay_order_id,
             razorpay_payment_id: response.razorpay_payment_id,
@@ -128,10 +199,14 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
           })
 
           if (verify.status === "success") {
-            alert("Payment successful! Your itinerary is now available in your account.")
-            window.location.href = "/profile"
+            setPaymentModal({ isOpen: true, status: 'success' })
           } else {
-            alert("Payment verification failed.")
+            setPaymentModal({ isOpen: true, status: 'failure', message: 'Payment verification failed.' })
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            setPaymentModal(prev => prev.status === 'processing' ? { isOpen: false, status: 'processing' } : prev)
           }
         },
         prefill: {
@@ -146,13 +221,15 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
       const rzp = new (window as any).Razorpay(options);
       rzp.open();
     } catch (err) {
-      console.error("Purchase failed", err)
-      alert("Something went wrong with the payment process.")
+      console.error("Payment failed", err)
+      setPaymentModal({ isOpen: true, status: 'failure', message: 'Something went wrong with the payment process.' })
     }
   }
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading Product...</div>
   if (!itinerary) return <div className="min-h-screen flex items-center justify-center">Product not found.</div>
+
+  const isTeaser = itinerary.is_custom && !itinerary.is_owned;
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-zinc-950">
@@ -161,14 +238,11 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
       <main className="flex-1 pt-24 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          {/* Breadcrumbs / Back */}
           <Link href="/destinations" className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-blue-600 mb-8 transition-colors">
             <ArrowLeft className="w-4 h-4" /> Back to Destinations
           </Link>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-
-            {/* Left: Product Images */}
             <div className="space-y-6">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -176,7 +250,11 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
                 className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-2xl"
               >
                 <Image
-                  src={itinerary.image || itinerary.image_url || "/destinations/bali.png"}
+                  src={
+                    (itinerary.image && typeof itinerary.image === 'string' && itinerary.image.length > 5) ? itinerary.image : 
+                    (itinerary.image_url && typeof itinerary.image_url === 'string' && itinerary.image_url.length > 5) ? itinerary.image_url : 
+                    "/placeholder.png"
+                  }
                   alt={itinerary.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -186,7 +264,6 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
               </motion.div>
             </div>
 
-            {/* Right: Product Info */}
             <div className="space-y-8">
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
@@ -205,13 +282,19 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
               </div>
 
               <div className="p-8 bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-6">
-                <div className="flex items-end gap-4">
-                  <div className="space-y-1">
-                    <span className="text-zinc-400 line-through text-sm italic">Regular price Rs. {itinerary.regular_price}</span>
-                    <div className="text-5xl font-black text-blue-600 italic">Rs. {itinerary.sale_price}</div>
+                {!itinerary.is_owned && (
+                  <div className="flex items-end gap-4">
+                    <div className="space-y-1">
+                      <span className="text-zinc-400 line-through text-sm italic">Regular price Rs. {itinerary.regular_price}</span>
+                      <div className="text-5xl font-black text-blue-600 italic">Rs. {itinerary.sale_price}</div>
+                    </div>
+                    {itinerary.regular_price && itinerary.sale_price && (
+                      <span className="bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-3 py-1 rounded-lg text-xs font-bold mb-2">
+                        Save {Math.round((1 - itinerary.sale_price / itinerary.regular_price) * 100)}%
+                      </span>
+                    )}
                   </div>
-                  <span className="bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-3 py-1 rounded-lg text-xs font-bold mb-2">Save 20%</span>
-                </div>
+                )}
 
                 <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
                   {itinerary.description}
@@ -233,7 +316,7 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
                         onClick={handlePurchase}
                         className="group w-full flex items-center justify-center gap-3 bg-zinc-950 text-white p-6 rounded-[2rem] text-xl font-black hover:bg-blue-600 transition-all shadow-2xl shadow-blue-500/20 active:scale-95"
                       >
-                        <Zap className="w-6 h-6 fill-current text-blue-400" /> BUY IT NOW
+                        <Zap className="w-6 h-6 fill-current text-blue-400" /> UNLOCK FULL BOOKLET
                       </button>
                     )}
                   </div>
@@ -275,14 +358,28 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
 
           {/* Detailed Content / Day-wise */}
           <div className="mt-32 space-y-12">
-            <h2 className="text-4xl font-black text-center italic tracking-tighter">Day-wise Breakdown</h2>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+              <h2 className="text-4xl font-black italic tracking-tighter">Day-wise Breakdown</h2>
+              {isTeaser && (
+                <div className="bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 border border-blue-100 dark:border-blue-900/30">
+                  <Sparkles className="w-4 h-4" /> Unlock to see all {itinerary.duration_days} days
+                </div>
+              )}
+            </div>
+            
             <div className="relative">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {(itinerary.content || itinerary.days)?.slice(0, (itinerary.is_custom && !itinerary.is_owned) ? 1 : undefined).map((item: any, i: number) => {
+                {(itinerary.content || itinerary.days)?.slice(0, isTeaser ? 1 : undefined).map((item: any, i: number) => {
                   const dayImages = itinerary.day_details?.filter((d: any) => d.day_number === (item.day || item.day_number)) || []
                   
+                  // Slice activities if teaser
+                  let activities = item.activities || [];
+                  if (isTeaser) {
+                    activities = activities.slice(0, Math.max(1, Math.ceil(activities.length / 2)));
+                  }
+
                   return (
-                    <div key={i} className="group bg-white dark:bg-zinc-900 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 overflow-hidden hover:shadow-xl transition-all">
+                    <div key={i} className="group bg-white dark:bg-zinc-900 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 overflow-hidden hover:shadow-xl transition-all flex flex-col relative">
                       {dayImages.length > 0 && (
                         <div className="relative aspect-video overflow-hidden">
                           <Image
@@ -293,43 +390,62 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
                           />
                         </div>
                       )}
-                      <div className="p-8">
+                      <div className="p-8 flex-1 flex flex-col">
                         <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black mb-6">
                           {item.day || item.day_number}
                         </div>
                         <h4 className="text-xl font-bold mb-4">Day {item.day || item.day_number}: {item.theme}</h4>
                         
-                        <div className="space-y-4">
-                          {item.activities?.map((act: any, idx: number) => (
-                            <div key={idx} className="flex gap-3 text-sm">
-                              <span className="font-bold text-blue-600 shrink-0">{act.time}</span>
-                              <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">{act.activity}</p>
+                        <div className="space-y-6 flex-1">
+                          {activities.map((act: any, idx: number) => (
+                            <div key={idx} className="space-y-3">
+                              <div className="flex gap-4">
+                                <span className="font-black text-blue-600 shrink-0 text-xs w-16">{act.time}</span>
+                                <div className="space-y-2 flex-1">
+                                  <h5 className="font-bold text-lg leading-tight">{act.activity}</h5>
+                                  {act.image_url && (
+                                    <div className="relative aspect-video rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800">
+                                      <Image src={act.image_url} alt={act.activity} fill className="object-cover" />
+                                    </div>
+                                  )}
+                                  <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed">{act.description}</p>
+                                  
+                                  <div className="flex flex-wrap gap-3 pt-1">
+                                    {(act.opening_time || act.closing_time) && (
+                                      <div className="flex items-center gap-1 text-[10px] font-bold text-zinc-400 uppercase tracking-tighter bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded-md">
+                                        <Clock className="w-3 h-3" /> {act.opening_time} - {act.closing_time}
+                                      </div>
+                                    )}
+                                    {act.duration_at_spot && (
+                                      <div className="flex items-center gap-1 text-[10px] font-bold text-blue-500 uppercase tracking-tighter bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-md">
+                                        ⏱ {act.duration_at_spot}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           ))}
                         </div>
-
-                        {(!item.activities && (item.activity || item.theme)) && (
-                           <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                            {item.activity || item.theme}
-                          </p>
+                        
+                        {isTeaser && (
+                           <div className="relative pt-12 mt-auto">
+                              <div className="absolute inset-x-0 -top-12 h-12 bg-gradient-to-t from-white dark:from-zinc-900 to-transparent pointer-events-none" />
+                              <div className="flex flex-col items-center gap-2 opacity-40">
+                                 <div className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
+                                 <div className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
+                                 <div className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
+                              </div>
+                           </div>
                         )}
                       </div>
                     </div>
                   )
                 })}
               </div>
-
-              {(itinerary.is_custom && !itinerary.is_owned) && (
-                <div className="absolute inset-x-0 -bottom-10 h-60 bg-gradient-to-t from-zinc-50 dark:from-zinc-950 to-transparent flex items-end justify-center pb-12">
-                  <div className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 px-6 py-3 rounded-full text-sm font-bold text-zinc-500 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-blue-500" /> Unlock to see all {itinerary.duration_days} days
-                  </div>
-                </div>
-              )}
             </div>
           </div>
 
-          {/* Related Products */}
           <div className="mt-40 space-y-12">
             <div className="flex items-end justify-between">
               <div>
@@ -343,7 +459,11 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
                 <Link key={item.id} href={`/itinerary/${item.id}`} className="group space-y-4">
                   <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-sm group-hover:shadow-xl transition-all">
                     <Image
-                      src={item.image || item.image_url || "/destinations/bali.png"}
+                      src={
+                        (item.image && typeof item.image === 'string' && item.image.length > 5) ? item.image : 
+                        (item.image_url && typeof item.image_url === 'string' && item.image_url.length > 5) ? item.image_url : 
+                        "/placeholder.png"
+                      }
                       alt={item.title}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
@@ -364,20 +484,35 @@ export default function ItineraryProductPage({ params }: { params: Promise<{ id:
 
       <Footer />
 
-      {/* Toast Notification */}
       {toast && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-6 py-3 rounded-2xl text-sm font-bold shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-300">
           {toast}
         </div>
       )}
 
+      <AddressModal
+        isOpen={isAddressModalOpen}
+        onClose={() => setIsAddressModalOpen(false)}
+        onSave={handleAddressSave}
+        initialData={currentUserProfile}
+      />
+
+      <PaymentStatusModal
+        isOpen={paymentModal.isOpen}
+        status={paymentModal.status}
+        message={paymentModal.message}
+        onClose={() => setPaymentModal({ ...paymentModal, isOpen: false })}
+      />
+
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         onSuccess={(userData) => {
+          setIsAuthModalOpen(false) // Close it first
           setIsAuthenticated(true)
           setUser(userData)
-          handlePurchase(true)
+          // Small timeout to allow state propagation before triggering next modal
+          setTimeout(() => handlePurchase(true), 100)
         }}
       />
     </div>

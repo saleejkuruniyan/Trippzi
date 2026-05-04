@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Itinerary, VisaRule, Transaction, Country, Destination, Attraction, UserProfile, Wishlist, ItineraryDay
+from .models import Itinerary, VisaRule, Transaction, Country, Destination, Attraction, UserProfile, Wishlist, ItineraryDay, SiteSettings
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
@@ -82,3 +82,13 @@ class WishlistAdmin(admin.ModelAdmin):
     list_display = ('user', 'itinerary', 'created_at')
     list_filter = ('created_at',)
     search_fields = ('user__username', 'user__email', 'itinerary__title')
+
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(admin.ModelAdmin):
+    list_display = ('custom_itinerary_price', 'custom_itinerary_regular_price')
+    
+    def has_add_permission(self, request):
+        # Prevent creating more than one instance
+        if self.model.objects.exists():
+            return False
+        return super().has_add_permission(request)

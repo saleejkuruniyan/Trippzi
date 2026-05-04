@@ -10,7 +10,15 @@ class PaymentService:
 
     def create_order(self, user, itinerary_id):
         itinerary = Itinerary.objects.get(id=itinerary_id)
-        amount = int(itinerary.sale_price * 100) # Razorpay expects amount in paise
+        sale_price = itinerary.sale_price
+        
+        # Always use current global price for custom itineraries if not owned
+        if itinerary.is_custom:
+            from api.models import SiteSettings
+            settings_obj = SiteSettings.get_settings()
+            sale_price = settings_obj.custom_itinerary_price
+            
+        amount = int(sale_price * 100) # Razorpay expects amount in paise
         
         order_data = {
             'amount': amount,
@@ -18,13 +26,28 @@ class PaymentService:
             'payment_capture': '1'
         }
         
+        if getattr(settings, 'MOCK_PAYMENT', False):
+            # Immediately complete purchase
+            Transaction.objects.get_or_create(
+                user=user,
+                itinerary=itinerary,
+                amount=sale_price,
+                status='COMPLETED',
+                razorpay_order_id=f"mock_order_{itinerary_id}_{user.id}"
+            )
+            return {
+                'status': 'mock_success', 
+                'itinerary_id': itinerary_id,
+                'message': 'Mock payment completed successfully'
+            }
+
         razorpay_order = self.client.order.create(data=order_data)
         
         # Create a pending transaction record
         transaction = Transaction.objects.create(
             user=user,
             itinerary=itinerary,
-            amount=itinerary.sale_price,
+            amount=sale_price,
             status='PENDING',
             razorpay_order_id=razorpay_order['id']
         )

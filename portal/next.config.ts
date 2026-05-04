@@ -17,6 +17,10 @@ const nextConfig: NextConfig = {
         hostname: '**.budlee.ai',
       },
       {
+        protocol: 'https',
+        hostname: 'flagcdn.com',
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
         port: '8000',
