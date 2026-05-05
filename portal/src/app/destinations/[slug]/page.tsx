@@ -4,7 +4,7 @@ import { useEffect, useState, use } from "react"
 import { motion } from "framer-motion"
 import { 
   Plane, Calendar, ShieldCheck, Clock, CheckCircle2, 
-  Lightbulb, ArrowRight, Star, ShoppingCart, Zap 
+  Lightbulb, ArrowRight, Star, ShoppingCart, Zap, Globe, MapPin 
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -206,6 +206,34 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
                     </div>
                   </div>
                   <div className="p-8">
+                    <div className="flex flex-wrap items-center gap-y-4 gap-x-6 text-[10px] font-black text-zinc-500 mb-6 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-2xl border border-zinc-100 dark:border-zinc-800/50 uppercase tracking-widest">
+                       <div className="flex items-center gap-2 shrink-0">
+                         <Clock className="w-3.5 h-3.5 text-blue-600" />
+                         {itinerary.duration_days} Days
+                       </div>
+                       
+                       <div className="flex items-center gap-2 border-l border-zinc-200 dark:border-zinc-700 pl-4 shrink-0">
+                         <MapPin className="w-3.5 h-3.5 text-orange-600" />
+                         {itinerary.destination}
+                       </div>
+
+                       <div className="flex items-center gap-2 border-l border-zinc-200 dark:border-zinc-700 pl-4 shrink-0">
+                         {itinerary.nationality_details ? (
+                           <>
+                             {itinerary.nationality_details.flag_url && (
+                               <Image src={itinerary.nationality_details.flag_url} alt="Flag" width={14} height={14} className="rounded-sm" />
+                             )}
+                             <span className="text-blue-700 dark:text-blue-300">For {itinerary.nationality_details.name} Nationalities</span>
+                           </>
+                         ) : (
+                           <>
+                             <Globe className="w-3.5 h-3.5 text-zinc-400" />
+                             <span>Global Travelers</span>
+                           </>
+                         )}
+                       </div>
+                    </div>
+                    
                     <h4 className="text-2xl font-bold mb-3">{itinerary.title}</h4>
                     <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-6 line-clamp-2">{itinerary.description}</p>
                     <div className="flex items-center justify-between">

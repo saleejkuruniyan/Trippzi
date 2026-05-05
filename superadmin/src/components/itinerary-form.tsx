@@ -57,7 +57,8 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
     is_custom: initialData?.is_custom || false,
     is_approved: initialData?.is_approved ?? (!initialData?.is_custom),
     image_url: initialData?.image_url || "",
-    content: initialData?.content || initialData?.days || []
+    content: initialData?.content || initialData?.days || [],
+    nationality: initialData?.nationality?.id || initialData?.nationality || ""
   })
   const [submitting, setSubmitting] = useState(false)
   const [activeDayIndex, setActiveDayIndex] = useState(0)
@@ -199,6 +200,17 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
                     onChange={e => setFormData({...formData, country: e.target.value ? parseInt(e.target.value) : ""})}
                   >
                     <option value="">Select Country</option>
+                    {countries.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium flex items-center gap-2 text-amber-600"><Globe className="w-4 h-4" /> Targeted Nationality (Optional)</label>
+                  <select 
+                    className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+                    value={formData.nationality}
+                    onChange={e => setFormData({...formData, nationality: e.target.value ? parseInt(e.target.value) : ""})}
+                  >
+                    <option value="">Global (All Passports)</option>
                     {countries.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
                 </div>

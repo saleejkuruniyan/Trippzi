@@ -33,14 +33,19 @@ class CountryViewSet(viewsets.ModelViewSet):
         queryset = Country.objects.all().order_by('name')
         user = self.request.user
         
-        # For public/user view, only show countries with at least one approved standard itinerary
         # Skip filter if user is staff OR if show_all=true is passed (used for AI Planner)
         if not (user and user.is_staff) and not self.request.query_params.get('show_all'):
             from .models import Itinerary
+            itinerary_filter = Q(is_approved=True, is_custom=False)
+            
+            if user.is_authenticated and hasattr(user, 'profile') and user.profile.nationality:
+                # Logged in users with nationality: show only their nationality + global
+                itinerary_filter &= (Q(nationality=user.profile.nationality) | Q(nationality__isnull=True))
+            # Guests see everything approved/standard
+                
             approved_itineraries = Itinerary.objects.filter(
                 Q(country=OuterRef('pk')) | Q(destinations__country=OuterRef('pk')),
-                is_approved=True,
-                is_custom=False
+                itinerary_filter
             )
             queryset = queryset.filter(Exists(approved_itineraries))
             
@@ -99,7 +104,6 @@ class ItineraryViewSet(viewsets.ModelViewSet):
         user = self.request.user
         queryset = Itinerary.objects.all().order_by('-created_at')
         
-        # Admin filtering
         is_custom = self.request.query_params.get('is_custom')
         if is_custom is not None:
             queryset = queryset.filter(is_custom=is_custom.lower() == 'true')
@@ -107,11 +111,14 @@ class ItineraryViewSet(viewsets.ModelViewSet):
         if user.is_authenticated and user.is_staff:
             return queryset
             
-        # For 'list' action (Homepage, Destinations), only show approved standard trips
+        if user.is_authenticated and hasattr(user, 'profile') and user.profile.nationality:
+            queryset = queryset.filter(
+                Q(nationality=user.profile.nationality) | Q(nationality__isnull=True)
+            )
+            
         if self.action == 'list':
             return queryset.filter(is_custom=False, is_approved=True)
             
-        # For 'retrieve' (direct link), we allow all - Serializer handles content masking
         return queryset
 
     def partial_update(self, request, *args, **kwargs):
@@ -298,9 +305,14 @@ class GenerateItineraryView(APIView):
         # Get dynamic pricing from settings
         site_settings = SiteSettings.get_settings()
         
+        # Resolve nationality
+        from .models import Country
+        nationality_obj = Country.objects.filter(name__icontains=source_country).first()
+        
         itinerary_obj = Itinerary.objects.create(
             user=request.user,
             country=country_obj,
+            nationality=nationality_obj,
             is_custom=True,
             title=itinerary_data.get('title', f"Trip to {country_obj.name}"),
             destination=", ".join(dest_names),

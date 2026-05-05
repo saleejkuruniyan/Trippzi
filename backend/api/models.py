@@ -97,6 +97,7 @@ class Attraction(models.Model):
 
 class Itinerary(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='itineraries', null=True)
+    nationality = models.ForeignKey(Country, on_delete=models.SET_NULL, related_name='nationality_itineraries', null=True, blank=True)
     destinations = models.ManyToManyField(Destination, related_name='itineraries_included')
     title = models.CharField(max_length=255)
     destination = models.CharField(max_length=255, help_text="Legacy field or primary destination summary")

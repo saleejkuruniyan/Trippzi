@@ -48,6 +48,11 @@ class CountrySerializer(serializers.ModelSerializer):
                 query |= Q(is_custom=True, user=user)
             itineraries = itineraries.filter(query).distinct()
             
+            if user and user.is_authenticated and hasattr(user, 'profile') and user.profile.nationality:
+                itineraries = itineraries.filter(
+                    Q(nationality=user.profile.nationality) | Q(nationality__isnull=True)
+                )
+            
         return itineraries.count()
 
     def get_itineraries(self, obj):
@@ -65,10 +70,16 @@ class CountrySerializer(serializers.ModelSerializer):
                 query |= Q(is_custom=True, user=user)
             itineraries = itineraries.filter(query).distinct()
             
+            if user and user.is_authenticated and hasattr(user, 'profile') and user.profile.nationality:
+                itineraries = itineraries.filter(
+                    Q(nationality=user.profile.nationality) | Q(nationality__isnull=True)
+                )
+            
         return SimpleItinerarySerializer(itineraries, many=True, context=self.context).data
 
 class SimpleItinerarySerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=True, required=False)
+    nationality_details = CountrySerializer(source='nationality', read_only=True)
     
     class Meta:
         model = Itinerary
@@ -115,6 +126,7 @@ class ItinerarySerializer(serializers.ModelSerializer):
     country_details = CountrySerializer(source='country', read_only=True)
     destinations_details = DestinationSerializer(source='destinations', many=True, read_only=True)
     day_details = ItineraryDaySerializer(many=True, read_only=True)
+    nationality_details = CountrySerializer(source='nationality', read_only=True)
     image = serializers.ImageField(use_url=True, required=False)
     is_owned = serializers.SerializerMethodField()
     

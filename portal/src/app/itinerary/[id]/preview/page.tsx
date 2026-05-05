@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation"
 import { fetchItineraryById, fetchItineraries } from "@/lib/api"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { MapPin, Clock, Sparkles, Zap, ArrowLeft, ShieldCheck, Download } from "lucide-react"
+import { MapPin, Clock, Sparkles, Zap, ArrowLeft, ShieldCheck, Download, Globe } from "lucide-react"
 import { AuthModal } from "@/components/auth-modal"
 import Link from "next/link"
 
@@ -91,8 +91,18 @@ export default function ItineraryPreviewPage() {
             <ArrowLeft className="w-4 h-4" /> Back to details
           </button>
           
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-600/20 text-blue-400 text-[10px] font-black uppercase tracking-widest mb-6 border border-blue-500/30">
-            <Sparkles className="w-3 h-3" /> Exclusive Preview
+          <div className="flex flex-wrap items-center gap-3 mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-600/20 text-blue-400 text-[10px] font-black uppercase tracking-widest border border-blue-500/30">
+              <Sparkles className="w-3 h-3" /> Exclusive Preview
+            </div>
+            {itinerary.nationality_details && (
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-600/20 text-amber-400 text-[10px] font-black uppercase tracking-widest border border-amber-500/30 italic">
+                {itinerary.nationality_details.flag_url && (
+                  <Image src={itinerary.nationality_details.flag_url} alt="Flag" width={14} height={14} className="rounded-sm" />
+                )}
+                <span>For {itinerary.nationality_details.name} Nationalities</span>
+              </div>
+            )}
           </div>
           <h1 className="text-5xl md:text-7xl font-black italic tracking-tighter uppercase mb-4">
             {itinerary.title}
@@ -100,6 +110,9 @@ export default function ItineraryPreviewPage() {
           <div className="flex items-center gap-6 text-zinc-400 font-medium">
             <div className="flex items-center gap-2"><MapPin className="w-4 h-4" /> {itinerary.destination}</div>
             <div className="flex items-center gap-2"><Clock className="w-4 h-4" /> {itinerary.duration_days} Days</div>
+            {!itinerary.nationality_details && (
+              <div className="flex items-center gap-2"><Globe className="w-4 h-4" /> Global Travelers</div>
+            )}
           </div>
         </div>
       </div>

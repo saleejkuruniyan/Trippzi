@@ -5,7 +5,7 @@ import { useParams } from "next/navigation"
 import { motion } from "framer-motion"
 import {
   ArrowLeft, Zap, Star, ShieldCheck,
-  Clock, MapPin, Share2, Heart, Download, Sparkles, Eye
+  Clock, MapPin, Share2, Heart, Download, Sparkles, Eye, Globe
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -273,6 +273,16 @@ export default function ItineraryProductPage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
                   <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">SALE</span>
+                  {itinerary.nationality_details && (
+                    <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded-full border border-blue-100 dark:border-blue-900/30">
+                      {itinerary.nationality_details.flag_url && (
+                        <Image src={itinerary.nationality_details.flag_url} alt="Flag" width={14} height={14} className="rounded-sm" />
+                      )}
+                      <span className="text-[10px] font-black uppercase text-blue-700 dark:text-blue-300 italic tracking-tight">
+                        Optimized for {itinerary.nationality_details.name} Nationalities
+                      </span>
+                    </div>
+                  )}
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />)}
                     <span className="text-xs text-zinc-400 ml-2">(4.9/5 based on 128 reviews)</span>
@@ -283,6 +293,12 @@ export default function ItineraryProductPage() {
                   <MapPin className="w-4 h-4" /> {itinerary.destination}
                   <span className="mx-2">•</span>
                   <Clock className="w-4 h-4" /> {itinerary.duration_days} Days
+                  {!itinerary.nationality_details && (
+                    <>
+                      <span className="mx-2">•</span>
+                      <Globe className="w-4 h-4" /> Global Travelers
+                    </>
+                  )}
                 </div>
               </div>
 
