@@ -385,7 +385,7 @@ class GenerateItineraryView(APIView):
                             image_url=img_url,
                             caption=act.get('activity', '')
                         )
-                        image_file = download_image_to_content_file(img_url)
+                        image_file = image_service.download_image(img_url)
                         if image_file:
                             day_detail.image.save(f"day_{day_num}_spot_{idx}.jpg", image_file)
         
