@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Save, X, Trash2, Globe, Plane, Clock, Info } from "lucide-react"
+import { Save, X, Trash2, Globe, Plane, Clock, Info, Calendar, Plus } from "lucide-react"
 
 interface CountryFormProps {
   initialData?: any
@@ -22,14 +22,39 @@ export const CountryForm = ({ initialData, onSave, onCancel, onDelete }: Country
     flag_url: initialData?.flag_url || "",
   })
 
+  // Days recommendation is a dict { "3": "Short stay", "5": "Ideal" }
+  const [daysRec, setDaysRec] = useState<any[]>(
+    initialData?.days_recommendation 
+      ? Object.entries(initialData.days_recommendation).map(([days, desc]) => ({ days, desc }))
+      : [{ days: "", desc: "" }]
+  )
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Convert daysRec array back to object
+    const days_recommendation: any = {}
+    daysRec.forEach(item => {
+      if (item.days && item.desc) {
+        days_recommendation[item.days] = item.desc
+      }
+    })
+
     const submissionData = {
       ...formData,
       airports: formData.airports.split(",").map(s => s.trim()).filter(Boolean),
       tips: formData.tips.split("\n").map(s => s.trim()).filter(Boolean),
+      days_recommendation
     }
     onSave(submissionData)
+  }
+
+  const addDayRec = () => setDaysRec([...daysRec, { days: "", desc: "" }])
+  const removeDayRec = (index: number) => setDaysRec(daysRec.filter((_, i) => i !== index))
+  const updateDayRec = (index: number, field: string, value: string) => {
+    const newRec = [...daysRec]
+    newRec[index] = { ...newRec[index], [field]: value }
+    setDaysRec(newRec)
   }
 
   return (
@@ -43,11 +68,11 @@ export const CountryForm = ({ initialData, onSave, onCancel, onDelete }: Country
         </div>
         <div className="flex gap-3">
           {initialData && onDelete && (
-            <button onClick={() => onDelete(initialData.id)} className="p-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors">
+            <button type="button" onClick={() => onDelete(initialData.id)} className="p-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors">
               <Trash2 className="w-5 h-5" />
             </button>
           )}
-          <button onClick={onCancel} className="p-3 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl transition-colors">
+          <button type="button" onClick={onCancel} className="p-3 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -110,6 +135,42 @@ export const CountryForm = ({ initialData, onSave, onCancel, onDelete }: Country
               onChange={e => setFormData({ ...formData, visa_process: e.target.value })}
               className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium resize-none"
             />
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 flex items-center gap-2">
+            <Calendar className="w-3 h-3 text-blue-500" /> Duration Recommendations
+          </label>
+          <div className="space-y-3">
+            {daysRec.map((rec, idx) => (
+              <div key={idx} className="flex gap-3 items-start">
+                <input 
+                  type="text" 
+                  placeholder="Days (e.g. 3)"
+                  value={rec.days}
+                  onChange={e => updateDayRec(idx, 'days', e.target.value)}
+                  className="w-24 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 transition-all font-bold text-sm"
+                />
+                <input 
+                  type="text" 
+                  placeholder="Recommendation description..."
+                  value={rec.desc}
+                  onChange={e => updateDayRec(idx, 'desc', e.target.value)}
+                  className="flex-1 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 transition-all text-sm font-medium"
+                />
+                <button type="button" onClick={() => removeDayRec(idx)} className="p-3 text-zinc-400 hover:text-red-500">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+            <button 
+              type="button" 
+              onClick={addDayRec}
+              className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-blue-600 hover:text-blue-700 ml-1"
+            >
+              <Plus className="w-3 h-3" /> Add Recommendation
+            </button>
           </div>
         </div>
 

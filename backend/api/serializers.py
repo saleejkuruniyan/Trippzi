@@ -101,7 +101,8 @@ class SimpleItinerarySerializer(serializers.ModelSerializer):
             data['image_url'] = None
 
         # Dynamic pricing for custom itineraries from global settings
-        if instance.is_custom:
+        # ONLY for non-staff users (admins should see the real DB price)
+        if instance.is_custom and not (user and user.is_staff):
             from .models import SiteSettings
             settings = SiteSettings.get_settings()
             data['sale_price'] = settings.custom_itinerary_price
@@ -144,7 +145,8 @@ class ItinerarySerializer(serializers.ModelSerializer):
                 data['day_details'] = [d for d in data['day_details'] if d.get('day_number') == 1]
         
         # Inject dynamic pricing from SiteSettings for custom itineraries if not owned/paid
-        if instance.is_custom and not is_paid:
+        # ONLY for non-staff users
+        if instance.is_custom and not is_paid and not (user and user.is_staff):
             from .models import SiteSettings
             settings_obj = SiteSettings.get_settings()
             data['sale_price'] = str(settings_obj.custom_itinerary_price)

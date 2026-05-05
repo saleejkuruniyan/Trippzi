@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <style>
         @page {
-            size: A4;
+            size: A4 portrait;
             margin: 0;
         }
         body {
@@ -21,26 +21,25 @@
             position: relative;
             background-size: cover;
             background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
             page-break-after: always;
         }
         .cover-overlay {
             position: absolute;
-            inset: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(to top, rgba(9, 9, 11, 1) 0%, rgba(9, 9, 11, 0.4) 50%, rgba(9, 9, 11, 0.2) 100%);
         }
         .cover-content {
-            position: relative;
-            z-index: 10;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
             padding: 80px 60px;
         }
         .label {
             display: inline-block;
             background-color: #2563eb;
             color: white;
-            padding: 4px 12px;
+            padding: 6px 16px;
             font-size: 12px;
             font-weight: 800;
             letter-spacing: 2px;
@@ -49,139 +48,122 @@
             border-radius: 4px;
         }
         h1 {
-            font-size: 64px;
+            font-size: 56px;
             font-weight: 900;
             margin: 0;
-            line-height: 1;
-            letter-spacing: -3px;
+            line-height: 1.1;
+            letter-spacing: -2px;
             text-transform: uppercase;
-            font-style: italic;
         }
         .trip-meta {
             font-size: 20px;
             font-weight: 500;
             color: #a1a1aa;
-            margin-top: 10px;
+            margin-top: 15px;
         }
-        .owner-info {
-            margin-top: 40px;
-            font-size: 14px;
-            color: #71717a;
-            border-top: 1px solid #27272a;
-            padding-top: 20px;
-            display: flex;
-            justify-content: space-between;
-        }
-
+        
         .day-page {
-            padding: 60px;
+            padding: 40px 60px;
             page-break-after: always;
+            position: relative;
+            min-height: 100vh;
         }
         .day-header {
-            display: flex;
-            align-items: baseline;
-            gap: 20px;
-            margin-bottom: 40px;
-            border-bottom: 2px solid #2563eb;
-            padding-bottom: 20px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #27272a;
+            padding-bottom: 15px;
         }
-        .day-number {
-            font-size: 80px;
-            font-weight: 900;
+        .day-number-label {
+            font-size: 14px;
             color: #2563eb;
-            line-height: 0.8;
-            opacity: 0.5;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
         .day-title {
-            font-size: 32px;
-            font-weight: 800;
-            margin: 0;
-        }
-
-        .photo-spread {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 15px;
-            margin-bottom: 40px;
-            height: 300px;
-        }
-        .photo-spread img {
-            width: 100%;
-            height: 100%;
-            object-cover: cover;
-            border-radius: 12px;
-        }
-
-        .timeline {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-        .activity-item {
-            display: flex;
-            gap: 30px;
-        }
-        .activity-time {
-            width: 80px;
+            font-size: 36px;
             font-weight: 900;
-            color: #2563eb;
-            font-size: 14px;
-            padding-top: 4px;
-        }
-        .activity-content h3 {
-            margin: 0 0 8px 0;
-            font-size: 18px;
-            font-weight: 700;
-        }
-        .activity-content p {
-            margin: 0;
-            font-size: 14px;
-            color: #a1a1aa;
-            line-height: 1.6;
+            margin: 5px 0 0 0;
+            color: #ffffff;
         }
 
-        .tips-section {
-            margin-top: 40px;
-            background: #18181b;
-            padding: 25px;
-            border-radius: 20px;
+        /* Zig-Zag Layout System */
+        .activity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            table-layout: fixed;
+        }
+        .activity-cell {
+            vertical-align: top;
+            padding: 15px;
+        }
+        .activity-text-col {
+            width: 55%;
+        }
+        .activity-image-col {
+            width: 45%;
+        }
+        
+        .activity-image-container {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            border-radius: 16px;
             border: 1px solid #27272a;
         }
-        .tips-section h4 {
-            margin: 0 0 12px 0;
-            font-size: 14px;
+        .activity-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            font-weight: 800;
             color: #2563eb;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 5px;
         }
-        .tips-list {
-            margin: 0;
-            padding: 0;
-            list-style: none;
+        .activity-name {
+            font-size: 20px;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            color: #ffffff;
+        }
+        .activity-description {
             font-size: 13px;
+            line-height: 1.6;
+            color: #a1a1aa;
+            margin-bottom: 15px;
+        }
+        
+        .activity-meta {
+            font-size: 11px;
             color: #71717a;
+            background: #18181b;
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: inline-block;
         }
-        .tips-list li {
-            margin-bottom: 8px;
-            padding-left: 20px;
-            position: relative;
-        }
-        .tips-list li:before {
-            content: '→';
-            position: absolute;
-            left: 0;
+
+        .transport-tag {
+            margin-top: 15px;
+            font-size: 10px;
+            font-weight: 800;
             color: #2563eb;
+            text-transform: uppercase;
+            border-top: 1px dashed #27272a;
+            padding-top: 10px;
         }
 
         .footer {
-            position: fixed;
+            position: absolute;
             bottom: 30px;
             left: 60px;
             right: 60px;
             font-size: 10px;
             color: #3f3f46;
-            display: flex;
-            justify-content: space-between;
             border-top: 1px solid #18181b;
             padding-top: 10px;
         }
@@ -189,182 +171,188 @@
 </head>
 <body>
     <!-- Cover Page -->
-    {% if itinerary.image_url or itinerary.image %}
     <div class="cover-page" style="background-image: url('{{ itinerary.image_url|default:itinerary.image.url }}')">
-    {% else %}
-    <div class="cover-page" style="background-color: #1a1a1a;">
-    {% endif %}
         <div class="cover-overlay"></div>
         <div class="cover-content">
-            <div class="label">Trippzi Premium Booklet</div>
+            <div class="label">Trippzi Signature Travel</div>
             <h1>{{ itinerary.title }}</h1>
-            <div class="trip-meta">{{ itinerary.duration_days }} Days in {{ itinerary.destination }}</div>
+            <div class="trip-meta">{{ itinerary.duration_days }} Days Explorer • {{ itinerary.destination }}</div>
             
-            <div class="owner-info">
-                <div>Prepared for: {{ user.get_full_name }}</div>
-                <div>Generated on: {{ itinerary.created_at|date:"F d, Y" }}</div>
+            <div style="margin-top: 40px; font-size: 14px; color: #71717a; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                Prepared exclusively for {{ user.get_full_name|default:user.username }}
             </div>
         </div>
     </div>
 
-    <!-- Destinations Overview Page -->
+    <!-- Destinations & Logistics Overview -->
     {% if itinerary.destinations.all %}
     <div class="day-page">
         <div class="day-header">
-            <div class="day-number">D</div>
+            <div class="day-number-label">O</div>
             <h2 class="day-title">Destinations Overview</h2>
         </div>
 
         {% for dest in itinerary.destinations.all %}
-        <div class="tips-section" style="margin-bottom: 30px;">
-            <div style="display: flex; justify-content: space-between; align-items: baseline;">
-                <h3 style="color: #2563eb; margin: 0; font-size: 24px;">{{ dest.name }}</h3>
-                <span style="font-size: 10px; color: #71717a; text-transform: uppercase; letter-spacing: 1px;">{{ itinerary.country.name }}</span>
-            </div>
-            
-            <p style="font-size: 14px; margin-top: 15px; color: #fafafa; line-height: 1.6;">{{ dest.description }}</p>
+        <div style="margin-bottom: 40px; border-left: 4px solid #2563eb; padding-left: 20px;">
+            <h3 style="font-size: 24px; font-weight: 900; margin: 0; color: #ffffff;">{{ dest.name }}</h3>
+            <p style="font-size: 14px; line-height: 1.6; color: #a1a1aa; margin: 10px 0;">{{ dest.description }}</p>
             
             {% if dest.culture %}
-            <div style="margin-top: 15px; padding: 15px; background: #09090b; border-radius: 12px; border-left: 4px solid #2563eb;">
-                <h4 style="margin: 0 0 8px 0; font-size: 12px; color: #2563eb; text-transform: uppercase;">Heritage & Culture</h4>
-                <p style="margin: 0; font-size: 13px; color: #a1a1aa; line-height: 1.5;">{{ dest.culture }}</p>
+            <div style="margin-top: 15px; padding: 15px; background: #18181b; border-radius: 12px; border: 1px solid #27272a;">
+                <h4 style="margin: 0 0 8px 0; font-size: 10px; color: #2563eb; text-transform: uppercase; letter-spacing: 1px;">Culture & Heritage</h4>
+                <p style="margin: 0; font-size: 13px; color: #71717a; line-height: 1.5;">{{ dest.culture }}</p>
             </div>
             {% endif %}
         </div>
         {% endfor %}
 
+        {% if itinerary.country.days_recommendation %}
+        <div style="margin-top: 40px;">
+            <div class="day-number-label">Recommended Duration</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                {% for stay, desc in itinerary.country.days_recommendation.items %}
+                <div style="background: #18181b; padding: 15px; border-radius: 12px; border: 1px solid #27272a;">
+                    <span style="display: block; font-size: 14px; font-weight: 900; color: #2563eb; margin-bottom: 5px;">{{ stay }} Days</span>
+                    <span style="font-size: 12px; color: #71717a;">{{ desc }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
         <div class="footer">
-            <div>Trippzi Travel Guide — Destinations Guide</div>
-            <div>Page 1</div>
+            <div style="float: left;">Trippzi Travel Guide — Overview</div>
+            <div style="float: right;">Page 1</div>
+            <div style="clear: both;"></div>
         </div>
     </div>
     {% endif %}
 
-    <!-- Daily Pages -->
+    <!-- Daily Itinerary Pages -->
     {% for day in days %}
     <div class="day-page">
         <div class="day-header">
-            <div class="day-number">{{ day.day_number }}</div>
+            <div class="day-number-label">Day {{ day.day_number }}</div>
             <h2 class="day-title">{{ day.theme }}</h2>
         </div>
 
-        {% with images=day_images|get_day:day.day_number %}
-        {% if images %}
-        <div class="photo-spread">
-            {% if images.0.image_url %}
-            <img src="{{ images.0.image_url }}" style="grid-row: span 1;">
-            {% elif images.0.image %}
-            <img src="{{ images.0.image.url }}" style="grid-row: span 1;">
-            {% endif %}
-            
-            {% if images|length > 1 %}
-                {% if images.1.image_url %}
-                <img src="{{ images.1.image_url }}">
-                {% elif images.1.image %}
-                <img src="{{ images.1.image.url }}">
-                {% endif %}
-            {% endif %}
-        </div>
-        {% endif %}
-        {% endwith %}
-
-        <div class="timeline">
+        <div class="activities-container">
             {% for act in day.activities %}
-            <div class="activity-item" style="margin-bottom: 40px;">
-                <div class="activity-time">
-                    {{ act.time }}
-                    {% if act.duration_at_spot %}
-                    <div style="font-size: 10px; color: #71717a; margin-top: 5px;">⏱ {{ act.duration_at_spot }}</div>
-                    {% endif %}
-                </div>
-                <div class="activity-content">
-                    <div style="display: flex; gap: 20px;">
-                        <div style="flex: 1;">
-                            <h3 style="color: #2563eb;">{{ act.activity }}</h3>
-                            <p>{{ act.description }}</p>
-                            
-                            {% if act.opening_time %}
-                            <div style="font-size: 11px; margin-top: 10px; color: #71717a; font-weight: bold;">
-                                HOURS: {{ act.opening_time }} - {{ act.closing_time }}
-                            </div>
-                            {% endif %}
-                            
-                            {% if act.ticket_price or act.closing_days %}
-                            <div style="font-size: 10px; margin-top: 5px; color: #2563eb;">
-                                {% if act.ticket_price %}🎫 Price: {{ act.ticket_price }}{% endif %}
-                                {% if act.closing_days %} | ⚠️ Closed: {{ act.closing_days }}{% endif %}
-                            </div>
-                            {% endif %}
-                        </div>
+            <table class="activity-table">
+                <tr>
+                    {% if forloop.counter|divisibleby:2 %}
+                    <!-- Even: Image Left, Text Right -->
+                    <td class="activity-cell activity-image-col">
                         {% if act.image_url %}
-                        <div style="width: 150px; height: 100px; border-radius: 8px; overflow: hidden; shrink-0;">
-                            <img src="{{ act.image_url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="activity-image-container">
+                            <img src="{{ act.image_url }}">
                         </div>
                         {% endif %}
-                    </div>
+                    </td>
+                    <td class="activity-cell activity-text-col">
+                        <div class="activity-time">{{ act.time }}{% if act.duration_at_spot %} • {{ act.duration_at_spot }}{% endif %}</div>
+                        <h3 class="activity-name">{{ act.activity }}</h3>
+                        <p class="activity-description">{{ act.description }}</p>
+                        
+                        <div class="activity-meta">
+                            {% if act.opening_time %}🕒 {{ act.opening_time }} - {{ act.closing_time }}{% endif %}
+                            {% if act.ticket_price %}<br>🎫 {{ act.ticket_price }}{% endif %}
+                        </div>
 
-                    {% if act.transport_to_next %}
-                    <div style="margin-top: 15px; padding-top: 10px; border-top: 1px dashed #27272a; font-size: 11px; color: #2563eb; font-weight: 800; text-transform: uppercase;">
-                        Next Destination: {{ act.distance_to_next }} via {{ act.transport_to_next }} ({{ act.time_to_next }})
-                    </div>
+                        {% if act.transport_to_next %}
+                        <div class="transport-tag">Next: {{ act.distance_to_next }} via {{ act.transport_to_next }}</div>
+                        {% endif %}
+                    </td>
+                    {% else %}
+                    <!-- Odd: Text Left, Image Right -->
+                    <td class="activity-cell activity-text-col">
+                        <div class="activity-time">{{ act.time }}{% if act.duration_at_spot %} • {{ act.duration_at_spot }}{% endif %}</div>
+                        <h3 class="activity-name">{{ act.activity }}</h3>
+                        <p class="activity-description">{{ act.description }}</p>
+                        
+                        <div class="activity-meta">
+                            {% if act.opening_time %}🕒 {{ act.opening_time }} - {{ act.closing_time }}{% endif %}
+                            {% if act.ticket_price %}<br>🎫 {{ act.ticket_price }}{% endif %}
+                        </div>
+
+                        {% if act.transport_to_next %}
+                        <div class="transport-tag">Next: {{ act.distance_to_next }} via {{ act.transport_to_next }}</div>
+                        {% endif %}
+                    </td>
+                    <td class="activity-cell activity-image-col">
+                        {% if act.image_url %}
+                        <div class="activity-image-container">
+                            <img src="{{ act.image_url }}">
+                        </div>
+                        {% endif %}
+                    </td>
                     {% endif %}
-                </div>
-            </div>
+                </tr>
+            </table>
             {% endfor %}
         </div>
 
-        {% if day.tips %}
-        <div class="tips-section">
-            <h4>Pro Tips</h4>
-            <ul class="tips-list">
-                {% for tip in day.tips %}
-                <li>{{ tip }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-
         <div class="footer">
-            <div>Trippzi Travel Guide — {{ itinerary.title }}</div>
-            <div>Page {{ forloop.counter|add:1 }}</div>
+            <div style="float: left;">Trippzi Travel — {{ itinerary.title }}</div>
+            <div style="float: right;">Page {{ forloop.counter|add:1 }}</div>
+            <div style="clear: both;"></div>
         </div>
     </div>
     {% endfor %}
 
-    <!-- Visa Information Page -->
+    <!-- Visa & Info Page -->
     {% if itinerary.country %}
     <div class="day-page">
         <div class="day-header">
-            <div class="day-number">V</div>
-            <h2 class="day-title">Country Guide: {{ itinerary.country.name }}</h2>
+            <div class="day-number-label">Travel Guide</div>
+            <h2 class="day-title">{{ itinerary.country.name }} Information</h2>
         </div>
 
-        <div class="tips-section" style="background: #1e1b4b; border-color: #312e81;">
-            <h4 style="color: #60a5fa;">Visa Process</h4>
-            <div style="font-size: 13px; line-height: 1.6;">
+        <div style="background: #1e1b4b; padding: 30px; border-radius: 20px; border: 1px solid #312e81; margin-bottom: 25px;">
+            <h4 style="color: #60a5fa; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase;">Visa Requirements</h4>
+            <div style="font-size: 13px; line-height: 1.6; color: #e2e8f0;">
                 {{ itinerary.country.visa_process|linebreaks }}
             </div>
         </div>
 
-        <div class="tips-section" style="margin-top: 25px; background: #18181b; border-color: #27272a;">
-            <h4 style="color: #2563eb;">Best Time to Visit</h4>
-            <p style="font-size: 13px;">{{ itinerary.country.best_time }}</p>
+        <div style="display: table; width: 100%; border-collapse: collapse;">
+            <div style="display: table-row;">
+                <div style="display: table-cell; width: 50%; padding-right: 15px;">
+                    <div style="background: #18181b; padding: 25px; border-radius: 20px; border: 1px solid #27272a; height: 180px;">
+                        <h4 style="color: #2563eb; margin: 0 0 10px 0; font-size: 12px; text-transform: uppercase;">Best Time</h4>
+                        <p style="font-size: 13px; color: #fafafa;">{{ itinerary.country.best_time }}</p>
+                    </div>
+                </div>
+                <div style="display: table-cell; width: 50%; padding-left: 15px;">
+                    <div style="background: #18181b; padding: 25px; border-radius: 20px; border: 1px solid #27272a; height: 180px;">
+                        <h4 style="color: #2563eb; margin: 0 0 10px 0; font-size: 12px; text-transform: uppercase;">Major Hubs</h4>
+                        <div style="margin-top: 10px;">
+                            {% for apt in itinerary.country.airports %}
+                            <span style="display: inline-block; background: #27272a; padding: 4px 10px; border-radius: 6px; font-size: 10px; margin: 0 5px 5px 0; font-weight: 800;">{{ apt }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         {% if itinerary.country.tips %}
-        <div class="tips-section" style="margin-top: 25px;">
-            <h4 style="color: #2563eb;">Pro Travel Tips</h4>
-            <ul class="tips-list">
+        <div style="margin-top: 25px; background: #09090b; padding: 30px; border-radius: 20px; border: 1px solid #27272a;">
+            <h4 style="color: #2563eb; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase;">Pro Travel Tips</h4>
+            <ul style="margin: 0; padding: 0; list-style: none;">
                 {% for tip in itinerary.country.tips %}
-                <li>{{ tip }}</li>
+                <li style="margin-bottom: 10px; font-size: 13px; color: #a1a1aa; padding-left: 20px; position: relative;">
+                    <span style="position: absolute; left: 0; color: #2563eb;">★</span> {{ tip }}
+                </li>
                 {% endfor %}
             </ul>
         </div>
         {% endif %}
 
         <div class="footer">
-            <div>Trippzi Travel Guide — Official Country Appendix</div>
-            <div>Final Page</div>
+            <div style="float: left;">Trippzi Signature Collection</div>
+            <div style="float: right;">Final Page</div>
+            <div style="clear: both;"></div>
         </div>
     </div>
     {% endif %}

@@ -35,14 +35,7 @@ export function CountryDropdown({
   
   const selectedCountry = countries.find(c => c.name === selectedCountryName)
 
-  // Move India to top and filter by search
-  const filteredCountries = countries
-    .sort((a, b) => {
-      if (a.name === "India") return -1;
-      if (b.name === "India") return 1;
-      return a.name.localeCompare(b.name);
-    })
-    .filter(c => c.name.toLowerCase().includes(search.toLowerCase()))
+  const filteredCountries = countries.filter(c => c.name.toLowerCase().includes(search.toLowerCase()))
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

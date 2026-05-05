@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
-import { ArrowLeft, Save, Trash2, Plus, X, Clock, MapPin, Image as ImageIcon, Navigation, Ruler, CreditCard, Search } from "lucide-react"
+import { useState, useEffect } from "react"
+import { ArrowLeft, Save, Trash2, Plus, X, Clock, MapPin, Image as ImageIcon, Navigation, Ruler, CreditCard, Search, Globe, CheckCircle2 } from "lucide-react"
+import { fetchAllCountries, fetchAllDestinations } from "@/lib/api"
 
 interface Activity {
   time: string
@@ -36,8 +37,14 @@ interface ItineraryFormProps {
 }
 
 export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: ItineraryFormProps) => {
+  const [countries, setCountries] = useState<any[]>([])
+  const [allDestinations, setAllDestinations] = useState<any[]>([])
   const [formData, setFormData] = useState({
     title: initialData?.title || "",
+    country: initialData?.country?.id || initialData?.country || "",
+    destinations: Array.isArray(initialData?.destinations) 
+      ? initialData.destinations.map((d: any) => typeof d === 'object' ? d.id : d) 
+      : [],
     destination: initialData?.destination || "",
     duration_days: initialData?.duration_days || 5,
     regular_price: initialData?.regular_price || 999,
@@ -45,6 +52,7 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
     price: initialData?.price || 799,
     description: initialData?.description || "",
     highlights: initialData?.highlights || "",
+    visa_requirements: initialData?.visa_requirements || "",
     is_premium: initialData?.is_premium || false,
     is_custom: initialData?.is_custom || false,
     is_approved: initialData?.is_approved ?? (!initialData?.is_custom),
@@ -53,6 +61,11 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
   })
   const [submitting, setSubmitting] = useState(false)
   const [activeDayIndex, setActiveDayIndex] = useState(0)
+
+  useEffect(() => {
+    fetchAllCountries().then(setCountries)
+    fetchAllDestinations().then(setAllDestinations)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -120,6 +133,17 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
     setFormData({ ...formData, content: newContent })
   }
 
+  const toggleDestination = (destId: any) => {
+    const current = Array.isArray(formData.destinations) ? [...formData.destinations] : []
+    const destIdNum = typeof destId === 'object' ? (destId as any).id : destId
+    
+    if (current.includes(destIdNum)) {
+      setFormData({ ...formData, destinations: current.filter(id => id !== destIdNum) })
+    } else {
+      setFormData({ ...formData, destinations: [...current, destIdNum] })
+    }
+  }
+
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden flex flex-col h-[85vh]">
       <div className="p-6 border-b border-zinc-200 dark:border-zinc-800 flex justify-between items-center shrink-0">
@@ -160,10 +184,46 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
                   <input required className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Destination</label>
-                  <input required className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.destination} onChange={e => setFormData({...formData, destination: e.target.value})} />
+                  <label className="text-sm font-medium">Display Destination (Summary)</label>
+                  <input required className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.destination} onChange={e => setFormData({...formData, destination: e.target.value})} placeholder="e.g. Bangkok + Phuket" />
                 </div>
               </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium flex items-center gap-2 text-blue-600"><Globe className="w-4 h-4" /> Target Country</label>
+                  <select 
+                    required 
+                    className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+                    value={formData.country}
+                    onChange={e => setFormData({...formData, country: e.target.value ? parseInt(e.target.value) : ""})}
+                  >
+                    <option value="">Select Country</option>
+                    {countries.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Included Sub-Destinations</label>
+                  <div className="flex flex-wrap gap-2 p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-800 min-h-[50px]">
+                    {allDestinations.filter(d => !formData.country || d.country === parseInt(formData.country as string)).map(d => (
+                      <button
+                        key={d.id}
+                        type="button"
+                        onClick={() => toggleDestination(d.id)}
+                        className={`px-3 py-1 rounded-lg text-[10px] font-bold transition-all ${
+                          formData.destinations.includes(d.id)
+                          ? "bg-blue-600 text-white"
+                          : "bg-zinc-200 dark:bg-zinc-700 text-zinc-500"
+                        }`}
+                      >
+                        {d.name}
+                      </button>
+                    ))}
+                    {allDestinations.length === 0 && <span className="text-xs text-zinc-400">Loading destinations...</span>}
+                  </div>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Duration (Days)</label>
@@ -215,10 +275,16 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
               <input type="checkbox" id="is_custom" className="w-5 h-5 rounded border-zinc-300 text-blue-600" checked={formData.is_custom} onChange={e => setFormData({...formData, is_custom: e.target.checked})} />
               <label htmlFor="is_custom" className="text-sm font-medium text-amber-600">Custom User Generated</label>
            </div>
+           {initialData?.has_pdf && (
+             <div className="flex items-center gap-3 px-4 py-2 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-100 dark:border-green-800/50">
+                <CheckCircle2 className="w-4 h-4 text-green-600" />
+                <span className="text-[10px] font-black uppercase text-green-700">PDF Booklet Generated</span>
+             </div>
+           )}
         </section>
 
         {/* Description & Highlights */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-2">
             <label className="text-sm font-medium">Marketing Description</label>
             <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
@@ -226,6 +292,10 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
           <div className="space-y-2">
             <label className="text-sm font-medium">Highlights Summary</label>
             <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.highlights} onChange={e => setFormData({...formData, highlights: e.target.value})} placeholder="e.g. Bangkok + Phuket + Pattaya" />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-blue-600">Specific Visa Process (AI Generated)</label>
+            <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.visa_requirements} onChange={e => setFormData({...formData, visa_requirements: e.target.value})} placeholder="End-to-end visa application steps..." />
           </div>
         </section>
 

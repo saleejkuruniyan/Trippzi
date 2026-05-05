@@ -32,8 +32,14 @@ export default function GeneratePage() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
 
   useEffect(() => {
-    fetchDestinations().then(data => {
-      setCountries(Array.isArray(data) ? data : data.results || [])
+    fetchDestinations(true).then(data => {
+      const raw = Array.isArray(data) ? data : data.results || []
+      const sorted = [...raw].sort((a, b) => {
+        if (a.name === "India") return -1
+        if (b.name === "India") return 1
+        return a.name.localeCompare(b.name)
+      })
+      setCountries(sorted)
     })
   }, [])
 
@@ -58,10 +64,13 @@ export default function GeneratePage() {
     )
   }
 
+  const [error, setError] = useState<string | null>(null)
+
   const handleSubmit = async (e?: React.FormEvent, force = false) => {
     if (e) e.preventDefault()
+    setError(null)
     if (!selectedCountry || (selectedDestinations.length === 0 && !formData.custom_destination)) {
-      alert("Please select a destination or enter a custom one")
+      setError("Please select a destination or enter a custom one")
       return
     }
 
@@ -80,7 +89,7 @@ export default function GeneratePage() {
       })
       router.push(`/itinerary/${data.itinerary_id}/preview`)
     } catch (err: any) {
-      alert(err.message || "Failed to generate itinerary")
+      setError(err.message || "Failed to generate itinerary. Please try again.")
     } finally {
       setLoading(false)
     }
@@ -142,6 +151,17 @@ export default function GeneratePage() {
                   </motion.div>
                 )}
               </AnimatePresence>
+
+              {error && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-2xl text-red-600 dark:text-red-400 text-sm font-bold flex items-center gap-3"
+                >
+                  <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                  {error}
+                </motion.div>
+              )}
 
               <button
                 type="submit" disabled={loading}

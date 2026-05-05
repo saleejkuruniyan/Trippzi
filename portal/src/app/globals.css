@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme {
   --font-sans: var(--font-baloo);
@@ -42,4 +43,16 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Markdown Typography Spacing */
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  margin-top: 2.5rem !important;
+  margin-bottom: 1.25rem !important;
+}
+.prose p {
+  margin-bottom: 1rem !important;
+}
+.prose li {
+  margin-bottom: 0.5rem !important;
 }

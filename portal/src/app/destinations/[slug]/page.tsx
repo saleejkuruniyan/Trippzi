@@ -11,6 +11,7 @@ import Image from "next/image"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { fetchDestinationBySlug } from "@/lib/api"
+import ReactMarkdown from 'react-markdown'
 
 export default function DestinationGuidePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
@@ -91,7 +92,10 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
                 <h3 className="text-2xl font-bold">Major Airports</h3>
               </div>
               <ul className="space-y-3">
-                {dest.airports?.map((airport: string, i: number) => (
+                {(Array.isArray(dest.airports) 
+                  ? dest.airports 
+                  : (typeof dest.airports === 'string' ? dest.airports.split(',').map(a => a.trim()).filter(Boolean) : [])
+                ).map((airport: string, i: number) => (
                   <li key={i} className="flex items-center gap-3 font-medium">
                     <CheckCircle2 className="w-5 h-5 text-green-500" /> {airport}
                   </li>
@@ -125,9 +129,11 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
                 <h3 className="text-3xl font-black">Visa & Immigration Process</h3>
               </div>
               <div className="prose prose-lg dark:prose-invert max-w-none">
-                <p className="whitespace-pre-line font-medium text-zinc-700 dark:text-zinc-300">
-                  {dest.visa_process}
-                </p>
+                <div className="font-medium text-zinc-700 dark:text-zinc-300">
+                  <ReactMarkdown>
+                    {dest.visa_process}
+                  </ReactMarkdown>
+                </div>
               </div>
             </motion.div>
 
@@ -158,7 +164,10 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
                   <h3 className="text-3xl font-black">Things to keep in mind</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {dest.tips?.map((tip: string, i: number) => (
+                  {(Array.isArray(dest.tips) 
+                    ? dest.tips 
+                    : (typeof dest.tips === 'string' ? dest.tips.split(',').map(t => t.trim()).filter(Boolean) : [])
+                  ).map((tip: string, i: number) => (
                     <div key={i} className="flex gap-4 items-start">
                       <div className="w-2 h-2 rounded-full bg-blue-500 mt-2 shrink-0" />
                       <p className="text-lg font-medium text-zinc-300 leading-relaxed">{tip}</p>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { Sidebar } from "@/components/sidebar"
@@ -67,19 +67,19 @@ export default function AdminDashboard() {
     try {
       const s = await fetchStats()
       if (s) setStats([
-        { name: "Total Sales", value: `₹${s.total_sales}`, icon: IndianRupee, color: "text-green-600" },
+        { name: "Total Sales", value: `₹${s.total_sales}`, icon: IndianRupee, color: "text-green-600", tab: "sales" },
         { name: "Total Itineraries", value: s.total_itineraries, icon: FileText, color: "text-blue-600" },
-        { name: "Standard Trips", value: s.total_standard, icon: FileText, color: "text-indigo-600" },
-        { name: "Custom Trips", value: s.total_custom, icon: Sparkles, color: "text-purple-600" },
-        { name: "Active Users", value: s.total_users, icon: Users, color: "text-orange-600" },
-        { name: "Countries", value: s.total_countries, icon: Globe, color: "text-emerald-600" },
-        { name: "Destinations", value: s.total_destinations, icon: MapPin, color: "text-pink-600" },
-        { name: "Attractions", value: s.total_attractions, icon: Camera, color: "text-indigo-600" },
+        { name: "Standard Trips", value: s.total_standard, icon: FileText, color: "text-indigo-600", tab: "itineraries" },
+        { name: "Custom Trips", value: s.total_custom, icon: Sparkles, color: "text-purple-600", tab: "custom" },
+        { name: "Active Users", value: s.total_users, icon: Users, color: "text-orange-600", tab: "users" },
+        { name: "Countries", value: s.total_countries, icon: Globe, color: "text-emerald-600", tab: "countries" },
+        { name: "Destinations", value: s.total_destinations, icon: MapPin, color: "text-pink-600", tab: "destinations" },
+        { name: "Attractions", value: s.total_attractions, icon: Camera, color: "text-indigo-600", tab: "attractions" },
       ])
     } catch (err) { console.error(err) }
   }
 
-  const loadTabData = async (pageNum = 1, search = searchQuery) => {
+  const loadTabData = useCallback(async (pageNum = 1, search = "") => {
     setLoading(true)
     try {
       let res: any
@@ -101,7 +101,12 @@ export default function AdminDashboard() {
       setTotalCount(res?.count || 0)
     } catch (err) { console.error(err) }
     setLoading(false)
-  }
+  }, [activeTab])
+
+  const handleSearch = useCallback((q: string) => {
+    setSearchQuery(q)
+    loadTabData(1, q)
+  }, [loadTabData])
 
   useEffect(() => {
     const check = () => {
@@ -146,8 +151,12 @@ export default function AdminDashboard() {
       } else if (activeTab === 'attractions') {
         editingItem ? await updateAttraction(editingItem.id, formData) : await createAttraction(formData)
       }
-      setEditingItem(null); setIsCreating(false); loadTabData(); loadStats();
-    } catch (err) { alert("Failed to save data") }
+      setEditingItem(null); 
+      setIsCreating(false); 
+      loadTabData(currentPage, searchQuery); // Maintain current page and search
+      loadStats();
+      alert("Changes saved successfully!");
+    } catch (err: any) { alert("Failed to save data: " + err.message) }
   }
 
   const handleDelete = async (id: number) => {
@@ -234,119 +243,90 @@ export default function AdminDashboard() {
                 </div>
                 
                 <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <input 
-                      type="text" 
-                      placeholder="Search..."
-                      className="px-6 py-3 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:ring-2 focus:ring-blue-600 outline-none w-full md:w-64 transition-all font-medium"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && loadTabData(1)}
-                    />
-                  </div>
-                  
-                  {['itineraries', 'custom', 'countries', 'destinations', 'attractions'].includes(activeTab) && (
-                    <button 
-                      onClick={() => { setEditingItem(null); setIsCreating(true); }}
-                      className="bg-zinc-950 dark:bg-white text-white dark:text-black px-6 py-3 rounded-2xl font-black italic tracking-tighter hover:scale-105 transition-transform shadow-xl"
-                    >
-                      CREATE NEW
-                    </button>
-                  )}
                 </div>
               </header>
 
               {activeTab === 'dashboard' && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {stats.map((stat, i) => (
-                    <StatsCard key={i} {...stat} />
+                    <StatsCard 
+                      key={i} 
+                      {...stat} 
+                      index={i} 
+                      onClick={stat.tab ? () => setActiveTab(stat.tab) : undefined}
+                    />
                   ))}
                 </div>
               )}
 
-              <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden min-h-[600px] flex flex-col">
-                {isCreating ? (
-                  <div className="p-8">
-                    <div className="flex items-center justify-between mb-8">
-                      <h3 className="text-2xl font-black italic uppercase tracking-tighter">Create New {activeTab.slice(0, -1)}</h3>
-                      <button onClick={() => setIsCreating(false)} className="text-zinc-500 font-bold hover:text-zinc-950">Cancel</button>
+              {activeTab !== 'dashboard' && (
+                <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden min-h-[600px] flex flex-col">
+                  {isCreating ? (
+                    <div className="p-8">
+                      <div className="flex items-center justify-between mb-8">
+                        <h3 className="text-2xl font-black italic uppercase tracking-tighter">Create New {activeTab.slice(0, -1)}</h3>
+                        <button onClick={() => setIsCreating(false)} className="text-zinc-500 font-bold hover:text-zinc-950">Cancel</button>
+                      </div>
+                      {activeTab === 'itineraries' || activeTab === 'custom' ? (
+                        <ItineraryForm onSave={handleSave} isCustom={activeTab === 'custom'} />
+                      ) : activeTab === 'countries' ? (
+                        <CountryForm onSave={handleSave} />
+                      ) : activeTab === 'destinations' ? (
+                        <DestinationForm onSave={handleSave} />
+                      ) : activeTab === 'attractions' ? (
+                        <AttractionForm onSave={handleSave} />
+                      ) : null}
                     </div>
-                    {activeTab === 'itineraries' || activeTab === 'custom' ? (
-                      <ItineraryForm onSave={handleSave} isCustom={activeTab === 'custom'} />
-                    ) : activeTab === 'countries' ? (
-                      <CountryForm onSave={handleSave} />
-                    ) : activeTab === 'destinations' ? (
-                      <DestinationForm onSave={handleSave} />
-                    ) : activeTab === 'attractions' ? (
-                      <AttractionForm onSave={handleSave} />
-                    ) : null}
-                  </div>
-                ) : editingItem ? (
-                  <div className="p-8">
-                    <div className="flex items-center justify-between mb-8">
-                      <h3 className="text-2xl font-black italic uppercase tracking-tighter">Edit {activeTab.slice(0, -1)}</h3>
-                      <button onClick={() => setEditingItem(null)} className="text-zinc-500 font-bold hover:text-zinc-950">Cancel</button>
+                  ) : editingItem ? (
+                    <div className="p-8">
+                      <div className="flex items-center justify-between mb-8">
+                        <h3 className="text-2xl font-black italic uppercase tracking-tighter">Edit {activeTab.slice(0, -1)}</h3>
+                        <button onClick={() => setEditingItem(null)} className="text-zinc-500 font-bold hover:text-zinc-950">Cancel</button>
+                      </div>
+                      {activeTab === 'itineraries' || activeTab === 'custom' ? (
+                        <ItineraryForm initialData={editingItem} onSave={handleSave} isCustom={activeTab === 'custom'} />
+                      ) : activeTab === 'countries' ? (
+                        <CountryForm initialData={editingItem} onSave={handleSave} />
+                      ) : activeTab === 'destinations' ? (
+                        <DestinationForm initialData={editingItem} onSave={handleSave} />
+                      ) : activeTab === 'attractions' ? (
+                        <AttractionForm initialData={editingItem} onSave={handleSave} />
+                      ) : null}
                     </div>
-                    {activeTab === 'itineraries' || activeTab === 'custom' ? (
-                      <ItineraryForm initialData={editingItem} onSave={handleSave} isCustom={activeTab === 'custom'} />
-                    ) : activeTab === 'countries' ? (
-                      <CountryForm initialData={editingItem} onSave={handleSave} />
-                    ) : activeTab === 'destinations' ? (
-                      <DestinationForm initialData={editingItem} onSave={handleSave} />
-                    ) : activeTab === 'attractions' ? (
-                      <AttractionForm initialData={editingItem} onSave={handleSave} />
-                    ) : null}
-                  </div>
-                ) : activeTab === 'settings' ? (
-                  <div className="p-8">
-                    <div className="flex items-center justify-between mb-8">
-                      <h3 className="text-2xl font-black italic uppercase tracking-tighter">Site Settings</h3>
+                  ) : activeTab === 'settings' ? (
+                    <div className="p-8">
+                      <div className="flex items-center justify-between mb-8">
+                        <h3 className="text-2xl font-black italic uppercase tracking-tighter">Site Settings</h3>
+                      </div>
+                      <SettingsForm initialData={settings} onSave={async (val) => {
+                        await updateSettings(val)
+                        const s = await fetchSettings()
+                        setSettings(s)
+                        alert("Settings updated")
+                      }} />
                     </div>
-                    <SettingsForm settings={settings} onSave={async (val) => {
-                      await updateSettings(val)
-                      const s = await fetchSettings()
-                      setSettings(s)
-                      alert("Settings updated")
-                    }} />
-                  </div>
-                ) : (
-                  <DataTable 
-                    title={activeTab} 
-                    data={data} 
-                    loading={loading}
-                    onEdit={setEditingItem}
-                    onDelete={handleDelete}
-                    onClone={handleClone}
-                    currentPage={currentPage}
-                    totalCount={totalCount}
-                    onPageChange={(p) => {
-                        setCurrentPage(p)
-                        loadTabData(p)
-                    }}
-                  />
-                )}
-              </div>
-              
-              {!isCreating && !editingItem && activeTab !== 'settings' && totalCount > 10 && (
-                <div className="flex items-center justify-center gap-2 pb-8">
-                  {Array.from({ length: Math.ceil(totalCount / 10) }).map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        setCurrentPage(i + 1)
-                        loadTabData(i + 1)
+                  ) : (
+                    <DataTable 
+                      title={activeTab} 
+                      data={data} 
+                      loading={loading}
+                      onEdit={setEditingItem}
+                      onDelete={handleDelete}
+                      onAdd={() => { setEditingItem(null); setIsCreating(true); }}
+                      onClone={handleClone}
+                      currentPage={currentPage}
+                      totalCount={totalCount}
+                      onPageChange={(p) => {
+                          setCurrentPage(p)
+                          loadTabData(p)
                       }}
-                      className={`w-10 h-10 rounded-xl font-bold transition-all ${
-                        currentPage === i + 1 
-                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' 
-                          : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50'
-                      }`}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
+                      onSearch={handleSearch}
+                    />
+                  )}
                 </div>
               )}
+              
+              {/* Redundant pagination removed */}
             </div>
           </main>
         </div>

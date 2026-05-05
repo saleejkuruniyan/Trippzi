@@ -23,7 +23,20 @@ async function handleResponse(res: Response) {
 }
 
 async function apiRequest(url: string, options: RequestInit = {}) {
-  const res = await fetch(url, options);
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      ...getHeaders(),
+      ...(options.headers || {})
+    }
+  });
+  
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => ({}));
+    const errorMsg = errorBody.detail || errorBody.error || JSON.stringify(errorBody) || res.statusText;
+    throw new Error(errorMsg);
+  }
+  
   return handleResponse(res);
 }
 

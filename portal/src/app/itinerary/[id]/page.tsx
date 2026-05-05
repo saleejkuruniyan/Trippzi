@@ -12,6 +12,7 @@ import Image from "next/image"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { fetchItineraries } from "@/lib/api"
+import ReactMarkdown from 'react-markdown'
 import { googleLogin } from "@/lib/api"
 import { AuthModal } from "@/components/auth-modal"
 import { AddressModal } from "@/components/address-modal"
@@ -300,9 +301,11 @@ export default function ItineraryProductPage() {
                   </div>
                 )}
 
-                <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
-                  {itinerary.description}
-                </p>
+                <div className="prose prose-sm dark:prose-invert max-w-none text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
+                  <ReactMarkdown>
+                    {itinerary.description}
+                  </ReactMarkdown>
+                </div>
 
                 <div className="space-y-4">
                   <div className="pt-4">
@@ -427,7 +430,12 @@ export default function ItineraryProductPage() {
                                     )}
                                     {act.ticket_price && (
                                       <div className="flex items-center gap-1 text-[10px] font-bold text-green-600 uppercase tracking-tighter bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-md">
-                                        🎫 {act.ticket_price}
+                                        🎫 {(() => {
+                                          if (typeof act.ticket_price === 'object' && act.ticket_price !== null) {
+                                            return `${act.ticket_price.adult || act.ticket_price.amount || ''} ${act.ticket_price.currency || ''}`.trim() || JSON.stringify(act.ticket_price);
+                                          }
+                                          return act.ticket_price;
+                                        })()}
                                       </div>
                                     )}
                                     {act.closing_days && (
@@ -458,6 +466,34 @@ export default function ItineraryProductPage() {
                 })}
               </div>
             </div>
+
+            {/* Destination Overviews */}
+            {itinerary.destinations_details && itinerary.destinations_details.length > 0 && (
+              <div className="mt-32 space-y-12">
+                <div className="text-center">
+                  <h2 className="text-4xl font-black italic tracking-tighter uppercase">Destination Highlights</h2>
+                  <p className="text-zinc-500 mt-2">Deeper look into the cities you'll explore</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {itinerary.destinations_details.map((dest: any, idx: number) => (
+                    <div key={idx} className="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 space-y-4">
+                      <h4 className="text-2xl font-black text-blue-600 italic">{dest.name}</h4>
+                      <div className="prose prose-sm dark:prose-invert max-w-none text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                        <ReactMarkdown>
+                          {dest.description}
+                        </ReactMarkdown>
+                      </div>
+                      {dest.culture && (
+                        <div className="p-6 bg-zinc-50 dark:bg-zinc-950 rounded-2xl border-l-4 border-blue-600">
+                          <h5 className="text-xs font-black uppercase tracking-widest text-zinc-400 mb-2">Culture & Heritage</h5>
+                          <p className="text-xs italic text-zinc-500">{dest.culture}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             
             {/* Country Guide Section (Optimized cached data) */}
             {itinerary.country_details && (
@@ -474,9 +510,13 @@ export default function ItineraryProductPage() {
                         <ShieldCheck className="w-6 h-6" />
                         <h4 className="text-2xl font-black italic uppercase tracking-tight">Visa Process</h4>
                       </div>
-                      <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed whitespace-pre-line">
-                        {itinerary.country_details.visa_process}
-                      </p>
+                      <div className="prose prose-lg dark:prose-invert max-w-none">
+                        <div className="font-medium text-zinc-700 dark:text-zinc-300">
+                          <ReactMarkdown>
+                            {itinerary.visa_requirements || itinerary.country_details?.visa_process}
+                          </ReactMarkdown>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="pt-8 border-t border-zinc-100 dark:border-zinc-800 grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -487,12 +527,32 @@ export default function ItineraryProductPage() {
                        <div className="space-y-4">
                           <h5 className="text-xs font-black text-zinc-400 uppercase tracking-widest">Major Hubs</h5>
                           <div className="flex flex-wrap gap-2">
-                             {itinerary.country_details.airports?.map((apt: string, idx: number) => (
-                               <span key={idx} className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-lg text-[10px] font-bold">{apt}</span>
-                             ))}
+                             {(() => {
+                               const airports = itinerary.country_details.airports;
+                               const list = Array.isArray(airports) 
+                                 ? airports 
+                                 : (typeof airports === 'string' ? airports.split(',').map(a => a.trim()).filter(Boolean) : []);
+                               return list.map((apt: string, idx: number) => (
+                                 <span key={idx} className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-lg text-[10px] font-bold">{apt}</span>
+                               ));
+                             })()}
                           </div>
                        </div>
                     </div>
+
+                    {itinerary.country_details.days_recommendation && Object.keys(itinerary.country_details.days_recommendation).length > 0 && (
+                      <div className="pt-8 border-t border-zinc-100 dark:border-zinc-800 space-y-6">
+                        <h5 className="text-xs font-black text-zinc-400 uppercase tracking-widest">Recommended Duration</h5>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {Object.entries(itinerary.country_details.days_recommendation).map(([days, desc]: [any, any], idx: number) => (
+                            <div key={idx} className="p-4 bg-zinc-50 dark:bg-zinc-950 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+                              <span className="text-sm font-black text-blue-600 block mb-1">{days} Days</span>
+                              <p className="text-[11px] text-zinc-500 leading-relaxed font-medium">{desc}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Pro Tips Side Card */}

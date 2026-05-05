@@ -31,11 +31,11 @@ class Country(models.Model):
     flag_url = models.URLField(max_length=500, blank=True, null=True)
     
     # Rich Guide Content
-    airports = models.JSONField(default=list, help_text="List of major airports")
-    best_time = models.TextField(help_text="Best time to visit description")
-    visa_process = models.TextField(help_text="Detailed visa process description")
-    days_recommendation = models.JSONField(default=dict, help_text="Duration vs description mapping")
-    tips = models.JSONField(default=list, help_text="Pro-tips and things to keep in mind")
+    airports = models.JSONField(default=list, blank=True, null=True, help_text="List of major airports")
+    best_time = models.TextField(blank=True, null=True, help_text="Best time to visit description")
+    visa_process = models.TextField(blank=True, null=True, help_text="Detailed visa process description")
+    days_recommendation = models.JSONField(default=dict, blank=True, null=True, help_text="Duration vs description mapping")
+    tips = models.JSONField(default=list, blank=True, null=True, help_text="Pro-tips and things to keep in mind")
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -112,6 +112,7 @@ class Itinerary(models.Model):
     content = models.JSONField(help_text="Detailed day-wise itinerary with timings and transfers")
     image = models.ImageField(upload_to=itinerary_image_path, blank=True, null=True)
     image_url = models.URLField(max_length=500, blank=True, null=True)
+    visa_requirements = models.TextField(blank=True, help_text="End-to-end visa process tailored for the specific traveler nationality.")
     
     is_premium = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='custom_itineraries', null=True, blank=True)

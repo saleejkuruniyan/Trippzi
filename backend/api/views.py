@@ -34,8 +34,8 @@ class CountryViewSet(viewsets.ModelViewSet):
         user = self.request.user
         
         # For public/user view, only show countries with at least one approved standard itinerary
-        # This checks both direct links to country and indirect links via destinations
-        if not (user and user.is_staff):
+        # Skip filter if user is staff OR if show_all=true is passed (used for AI Planner)
+        if not (user and user.is_staff) and not self.request.query_params.get('show_all'):
             from .models import Itinerary
             approved_itineraries = Itinerary.objects.filter(
                 Q(country=OuterRef('pk')) | Q(destinations__country=OuterRef('pk')),
@@ -114,6 +114,38 @@ class ItineraryViewSet(viewsets.ModelViewSet):
         # For 'retrieve' (direct link), we allow all - Serializer handles content masking
         return queryset
 
+    def partial_update(self, request, *args, **kwargs):
+        """
+        Explicitly handle PATCH updates for complex relational fields.
+        """
+        instance = self.get_object()
+        data = request.data.copy()
+        
+        # Handle destinations (ManyToMany) explicitly if provided
+        dest_ids = data.get('destinations')
+        if dest_ids is not None:
+            if isinstance(dest_ids, list):
+                instance.destinations.set(dest_ids)
+                if 'destinations' in data:
+                    del data['destinations']
+        
+        # Handle country (ForeignKey) explicitly if provided
+        country_id = data.get('country')
+        if country_id:
+            from .models import Country
+            try:
+                instance.country = Country.objects.get(id=country_id)
+                if 'country' in data:
+                    del data['country']
+            except Country.DoesNotExist:
+                return Response({"error": f"Country with ID {country_id} not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(instance, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        
+        return Response(serializer.data)
+
     @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
     def clone_to_standard(self, request, pk=None):
         itinerary = self.get_object()
@@ -184,53 +216,72 @@ class ItineraryViewSet(viewsets.ModelViewSet):
 class GenerateItineraryView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
-        country_id = request.data.get('country_id')
-        destination_ids = request.data.get('destination_ids', [])
-        duration = request.data.get('duration', 5)
-        budget = request.data.get('budget', 'Budget')
-        style = request.data.get('style', 'Backpacking')
-        interests = request.data.get('interests', 'Food, Culture')
-        source_country = request.data.get('source_country', 'India')
-        custom_destination = request.data.get('custom_destination', '')
+        try:
+            country_id = request.data.get('country_id')
+            destination_ids = request.data.get('destination_ids', [])
+            duration = request.data.get('duration', 5)
+            budget = request.data.get('budget', 'Budget')
+            style = request.data.get('style', 'Backpacking')
+            interests = request.data.get('interests', 'Food, Culture')
+            source_country = request.data.get('source_country', 'India')
+            custom_destination = request.data.get('custom_destination', '')
 
-        if not country_id:
-            return Response({"error": "Country is required"}, status=status.HTTP_400_BAD_REQUEST)
-        
-        country_obj = get_object_or_404(Country, id=country_id)
-        destinations = Destination.objects.filter(id__in=destination_ids, country=country_obj)
-        dest_names = [d.name for d in destinations]
-        if custom_destination:
-            dest_names.append(custom_destination)
+            if not country_id:
+                return Response({"error": "Country is required"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            country_obj = get_object_or_404(Country, id=country_id)
+            destinations = Destination.objects.filter(id__in=destination_ids, country=country_obj)
+            dest_names = [d.name for d in destinations]
+            if custom_destination:
+                dest_names.append(custom_destination)
 
-        if not dest_names:
-            return Response({"error": "At least one destination is required"}, status=status.HTTP_400_BAD_REQUEST)
+            if not dest_names:
+                return Response({"error": "At least one destination is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        ai_engine = AIEngine()
-        
-        # 0. Refresh Country Guide Data (Tavily optimization)
-        ai_engine.refresh_country_data(country_obj)
+            ai_engine = AIEngine()
+            
+            # 0. Refresh Country Guide Data (Tavily optimization)
+            ai_engine.refresh_country_data(country_obj)
 
-        # 0b. Process Destinations (Add new ones & refresh culture)
-        final_dest_objects = []
-        for name in dest_names:
-            dest_obj, created = Destination.objects.get_or_create(
-                name=name, 
-                country=country_obj,
-                defaults={'description': f"Explore {name} in {country_obj.name}"}
+            # 0b. Process Destinations (Add new ones & refresh culture)
+            final_dest_objects = []
+            for name in dest_names:
+                dest_obj, created = Destination.objects.get_or_create(
+                    name=name, 
+                    country=country_obj,
+                    defaults={'description': f"Explore {name} in {country_obj.name}"}
+                )
+                ai_engine.refresh_destination_data(dest_obj)
+                final_dest_objects.append(dest_obj)
+            
+            # 1. Generate Itinerary Structure
+            itinerary_data = ai_engine.generate_itinerary(
+                country=country_obj.name,
+                selected_destinations=dest_names,
+                duration=duration,
+                budget=budget,
+                style=style,
+                interests=interests,
+                source_country=source_country
             )
-            ai_engine.refresh_destination_data(dest_obj)
-            final_dest_objects.append(dest_obj)
-        
-        # 1. Generate Itinerary Structure
-        itinerary_data = ai_engine.generate_itinerary(
-            country=country_obj.name,
-            selected_destinations=dest_names,
-            duration=duration,
-            budget=budget,
-            style=style,
-            interests=interests,
-            source_country=source_country
-        )
+        except Exception as e:
+            import traceback
+            error_trace = traceback.format_exc()
+            print(f"\n[AI GENERATION ERROR] >>>\n{error_trace}\n<<<")
+            
+            error_msg = "Our AI engine is currently resting. Please try again in a few moments."
+            err_str = str(e).lower()
+            if "authentication" in err_str or "401" in err_str:
+                error_msg = "AI Configuration Error: Invalid API Key or Model Access. Please contact support."
+            elif "rate_limit" in err_str or "429" in err_str:
+                error_msg = "AI Capacity Reached: Too many requests. Please try again in a minute."
+            elif "timeout" in err_str:
+                error_msg = "AI Timeout: The generation took too long. Please try a shorter duration."
+            
+            return Response({
+                "error": error_msg,
+                "details": str(e) if settings.DEBUG else "Check server logs for trace."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         if "error" in itinerary_data:
             return Response({
@@ -258,10 +309,10 @@ class GenerateItineraryView(APIView):
             sale_price=site_settings.custom_itinerary_price,
             regular_price=site_settings.custom_itinerary_regular_price,
             description=itinerary_data.get('overview', ''),
+            visa_requirements=itinerary_data.get('visa_requirements', ''),
             content=content_data
         )
         itinerary_obj.destinations.set(final_dest_objects)
-        
         # 3b. Fetch Itinerary Hero Image
         hero_images = fetch_unsplash_images(f"{country_obj.name} travel {dest_names[0]}", count=1)
         if hero_images:
