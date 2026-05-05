@@ -129,6 +129,7 @@ class ItinerarySerializer(serializers.ModelSerializer):
     nationality_details = CountrySerializer(source='nationality', read_only=True)
     image = serializers.ImageField(use_url=True, required=False)
     is_owned = serializers.SerializerMethodField()
+    visa_requirements = serializers.SerializerMethodField()
     
     class Meta:
         model = Itinerary
@@ -180,9 +181,25 @@ class ItinerarySerializer(serializers.ModelSerializer):
 
     def get_is_owned(self, obj):
         request = self.context.get('request')
-        if request and request.user and request.user.is_authenticated:
-            return Transaction.objects.filter(user=request.user, itinerary=obj, status='COMPLETED').exists()
+        user = request.user if request else None
+        if user and user.is_authenticated:
+            if obj.user == user:
+                return True
+            return Transaction.objects.filter(user=user, itinerary=obj, status='COMPLETED').exists()
         return False
+
+    def get_visa_requirements(self, obj):
+        from .models import VisaRequirement
+        if obj.nationality and obj.country:
+            rule = VisaRequirement.objects.filter(
+                source_country=obj.nationality,
+                destination_country=obj.country
+            ).first()
+            if rule:
+                return rule.content
+        
+        # Fallback to Country.visa_process (Global itineraries or missing rules)
+        return obj.country.visa_process if obj.country else ""
 
 
 class UserProfileSerializer(serializers.ModelSerializer):

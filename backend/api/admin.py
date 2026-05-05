@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import Itinerary, Transaction, Country, Destination, Attraction, UserProfile, Wishlist, ItineraryDay, SiteSettings
+from .models import (
+    Itinerary, Transaction, Country, Destination, Attraction, 
+    UserProfile, Wishlist, ItineraryDay, SiteSettings, VisaRequirement
+)
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
@@ -11,6 +14,12 @@ class CountryAdmin(admin.ModelAdmin):
     def itineraries_count(self, obj):
         return obj.itineraries.count()
     itineraries_count.short_description = 'Itineraries'
+
+@admin.register(VisaRequirement)
+class VisaRequirementAdmin(admin.ModelAdmin):
+    list_display = ('source_country', 'destination_country', 'updated_at')
+    list_filter = ('source_country', 'destination_country')
+    search_fields = ('source_country__name', 'destination_country__name', 'content')
 
 @admin.register(Destination)
 class DestinationAdmin(admin.ModelAdmin):
@@ -33,12 +42,16 @@ class ItineraryDayInline(admin.TabularInline):
 
 @admin.register(Itinerary)
 class ItineraryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'country', 'duration_days', 'price', 'is_approved', 'is_custom', 'user', 'created_at')
-    list_filter = ('is_approved', 'is_custom', 'is_premium', 'country', 'created_at')
-    search_fields = ('title', 'country__name', 'description', 'user__username', 'user__email')
+    list_display = (
+        'id', 'title', 'country', 'nationality', 'duration_days', 
+        'price', 'is_approved', 'is_premium', 'is_custom', 'user', 'created_at'
+    )
+    list_filter = ('is_approved', 'is_custom', 'is_premium', 'country', 'nationality', 'created_at')
+    search_fields = ('title', 'country__name', 'nationality__name', 'description', 'user__username', 'user__email')
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
     inlines = [ItineraryDayInline]
+    filter_horizontal = ('destinations',)
     
     actions = ['approve_itineraries', 'unapprove_itineraries']
 
@@ -67,7 +80,8 @@ class TransactionAdmin(admin.ModelAdmin):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone_number', 'city', 'country', 'zip_code')
+    list_display = ('user', 'phone_number', 'nationality', 'city', 'country', 'zip_code')
+    list_filter = ('nationality', 'country')
     search_fields = ('user__username', 'user__email', 'phone_number', 'city', 'country')
 
 @admin.register(Wishlist)
@@ -81,7 +95,6 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     list_display = ('custom_itinerary_price', 'custom_itinerary_regular_price')
     
     def has_add_permission(self, request):
-        # Prevent creating more than one instance
         if self.model.objects.exists():
             return False
         return super().has_add_permission(request)

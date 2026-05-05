@@ -24,12 +24,7 @@
         "name": "Strasbourg",
         "description": "A charming blend of French and German cultures, featuring picturesque timber-framed houses and a stunning Gothic cathedral."
       }
-    ],
-    "airports": [
-      "CDG",
-      "ORY"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 2,
@@ -56,12 +51,7 @@
         "name": "Milan",
         "description": "Italy\u2019s global hub for fashion and design, dominated by the magnificent Duomo di Milano and high-end shopping galleries."
       }
-    ],
-    "airports": [
-      "FCO",
-      "MXP"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 3,
@@ -88,12 +78,7 @@
         "name": "Ibiza",
         "description": "A world-famous Balearic Island known for its legendary nightlife, luxury beach clubs, and serene coastal coves."
       }
-    ],
-    "airports": [
-      "MAD",
-      "BCN"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 4,
@@ -120,13 +105,7 @@
         "name": "San Francisco",
         "description": "A hilly city on the Pacific coast, celebrated for the iconic Golden Gate Bridge, historic cable cars, and Victorian architecture."
       }
-    ],
-    "airports": [
-      "JFK",
-      "LAX",
-      "ORD"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 5,
@@ -153,12 +132,7 @@
         "name": "Guilin",
         "description": "Famous for its surreal karst limestone landscapes and the scenic Li River, often depicted in traditional Chinese ink paintings."
       }
-    ],
-    "airports": [
-      "PEK",
-      "PVG"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 6,
@@ -185,12 +159,7 @@
         "name": "Isle of Skye",
         "description": "A rugged island in the Inner Hebrides, famous for its dramatic volcanic landscapes, medieval castles, and picturesque fishing villages."
       }
-    ],
-    "airports": [
-      "LHR",
-      "LGW"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 7,
@@ -217,12 +186,7 @@
         "name": "Pamukkale",
         "description": "A natural wonder featuring white travertine terraces filled with mineral-rich thermal waters and the ruins of the ancient spa city Hierapolis."
       }
-    ],
-    "airports": [
-      "IST",
-      "AYT"
-    ],
-    "visa_for_indians": "eVisa (with US/UK/Schengen visa) / Visa Required"
+    ]
   },
   {
     "id": 8,
@@ -249,12 +213,7 @@
         "name": "Los Cabos",
         "description": "Located at the tip of the Baja Peninsula, it offers a dramatic desert-meets-sea landscape and world-class sportfishing and golf."
       }
-    ],
-    "airports": [
-      "MEX",
-      "CUN"
-    ],
-    "visa_for_indians": "Visa Required (Visa-free with US/UK/Schengen/etc. visa)"
+    ]
   },
   {
     "id": 9,
@@ -281,12 +240,7 @@
         "name": "Heidelberg",
         "description": "A romantic destination featuring the evocative ruins of Heidelberg Castle and Germany\u2019s oldest university set along the Neckar River."
       }
-    ],
-    "airports": [
-      "FRA",
-      "MUC"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 10,
@@ -313,11 +267,7 @@
         "name": "Meteora",
         "description": "A breathtaking site featuring ancient monasteries perched atop towering sandstone pillars in central Greece."
       }
-    ],
-    "airports": [
-      "ATH"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 11,
@@ -344,12 +294,7 @@
         "name": "Fujairah",
         "description": "Located on the east coast, it is famous for its Hajar Mountain backdrop and pristine snorkeling and diving sites in the Gulf of Oman."
       }
-    ],
-    "airports": [
-      "DXB",
-      "AUH"
-    ],
-    "visa_for_indians": "eVisa / Visa Required (VoA with US/UK/Schengen visa)"
+    ]
   },
   {
     "id": 12,
@@ -376,12 +321,7 @@
         "name": "Madeira",
         "description": "A volcanic island known as the 'Island of Eternal Spring,' famous for its rugged landscapes, botanical gardens, and levada hiking trails."
       }
-    ],
-    "airports": [
-      "LIS",
-      "OPO"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 13,
@@ -408,12 +348,7 @@
         "name": "Mecca",
         "description": "The spiritual heart of Islam and the holiest city, attracting millions of pilgrims annually to the Masjid al-Haram and the Kaaba."
       }
-    ],
-    "airports": [
-      "RUH",
-      "JED"
-    ],
-    "visa_for_indians": "eVisa (with US/UK/Schengen visa) / Visa Required"
+    ]
   },
   {
     "id": 14,
@@ -440,12 +375,7 @@
         "name": "Zakopane",
         "description": "The winter capital of Poland, nestled at the foot of the Tatra Mountains and known for its unique wooden architecture and hiking trails."
       }
-    ],
-    "airports": [
-      "WAW",
-      "KRK"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 15,
@@ -472,11 +402,7 @@
         "name": "Keukenhof",
         "description": "Commonly known as the 'Garden of Europe,' it is the world's largest flower garden, showcasing millions of tulips every spring."
       }
-    ],
-    "airports": [
-      "AMS"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 16,
@@ -503,12 +429,7 @@
         "name": "Zadar",
         "description": "A historic port city known for its Roman and Venetian ruins and the unique Sea Organ and Sun Salutation art installations."
       }
-    ],
-    "airports": [
-      "ZAG",
-      "DBV"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 17,
@@ -535,13 +456,7 @@
         "name": "Krabi",
         "description": "A stunning coastal province characterized by its dramatic limestone karsts, emerald waters, and the iconic Railay Beach."
       }
-    ],
-    "airports": [
-      "BKK",
-      "DMK",
-      "HKT"
-    ],
-    "visa_for_indians": "Visa-free / Visa on Arrival"
+    ]
   },
   {
     "id": 18,
@@ -568,11 +483,7 @@
         "name": "Cameron Highlands",
         "description": "A hill station offering a cool climate, emerald-green tea plantations, and scenic hiking trails in the mountains."
       }
-    ],
-    "airports": [
-      "KUL"
-    ],
-    "visa_for_indians": "Visa-free (up to 30 days)"
+    ]
   },
   {
     "id": 19,
@@ -599,12 +510,7 @@
         "name": "Hue",
         "description": "The former imperial capital of Vietnam, home to the vast 19th-century Citadel and the tombs of Nguyen dynasty emperors."
       }
-    ],
-    "airports": [
-      "SGN",
-      "HAN"
-    ],
-    "visa_for_indians": "eVisa Required"
+    ]
   },
   {
     "id": 20,
@@ -631,13 +537,7 @@
         "name": "Quebec City",
         "description": "One of North America's oldest cities, featuring the iconic Ch\u00e2teau Frontenac and a charming, walled historic district."
       }
-    ],
-    "airports": [
-      "YYZ",
-      "YVR",
-      "YUL"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 21,
@@ -664,13 +564,7 @@
         "name": "Mount Fuji",
         "description": "Japan's most iconic peak and a sacred site, offering stunning views from the Fuji Five Lakes region and surrounding hot springs."
       }
-    ],
-    "airports": [
-      "NRT",
-      "HND",
-      "KIX"
-    ],
-    "visa_for_indians": "eVisa available (with conditions) / Visa Required"
+    ]
   },
   {
     "id": 22,
@@ -697,12 +591,7 @@
         "name": "Casablanca",
         "description": "A modern port city and economic hub featuring a unique blend of Art Deco architecture and the magnificent Hassan II Mosque."
       }
-    ],
-    "airports": [
-      "CMN",
-      "RAK"
-    ],
-    "visa_for_indians": "eVisa Required"
+    ]
   },
   {
     "id": 23,
@@ -729,12 +618,7 @@
         "name": "Alexandria",
         "description": "A Mediterranean port city with a rich Greco-Roman history, home to the modern Bibliotheca Alexandrina and Qaitbay Citadel."
       }
-    ],
-    "airports": [
-      "CAI",
-      "HRG"
-    ],
-    "visa_for_indians": "Visa on Arrival / eVisa Required"
+    ]
   },
   {
     "id": 24,
@@ -761,12 +645,7 @@
         "name": "Geneva",
         "description": "A cosmopolitan city on Lake Geneva, home to the UN headquarters and the towering Jet d'Eau fountain."
       }
-    ],
-    "airports": [
-      "ZRH",
-      "GVA"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 25,
@@ -793,11 +672,7 @@
         "name": "Szentendre",
         "description": "A charming riverside town near Budapest, famous for its Mediterranean feel, colorful houses, and numerous art galleries."
       }
-    ],
-    "airports": [
-      "BUD"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 26,
@@ -824,11 +699,7 @@
         "name": "Kutna Hora",
         "description": "Kutna Hora is one of the most significant tourist destinations in Czechia, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "PRG"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 27,
@@ -855,12 +726,7 @@
         "name": "Raja Ampat",
         "description": "Raja Ampat is one of the most significant tourist destinations in Indonesia, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "DPS",
-      "CGK"
-    ],
-    "visa_for_indians": "Visa on Arrival (e-VOA available)"
+    ]
   },
   {
     "id": 28,
@@ -887,11 +753,7 @@
         "name": "Chinatown",
         "description": "Chinatown is one of the most significant tourist destinations in Singapore, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "SIN"
-    ],
-    "visa_for_indians": "eVisa Required"
+    ]
   },
   {
     "id": 29,
@@ -918,11 +780,7 @@
         "name": "Skagen",
         "description": "Skagen is one of the most significant tourist destinations in Denmark, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "CPH"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 30,
@@ -949,12 +807,7 @@
         "name": "Incheon",
         "description": "Incheon is one of the most significant tourist destinations in South Korea, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "ICN",
-      "GMP"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 31,
@@ -981,12 +834,7 @@
         "name": "Aqaba",
         "description": "Aqaba is one of the most significant tourist destinations in Jordan, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "AMM",
-      "AQJ"
-    ],
-    "visa_for_indians": "Visa on Arrival"
+    ]
   },
   {
     "id": 32,
@@ -1013,12 +861,7 @@
         "name": "Turkistan",
         "description": "Turkistan is one of the most significant tourist destinations in Kazakhstan, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "ALA",
-      "NQZ"
-    ],
-    "visa_for_indians": "Visa-free (up to 14 days)"
+    ]
   },
   {
     "id": 33,
@@ -1045,12 +888,7 @@
         "name": "El Jem",
         "description": "El Jem is one of the most significant tourist destinations in Tunisia, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "TUN",
-      "NBE"
-    ],
-    "visa_for_indians": "Visa Required / eVisa with conditions"
+    ]
   },
   {
     "id": 34,
@@ -1077,13 +915,7 @@
         "name": "Kerala Backwaters",
         "description": "Kerala Backwaters is one of the most significant tourist destinations in India, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "DEL",
-      "BOM",
-      "BLR"
-    ],
-    "visa_for_indians": "Not applicable (Citizen)"
+    ]
   },
   {
     "id": 35,
@@ -1110,12 +942,7 @@
         "name": "Ardennes",
         "description": "Ardennes is one of the most significant tourist destinations in Belgium, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "BRU",
-      "CRL"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 36,
@@ -1142,13 +969,7 @@
         "name": "Cork",
         "description": "Cork is one of the most significant tourist destinations in Ireland, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "DUB",
-      "SNN",
-      "ORK"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 37,
@@ -1175,13 +996,7 @@
         "name": "Durban",
         "description": "Durban is one of the most significant tourist destinations in South Africa, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "JNB",
-      "CPT",
-      "DUR"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 38,
@@ -1208,12 +1023,7 @@
         "name": "La Romana",
         "description": "La Romana is one of the most significant tourist destinations in Dominican Republic, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "PUJ",
-      "SDQ"
-    ],
-    "visa_for_indians": "Visa Required (Visa-free with US/UK/Schengen/etc. visa)"
+    ]
   },
   {
     "id": 39,
@@ -1240,12 +1050,7 @@
         "name": "Fergana Valley",
         "description": "Fergana Valley is one of the most significant tourist destinations in Uzbekistan, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "TAS",
-      "SKD"
-    ],
-    "visa_for_indians": "Visa-free (up to 30 days)"
+    ]
   },
   {
     "id": 40,
@@ -1272,12 +1077,7 @@
         "name": "Jiufen",
         "description": "Jiufen is one of the most significant tourist destinations in Taiwan, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "TPE",
-      "KHH"
-    ],
-    "visa_for_indians": "Visa Required (Travel Auth available)"
+    ]
   },
   {
     "id": 41,
@@ -1304,12 +1104,7 @@
         "name": "Malmo",
         "description": "Malmo is one of the most significant tourist destinations in Sweden, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "ARN",
-      "GOT"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 42,
@@ -1336,12 +1131,7 @@
         "name": "Manaus",
         "description": "Manaus is one of the most significant tourist destinations in Brazil, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "GRU",
-      "GIG"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 43,
@@ -1368,12 +1158,7 @@
         "name": "Battambang",
         "description": "Battambang is one of the most significant tourist destinations in Cambodia, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "PNH",
-      "SAI"
-    ],
-    "visa_for_indians": "Visa on Arrival / eVisa"
+    ]
   },
   {
     "id": 44,
@@ -1400,11 +1185,7 @@
         "name": "Qal'at al-Bahrain",
         "description": "Qal'at al-Bahrain is one of the most significant tourist destinations in Bahrain, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "BAH"
-    ],
-    "visa_for_indians": "eVisa / Visa on Arrival"
+    ]
   },
   {
     "id": 45,
@@ -1431,12 +1212,7 @@
         "name": "Mendoza",
         "description": "Mendoza is one of the most significant tourist destinations in Argentina, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "EZE",
-      "AEP"
-    ],
-    "visa_for_indians": "Visa Required (AVE available with US/Schengen visa)"
+    ]
   },
   {
     "id": 46,
@@ -1463,12 +1239,7 @@
         "name": "Lofoten Islands",
         "description": "Lofoten Islands is one of the most significant tourist destinations in Norway, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "OSL",
-      "BGO"
-    ],
-    "visa_for_indians": "Schengen Visa Required"
+    ]
   },
   {
     "id": 47,
@@ -1495,12 +1266,7 @@
         "name": "Siargao",
         "description": "Siargao is one of the most significant tourist destinations in Philippines, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "MNL",
-      "CEB"
-    ],
-    "visa_for_indians": "Visa Required (Visa-free with US/UK/Schengen/etc. visa)"
+    ]
   },
   {
     "id": 48,
@@ -1527,11 +1293,7 @@
         "name": "Ponce",
         "description": "Ponce is one of the most significant tourist destinations in Puerto Rico, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "SJU"
-    ],
-    "visa_for_indians": "US Visa Required"
+    ]
   },
   {
     "id": 49,
@@ -1558,13 +1320,7 @@
         "name": "Uluru",
         "description": "Uluru is one of the most significant tourist destinations in Australia, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "SYD",
-      "MEL",
-      "BNE"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 50,
@@ -1591,11 +1347,7 @@
         "name": "Easter Island",
         "description": "Easter Island is one of the most significant tourist destinations in Chile, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "SCL"
-    ],
-    "visa_for_indians": "Visa Required (Visa-free with US visa)"
+    ]
   },
   {
     "id": 51,
@@ -1622,11 +1374,7 @@
         "name": "Sacred Valley",
         "description": "Sacred Valley is one of the most significant tourist destinations in Peru, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "LIM"
-    ],
-    "visa_for_indians": "Visa Required (Visa-free with US/UK/Schengen/etc. visa)"
+    ]
   },
   {
     "id": 52,
@@ -1653,12 +1401,7 @@
         "name": "Tayrona Park",
         "description": "Tayrona Park is one of the most significant tourist destinations in Colombia, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "BOG",
-      "MDE"
-    ],
-    "visa_for_indians": "Visa Required (Visa-free with US/Schengen visa)"
+    ]
   },
   {
     "id": 53,
@@ -1685,11 +1428,7 @@
         "name": "San Blas Islands",
         "description": "San Blas Islands is one of the most significant tourist destinations in Panama, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "PTY"
-    ],
-    "visa_for_indians": "Visa Required (Visa-free with US/UK/Schengen/etc. visa)"
+    ]
   },
   {
     "id": 54,
@@ -1716,12 +1455,7 @@
         "name": "Lake Nakuru",
         "description": "Lake Nakuru is one of the most significant tourist destinations in Kenya, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "NBO",
-      "MBA"
-    ],
-    "visa_for_indians": "eTA Required (Visa-free but authorization needed)"
+    ]
   },
   {
     "id": 55,
@@ -1748,13 +1482,7 @@
         "name": "Dar es Salaam",
         "description": "Dar es Salaam is one of the most significant tourist destinations in Tanzania, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "DAR",
-      "JRO",
-      "ZNZ"
-    ],
-    "visa_for_indians": "Visa on Arrival / eVisa"
+    ]
   },
   {
     "id": 56,
@@ -1781,11 +1509,7 @@
         "name": "Aksum",
         "description": "Aksum is one of the most significant tourist destinations in Ethiopia, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "ADD"
-    ],
-    "visa_for_indians": "eVisa Required"
+    ]
   },
   {
     "id": 57,
@@ -1812,11 +1536,7 @@
         "name": "Black River Gorges",
         "description": "Black River Gorges is one of the most significant tourist destinations in Mauritius, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "MRU"
-    ],
-    "visa_for_indians": "Visa on Arrival (Free)"
+    ]
   },
   {
     "id": 58,
@@ -1843,11 +1563,7 @@
         "name": "Bird Island",
         "description": "Bird Island is one of the most significant tourist destinations in Seychelles, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "SEZ"
-    ],
-    "visa_for_indians": "Visa-free (Visitor's Permit on arrival)"
+    ]
   },
   {
     "id": 59,
@@ -1874,11 +1590,7 @@
         "name": "Maafushi",
         "description": "Maafushi is one of the most significant tourist destinations in Maldives, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "MLE"
-    ],
-    "visa_for_indians": "Visa on Arrival (Free)"
+    ]
   },
   {
     "id": 60,
@@ -1905,11 +1617,7 @@
         "name": "Ella",
         "description": "Ella is one of the most significant tourist destinations in Sri Lanka, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "CMB"
-    ],
-    "visa_for_indians": "Visa-free (Temporary pilot program)"
+    ]
   },
   {
     "id": 61,
@@ -1936,11 +1644,7 @@
         "name": "Chitwan",
         "description": "Chitwan is one of the most significant tourist destinations in Nepal, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "KTM"
-    ],
-    "visa_for_indians": "Visa-free (for Indian citizens)"
+    ]
   },
   {
     "id": 62,
@@ -1967,11 +1671,7 @@
         "name": "Bumthang",
         "description": "Bumthang is one of the most significant tourist destinations in Bhutan, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "PBH"
-    ],
-    "visa_for_indians": "Visa-free (Permit required)"
+    ]
   },
   {
     "id": 63,
@@ -1998,11 +1698,7 @@
         "name": "Chittagong",
         "description": "Chittagong is one of the most significant tourist destinations in Bangladesh, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "DAC"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 64,
@@ -2029,11 +1725,7 @@
         "name": "Ngapali Beach",
         "description": "Ngapali Beach is one of the most significant tourist destinations in Myanmar, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "RGN"
-    ],
-    "visa_for_indians": "eVisa Required"
+    ]
   },
   {
     "id": 65,
@@ -2060,11 +1752,7 @@
         "name": "Bolaven Plateau",
         "description": "Bolaven Plateau is one of the most significant tourist destinations in Laos, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "VTE"
-    ],
-    "visa_for_indians": "Visa on Arrival / eVisa"
+    ]
   },
   {
     "id": 66,
@@ -2091,11 +1779,7 @@
         "name": "Coral Coast",
         "description": "Coral Coast is one of the most significant tourist destinations in Fiji, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "NAN"
-    ],
-    "visa_for_indians": "Visa-free (up to 4 months)"
+    ]
   },
   {
     "id": 67,
@@ -2122,11 +1806,7 @@
         "name": "Malekula",
         "description": "Malekula is one of the most significant tourist destinations in Vanuatu, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "VLI"
-    ],
-    "visa_for_indians": "Visa-free (up to 30 days)"
+    ]
   },
   {
     "id": 68,
@@ -2153,11 +1833,7 @@
         "name": "Piula Cave Pool",
         "description": "Piula Cave Pool is one of the most significant tourist destinations in Samoa, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "APW"
-    ],
-    "visa_for_indians": "Visa-free (up to 60 days)"
+    ]
   },
   {
     "id": 69,
@@ -2184,11 +1860,7 @@
         "name": "Pangaimotu",
         "description": "Pangaimotu is one of the most significant tourist destinations in Tonga, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "TBU"
-    ],
-    "visa_for_indians": "Visa on Arrival (Free)"
+    ]
   },
   {
     "id": 70,
@@ -2215,12 +1887,7 @@
         "name": "Lake Tekapo",
         "description": "Lake Tekapo is one of the most significant tourist destinations in New Zealand, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "AKL",
-      "CHC"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 71,
@@ -2247,11 +1914,7 @@
         "name": "Inland Sea",
         "description": "Inland Sea is one of the most significant tourist destinations in Qatar, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "DOH"
-    ],
-    "visa_for_indians": "Visa-free (30 days)"
+    ]
   },
   {
     "id": 72,
@@ -2278,12 +1941,7 @@
         "name": "Wadi Shab",
         "description": "Wadi Shab is one of the most significant tourist destinations in Oman, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "MCT",
-      "SLL"
-    ],
-    "visa_for_indians": "Visa-free (14 days with conditions) / eVisa"
+    ]
   },
   {
     "id": 73,
@@ -2310,11 +1968,7 @@
         "name": "Failaka Island",
         "description": "Failaka Island is one of the most significant tourist destinations in Kuwait, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "KWI"
-    ],
-    "visa_for_indians": "eVisa / Visa Required"
+    ]
   },
   {
     "id": 74,
@@ -2341,11 +1995,7 @@
         "name": "Tatev Monastery",
         "description": "Tatev Monastery is one of the most significant tourist destinations in Armenia, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "EVN"
-    ],
-    "visa_for_indians": "eVisa / Visa on Arrival"
+    ]
   },
   {
     "id": 75,
@@ -2372,12 +2022,7 @@
         "name": "Mestia",
         "description": "Mestia is one of the most significant tourist destinations in Georgia, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "TBS",
-      "KUT"
-    ],
-    "visa_for_indians": "eVisa Required"
+    ]
   },
   {
     "id": 76,
@@ -2404,11 +2049,7 @@
         "name": "Mud Volcanoes",
         "description": "Mud Volcanoes is one of the most significant tourist destinations in Azerbaijan, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "GYD"
-    ],
-    "visa_for_indians": "eVisa Required"
+    ]
   },
   {
     "id": 77,
@@ -2435,11 +2076,7 @@
         "name": "Sidon",
         "description": "Sidon is one of the most significant tourist destinations in Lebanon, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "BEY"
-    ],
-    "visa_for_indians": "Visa on Arrival (Free for 1 month)"
+    ]
   },
   {
     "id": 78,
@@ -2466,12 +2103,7 @@
         "name": "Karbala",
         "description": "Karbala is one of the most significant tourist destinations in Iraq, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "BGW",
-      "EBL"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 79,
@@ -2498,11 +2130,7 @@
         "name": "Eilat",
         "description": "Eilat is one of the most significant tourist destinations in Israel, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "TLV"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 80,
@@ -2529,11 +2157,7 @@
         "name": "Nablus",
         "description": "Nablus is one of the most significant tourist destinations in Palestine, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "N/A"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 81,
@@ -2560,11 +2184,7 @@
         "name": "Karakol",
         "description": "Karakol is one of the most significant tourist destinations in Kyrgyzstan, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "FRU"
-    ],
-    "visa_for_indians": "eVisa Required"
+    ]
   },
   {
     "id": 82,
@@ -2591,11 +2211,7 @@
         "name": "Khujand",
         "description": "Khujand is one of the most significant tourist destinations in Tajikistan, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "DYU"
-    ],
-    "visa_for_indians": "eVisa Required"
+    ]
   },
   {
     "id": 83,
@@ -2622,11 +2238,7 @@
         "name": "Turkmenbashi",
         "description": "Turkmenbashi is one of the most significant tourist destinations in Turkmenistan, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "ASB"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 84,
@@ -2653,11 +2265,7 @@
         "name": "Orkhon Valley",
         "description": "Orkhon Valley is one of the most significant tourist destinations in Mongolia, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "UBN"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 85,
@@ -2684,11 +2292,7 @@
         "name": "Tabriz",
         "description": "Tabriz is one of the most significant tourist destinations in Iran, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "IKA"
-    ],
-    "visa_for_indians": "Visa-free (up to 15 days by air)"
+    ]
   },
   {
     "id": 86,
@@ -2715,13 +2319,7 @@
         "name": "Skardu",
         "description": "Skardu is one of the most significant tourist destinations in Pakistan, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "ISB",
-      "KHI",
-      "LHE"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 87,
@@ -2748,11 +2346,7 @@
         "name": "Band-e-Amir",
         "description": "Band-e-Amir is one of the most significant tourist destinations in Afghanistan, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "KBL"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 88,
@@ -2779,11 +2373,7 @@
         "name": "Latakia",
         "description": "Latakia is one of the most significant tourist destinations in Syria, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "DAM"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 89,
@@ -2810,11 +2400,7 @@
         "name": "Al Mukalla",
         "description": "Al Mukalla is one of the most significant tourist destinations in Yemen, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "ADE"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 90,
@@ -2841,12 +2427,7 @@
         "name": "Cyrene",
         "description": "Cyrene is one of the most significant tourist destinations in Libya, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "MJI",
-      "BEN"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 91,
@@ -2873,12 +2454,7 @@
         "name": "Yankari Park",
         "description": "Yankari Park is one of the most significant tourist destinations in Nigeria, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "LOS",
-      "ABV"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 92,
@@ -2905,11 +2481,7 @@
         "name": "Mole Park",
         "description": "Mole Park is one of the most significant tourist destinations in Ghana, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "ACC"
-    ],
-    "visa_for_indians": "Visa Required / VoA (conditions)"
+    ]
   },
   {
     "id": 93,
@@ -2936,11 +2508,7 @@
         "name": "Nyungwe Forest",
         "description": "Nyungwe Forest is one of the most significant tourist destinations in Rwanda, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "KGL"
-    ],
-    "visa_for_indians": "Visa on Arrival (Free for 30 days)"
+    ]
   },
   {
     "id": 94,
@@ -2967,11 +2535,7 @@
         "name": "Entebbe",
         "description": "Entebbe is one of the most significant tourist destinations in Uganda, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "EBB"
-    ],
-    "visa_for_indians": "eVisa Required"
+    ]
   },
   {
     "id": 95,
@@ -2998,12 +2562,7 @@
         "name": "Kafue",
         "description": "Kafue is one of the most significant tourist destinations in Zambia, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "LUN",
-      "LVI"
-    ],
-    "visa_for_indians": "Visa-free (up to 90 days)"
+    ]
   },
   {
     "id": 96,
@@ -3030,12 +2589,7 @@
         "name": "Mana Pools",
         "description": "Mana Pools is one of the most significant tourist destinations in Zimbabwe, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "HRE",
-      "VFA"
-    ],
-    "visa_for_indians": "eVisa / Visa on Arrival"
+    ]
   },
   {
     "id": 97,
@@ -3062,11 +2616,7 @@
         "name": "Damaraland",
         "description": "Damaraland is one of the most significant tourist destinations in Namibia, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "WDH"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 98,
@@ -3093,13 +2643,7 @@
         "name": "Kalahari",
         "description": "Kalahari is one of the most significant tourist destinations in Botswana, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "GBE",
-      "MUB",
-      "BBK"
-    ],
-    "visa_for_indians": "Visa Required"
+    ]
   },
   {
     "id": 99,
@@ -3126,11 +2670,7 @@
         "name": "Tsingy",
         "description": "Tsingy is one of the most significant tourist destinations in Madagascar, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "TNR"
-    ],
-    "visa_for_indians": "Visa on Arrival / eVisa"
+    ]
   },
   {
     "id": 100,
@@ -3157,10 +2697,6 @@
         "name": "Mozambique Island",
         "description": "Mozambique Island is one of the most significant tourist destinations in Mozambique, offering unique cultural and historical experiences."
       }
-    ],
-    "airports": [
-      "MPM"
-    ],
-    "visa_for_indians": "Visa on Arrival (for tourism)"
+    ]
   }
 ]

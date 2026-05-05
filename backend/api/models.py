@@ -52,6 +52,20 @@ class Country(models.Model):
     def __str__(self):
         return self.name
 
+class VisaRequirement(models.Model):
+    source_country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='outgoing_visa_rules')
+    destination_country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='incoming_visa_rules')
+    content = models.TextField()
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('source_country', 'destination_country')
+        verbose_name = "Visa Requirement"
+        verbose_name_plural = "Visa Requirements"
+
+    def __str__(self):
+        return f"{self.source_country.name} -> {self.destination_country.name}"
+
 class Destination(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='destinations', null=True, blank=True)
     name = models.CharField(max_length=255)
@@ -113,8 +127,6 @@ class Itinerary(models.Model):
     content = models.JSONField(help_text="Detailed day-wise itinerary with timings and transfers")
     image = models.ImageField(upload_to=itinerary_image_path, blank=True, null=True)
     image_url = models.URLField(max_length=500, blank=True, null=True)
-    visa_requirements = models.TextField(blank=True, help_text="End-to-end visa process tailored for the specific traveler nationality.")
-    
     is_premium = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='custom_itineraries', null=True, blank=True)
     is_custom = models.BooleanField(default=False)
@@ -158,7 +170,12 @@ class UserProfile(models.Model):
     address = models.TextField(blank=True)
     city = models.CharField(max_length=100, blank=True)
     country = models.CharField(max_length=100, blank=True, default='India')
-    nationality = models.ForeignKey('Country', on_delete=models.SET_NULL, null=True, blank=True, related_name='profiles')
+    budget = models.CharField(max_length=100, blank=True, null=True)
+    travel_style = models.CharField(max_length=100, blank=True, null=True)
+    interests = models.TextField(blank=True, null=True)
+    
+    # New Nationality field (Passport)
+    nationality = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='targeted_itineraries')
     zip_code = models.CharField(max_length=20, blank=True)
 
     def __str__(self):

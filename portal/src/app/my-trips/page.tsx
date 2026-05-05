@@ -11,6 +11,7 @@ import { Footer } from "@/components/footer"
 import { useRouter } from "next/navigation"
 import { AddressModal } from "@/components/address-modal"
 import { PaymentStatusModal } from "@/components/payment-status-modal"
+import { LoadingScreen } from "@/components/loading-screen"
 
 export default function MyTripsPage() {
   const router = useRouter()
@@ -174,9 +175,7 @@ export default function MyTripsPage() {
           </header>
 
           {loading ? (
-            <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            </div>
+            <LoadingScreen message="Collecting your trips..." />
           ) : trips.length === 0 ? (
             <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 p-12 text-center">
               <Sparkles className="w-16 h-16 text-zinc-300 mx-auto mb-6" />

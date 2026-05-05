@@ -8,6 +8,7 @@ import Image from "next/image"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { fetchDestinations } from "@/lib/api"
+import { LoadingScreen } from "@/components/loading-screen"
 
 export default function DestinationsPage() {
   const [destinations, setDestinations] = useState<any[]>([])
@@ -32,6 +33,8 @@ export default function DestinationsPage() {
   const filtered = destList.filter(d => 
     d.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  if (loading) return <LoadingScreen message="Finding the best spots..." />
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -72,21 +75,13 @@ export default function DestinationsPage() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="animate-pulse bg-zinc-100 dark:bg-zinc-900 rounded-3xl aspect-[3/4]" />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {filtered.map((dest, i) => (
-                <DestinationCard key={dest.id} dest={dest} index={i} />
-              ))}
-            </div>
-          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {filtered.map((dest, i) => (
+              <DestinationCard key={dest.id} dest={dest} index={i} />
+            ))}
+          </div>
           
-          {!loading && filtered.length === 0 && (
+          {filtered.length === 0 && (
             <div className="text-center py-20">
               <p className="text-zinc-500 italic">No destinations found matching your search.</p>
             </div>

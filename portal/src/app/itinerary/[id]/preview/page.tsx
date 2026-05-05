@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 import { MapPin, Clock, Sparkles, Zap, ArrowLeft, ShieldCheck, Download, Globe } from "lucide-react"
 import { AuthModal } from "@/components/auth-modal"
 import Link from "next/link"
+import { LoadingScreen } from "@/components/loading-screen"
 
 export default function ItineraryPreviewPage() {
   const { id } = useParams()
@@ -60,11 +61,7 @@ export default function ItineraryPreviewPage() {
     }
   }
 
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-950">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-    </div>
-  )
+  if (loading) return <LoadingScreen message="Preparing your sneak peek..." />
 
   if (!itinerary) return <div>Itinerary not found.</div>
 

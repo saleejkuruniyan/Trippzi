@@ -9,8 +9,8 @@ from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from .services.ai_engine import AIEngine
+from .services.image_service import ImageService
 from .models import Itinerary, Transaction, Country, Destination, Attraction, Wishlist, ItineraryDay, SiteSettings
-from .utils import fetch_unsplash_images, download_image_to_content_file
 from .storage import R2Storage
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -230,13 +230,20 @@ class GenerateItineraryView(APIView):
             budget = request.data.get('budget', 'Budget')
             style = request.data.get('style', 'Backpacking')
             interests = request.data.get('interests', 'Food, Culture')
-            source_country = request.data.get('source_country', 'India')
+            source_country_name = request.data.get('source_country', 'India')
             custom_destination = request.data.get('custom_destination', '')
 
             if not country_id:
                 return Response({"error": "Country is required"}, status=status.HTTP_400_BAD_REQUEST)
             
             country_obj = get_object_or_404(Country, id=country_id)
+            
+            # Lookup source country object
+            source_country_obj = Country.objects.filter(name__icontains=source_country_name).first()
+            if not source_country_obj and source_country_name:
+                 # Fallback/Default if not found
+                 source_country_obj = Country.objects.filter(name="India").first()
+
             destinations = Destination.objects.filter(id__in=destination_ids, country=country_obj)
             dest_names = [d.name for d in destinations]
             if custom_destination:
@@ -246,6 +253,7 @@ class GenerateItineraryView(APIView):
                 return Response({"error": "At least one destination is required"}, status=status.HTTP_400_BAD_REQUEST)
 
             ai_engine = AIEngine()
+            image_service = ImageService()
             
             # 0. Refresh Country Guide Data (Tavily optimization)
             ai_engine.refresh_country_data(country_obj)
@@ -263,13 +271,13 @@ class GenerateItineraryView(APIView):
             
             # 1. Generate Itinerary Structure
             itinerary_data = ai_engine.generate_itinerary(
-                country=country_obj.name,
+                country_obj=country_obj,
                 selected_destinations=dest_names,
                 duration=duration,
                 budget=budget,
                 style=style,
                 interests=interests,
-                source_country=source_country
+                source_country_obj=source_country_obj
             )
         except Exception as e:
             import traceback
@@ -305,14 +313,10 @@ class GenerateItineraryView(APIView):
         # Get dynamic pricing from settings
         site_settings = SiteSettings.get_settings()
         
-        # Resolve nationality
-        from .models import Country
-        nationality_obj = Country.objects.filter(name__icontains=source_country).first()
-        
         itinerary_obj = Itinerary.objects.create(
             user=request.user,
             country=country_obj,
-            nationality=nationality_obj,
+            nationality=source_country_obj,
             is_custom=True,
             title=itinerary_data.get('title', f"Trip to {country_obj.name}"),
             destination=", ".join(dest_names),
@@ -321,15 +325,14 @@ class GenerateItineraryView(APIView):
             sale_price=site_settings.custom_itinerary_price,
             regular_price=site_settings.custom_itinerary_regular_price,
             description=itinerary_data.get('overview', ''),
-            visa_requirements=itinerary_data.get('visa_requirements', ''),
             content=content_data
         )
         itinerary_obj.destinations.set(final_dest_objects)
         # 3b. Fetch Itinerary Hero Image
-        hero_images = fetch_unsplash_images(f"{country_obj.name} travel {dest_names[0]}", count=1)
+        hero_images = image_service.fetch_unsplash_images(f"{country_obj.name} travel {dest_names[0]}", count=1)
         if hero_images:
             itinerary_obj.image_url = hero_images[0]
-            hero_file = download_image_to_content_file(hero_images[0])
+            hero_file = image_service.download_image(hero_images[0])
             if hero_file:
                 itinerary_obj.image.save(f"itinerary_{itinerary_obj.id}.jpg", hero_file)
             itinerary_obj.save()
@@ -367,7 +370,7 @@ class GenerateItineraryView(APIView):
 
                 # Use AI provided unsplash query
                 query = act.get('unsplash_query') or f"{act.get('activity')} {act.get('location')}"
-                image_urls = fetch_unsplash_images(query, count=1)
+                image_urls = image_service.fetch_unsplash_images(query, count=1)
                 
                 if image_urls:
                     img_url = image_urls[0]
@@ -624,11 +627,27 @@ class DownloadItineraryPDFView(APIView):
             try:
                 from weasyprint import HTML
 
+                # Get Visa Requirements from Matrix
+                from .models import VisaRequirement
+                visa_content = ""
+                if itinerary.nationality and itinerary.country:
+                    rule = VisaRequirement.objects.filter(
+                        source_country=itinerary.nationality,
+                        destination_country=itinerary.country
+                    ).first()
+                    if rule:
+                        visa_content = rule.content
+                
+                # Fallback to Country.visa_process (Global itineraries or missing rules)
+                if not visa_content and itinerary.country:
+                    visa_content = itinerary.country.visa_process
+
                 context = {
                     'itinerary': itinerary,
                     'days': normalized_days,
                     'day_images': day_images,
                     'user': request.user,
+                    'visa_requirements': visa_content,
                 }
                 html_string = render_to_string('itinerary_pdf.html', context)
                 pdf_bytes = HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf()
@@ -646,6 +665,7 @@ class DownloadItineraryPDFView(APIView):
                         'days': normalized_days,
                         'day_images': day_images,
                         'user': request.user,
+                        'visa_requirements': visa_content,
                     }
                     html_string = render_to_string('itinerary_pdf.html', context)
                     result = BytesIO()

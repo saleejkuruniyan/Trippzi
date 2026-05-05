@@ -8,6 +8,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import { LoadingScreen } from "@/components/loading-screen"
 
 export default function MyWishlistPage() {
   const [items, setItems] = useState<any[]>([])
@@ -34,9 +35,7 @@ export default function MyWishlistPage() {
           </header>
 
           {loading ? (
-            <div className="flex items-center justify-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
-            </div>
+            <LoadingScreen color="red-500" message="Checking your heart's desires..." />
           ) : items.length === 0 ? (
             <div className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 p-12 text-center">
               <Heart className="w-16 h-16 text-zinc-300 mx-auto mb-6" />

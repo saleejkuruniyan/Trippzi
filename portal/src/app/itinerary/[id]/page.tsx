@@ -17,6 +17,7 @@ import { googleLogin } from "@/lib/api"
 import { AuthModal } from "@/components/auth-modal"
 import { AddressModal } from "@/components/address-modal"
 import { PaymentStatusModal } from "@/components/payment-status-modal"
+import { LoadingScreen } from "@/components/loading-screen"
 
 export default function ItineraryProductPage() {
   const { id } = useParams()
@@ -231,7 +232,7 @@ export default function ItineraryProductPage() {
     }
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading Product...</div>
+  if (loading) return <LoadingScreen message="Unpacking your adventure..." />
   if (!itinerary) return <div className="min-h-screen flex items-center justify-center">Product not found.</div>
 
   const isTeaser = itinerary.is_custom && !itinerary.is_owned;

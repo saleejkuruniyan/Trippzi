@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer"
 import { fetchProfile, updateProfile, fetchCountries } from "@/lib/api"
 import { User, Phone, MapPin, Save, ShieldCheck, Globe } from "lucide-react"
 import { CountryDropdown } from "@/components/country-dropdown"
+import { LoadingScreen } from "@/components/loading-screen"
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<any>(null)
@@ -60,7 +61,7 @@ export default function ProfilePage() {
     }
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading Profile...</div>
+  if (loading) return <LoadingScreen message="Loading Profile..." />
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-zinc-950">

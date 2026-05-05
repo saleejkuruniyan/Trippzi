@@ -37,7 +37,6 @@ class SearchService:
         now = datetime.now()
         current_date_str = now.strftime("%B %Y")
         
-        # Primary query
         queries = [
             f"official visa requirements for {source} citizens visiting {destination} as of {current_date_str}",
             f"visa relaxation for {source} citizens with valid US UK or Schengen visa visiting {destination} {current_date_str}"
@@ -53,3 +52,31 @@ class SearchService:
                 print(f"Tavily visa search failed for query '{query}': {str(e)}")
         
         return context
+
+    def search_attraction_info(self, attraction_name, city):
+        """
+        Searches for specific attraction details: opening times, ticket prices, and current status.
+        """
+        query = f"opening hours, ticket prices, best time to visit, and closing days for {attraction_name} in {city} 2024 2025"
+        try:
+            search_result = self.client.search(query=query, search_depth="basic", max_results=3)
+            context = ""
+            for result in search_result.get('results', []):
+                context += f"Info: {result.get('content')}\n"
+            return context
+        except:
+            return ""
+
+    def search_transfer_info(self, from_point, to_point, city):
+        """
+        Searches for realistic travel distance, time, and modes between two points.
+        """
+        query = f"best way to travel from {from_point} to {to_point} in {city}: distance, time by car, public transport, and cost"
+        try:
+            search_result = self.client.search(query=query, search_depth="basic", max_results=2)
+            context = ""
+            for result in search_result.get('results', []):
+                context += f"Transit Info: {result.get('content')}\n"
+            return context
+        except:
+            return ""

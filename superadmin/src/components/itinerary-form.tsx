@@ -52,7 +52,6 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
     price: initialData?.price || 799,
     description: initialData?.description || "",
     highlights: initialData?.highlights || "",
-    visa_requirements: initialData?.visa_requirements || "",
     is_premium: initialData?.is_premium || false,
     is_custom: initialData?.is_custom || false,
     is_approved: initialData?.is_approved ?? (!initialData?.is_custom),
@@ -304,10 +303,6 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
           <div className="space-y-2">
             <label className="text-sm font-medium">Highlights Summary</label>
             <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.highlights} onChange={e => setFormData({...formData, highlights: e.target.value})} placeholder="e.g. Bangkok + Phuket + Pattaya" />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-blue-600">Specific Visa Process (AI Generated)</label>
-            <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.visa_requirements} onChange={e => setFormData({...formData, visa_requirements: e.target.value})} placeholder="End-to-end visa application steps..." />
           </div>
         </section>
 
