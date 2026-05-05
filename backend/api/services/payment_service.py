@@ -26,19 +26,19 @@ class PaymentService:
             'payment_capture': '1'
         }
         
-        if getattr(settings, 'MOCK_PAYMENT', False):
-            # Immediately complete purchase
+        if getattr(settings, 'MOCK_PAYMENT', False) or amount == 0:
+            # Immediately complete purchase for mock environment or free items
             Transaction.objects.get_or_create(
                 user=user,
                 itinerary=itinerary,
                 amount=sale_price,
                 status='COMPLETED',
-                razorpay_order_id=f"mock_order_{itinerary_id}_{user.id}"
+                razorpay_order_id=f"free_order_{itinerary_id}_{user.id}" if amount == 0 else f"mock_order_{itinerary_id}_{user.id}"
             )
             return {
                 'status': 'mock_success', 
                 'itinerary_id': itinerary_id,
-                'message': 'Mock payment completed successfully'
+                'message': 'Success! Free itinerary unlocked.' if amount == 0 else 'Mock payment completed successfully'
             }
 
         razorpay_order = self.client.order.create(data=order_data)

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Sun, Moon, ShoppingBag, Bookmark, UserCircle } from "lucide-react"
+import { Sun, Moon, Map, Heart, UserCircle } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
 import { googleLogin } from "@/lib/api"
@@ -87,14 +87,14 @@ export function Navbar() {
                           onClick={() => setShowUserModal(false)}
                           className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-xl transition-colors font-medium"
                         >
-                          <Bookmark className="w-4 h-4" /> My Wishlist
+                          <Heart className="w-4 h-4" /> My Wishlist
                         </Link>
                         <Link 
                           href="/my-trips"
                           onClick={() => setShowUserModal(false)}
                           className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-xl transition-colors font-medium"
                         >
-                          <ShoppingBag className="w-4 h-4" /> My Purchases
+                          <Map className="w-4 h-4" /> My Itineraries
                         </Link>
                       </div>
                       <div className="p-2">

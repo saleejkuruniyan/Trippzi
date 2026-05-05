@@ -7,16 +7,15 @@ class SearchService:
     def __init__(self):
         self.client = TavilyClient(api_key=settings.TAVILY_API_KEY)
 
-    def search_travel_info(self, country, destinations):
+    def search_travel_info(self, country, destinations, source_country="India"):
         """
         Searches for real-time travel information including prices, events, and restaurant trends.
-        Uses current month and year (e.g., May 2026) for search accuracy.
+        Tailors search for specific passport holders (source_country).
         """
-        # Programmatically get current month and year
         now = datetime.now()
         current_date_str = now.strftime("%B %Y")
         
-        query = f"top travel attractions, entry ticket prices, events, and best restaurants in {', '.join(destinations)}, {country} as of {current_date_str}"
+        query = f"top travel attractions, entry ticket prices, events, and best restaurants in {', '.join(destinations)}, {country} for travelers from {source_country} as of {current_date_str}"
         
         try:
             # Perform search with high depth for better context

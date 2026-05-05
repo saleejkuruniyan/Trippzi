@@ -69,6 +69,7 @@ export const DataTable = ({
               <tr>
                 <th className="px-6 py-4 font-semibold text-sm">ID</th>
                 {title.toLowerCase() === 'sales' && <th className="px-6 py-4 font-semibold text-sm">User</th>}
+                {['itineraries', 'custom'].includes(title.toLowerCase()) && <th className="px-6 py-4 font-semibold text-sm">Country</th>}
                 <th className="px-6 py-4 font-semibold text-sm">
                   {['countries', 'destinations', 'attractions'].includes(title.toLowerCase()) ? 'Name' : (title.toLowerCase() === 'sales' ? 'Itinerary' : 'Details')}
                 </th>
@@ -103,6 +104,11 @@ export const DataTable = ({
                           <td className="px-6 py-4">
                             <p className="font-medium text-zinc-900 dark:text-zinc-100">{item.user_full_name}</p>
                             <p className="text-xs text-zinc-500">{item.user_email}</p>
+                          </td>
+                        )}
+                        {['itineraries', 'custom'].includes(title.toLowerCase()) && (
+                          <td className="px-6 py-4">
+                            <span className="text-sm font-medium">{item.country_details?.name || item.country_name || 'N/A'}</span>
                           </td>
                         )}
                         <td className="px-6 py-4">

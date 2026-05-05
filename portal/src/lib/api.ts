@@ -1,7 +1,7 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
 export async function fetchDestinations() {
-  const res = await apiRequest(`${API_BASE}/destinations/`);
+  const res = await apiRequest(`${API_BASE}/destinations/?t=${Date.now()}`);
   return res.json();
 }
 

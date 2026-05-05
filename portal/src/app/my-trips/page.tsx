@@ -169,7 +169,7 @@ export default function MyTripsPage() {
       <main className="flex-1 bg-zinc-50 dark:bg-zinc-950 pt-32 pb-20 px-4">
         <div className="max-w-6xl mx-auto">
           <header className="mb-12">
-            <h1 className="text-4xl font-bold mb-3">My Purchases</h1>
+            <h1 className="text-4xl font-bold mb-3">My Itineraries</h1>
             <p className="text-zinc-500">All your AI-generated and curated itineraries in one place.</p>
           </header>
 

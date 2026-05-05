@@ -24,7 +24,7 @@ class DestinationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CountrySerializer(serializers.ModelSerializer):
-    itineraries_count = serializers.IntegerField(source='itineraries.count', read_only=True)
+    itineraries_count = serializers.SerializerMethodField()
     itineraries = serializers.SerializerMethodField()
     destinations = DestinationSerializer(many=True, read_only=True)
     image = serializers.ImageField(use_url=True, required=False)
@@ -33,11 +33,32 @@ class CountrySerializer(serializers.ModelSerializer):
         model = Country
         fields = '__all__'
 
+    def get_itineraries_count(self, obj):
+        request = self.context.get('request')
+        user = request.user if request else None
+        
+        # Get itineraries linked directly or via destinations
+        itineraries = Itinerary.objects.filter(
+            Q(country=obj) | Q(destinations__country=obj)
+        ).distinct()
+
+        if not (user and user.is_authenticated and user.is_staff):
+            query = Q(is_custom=False, is_approved=True)
+            if user and user.is_authenticated:
+                query |= Q(is_custom=True, user=user)
+            itineraries = itineraries.filter(query).distinct()
+            
+        return itineraries.count()
+
     def get_itineraries(self, obj):
         request = self.context.get('request')
         user = request.user if request else None
         
-        itineraries = obj.itineraries.all()
+        # Get itineraries linked directly or via destinations
+        itineraries = Itinerary.objects.filter(
+            Q(country=obj) | Q(destinations__country=obj)
+        ).distinct()
+
         if not (user and user.is_authenticated and user.is_staff):
             query = Q(is_custom=False, is_approved=True)
             if user and user.is_authenticated:

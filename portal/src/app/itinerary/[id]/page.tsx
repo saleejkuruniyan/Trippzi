@@ -179,7 +179,11 @@ export default function ItineraryProductPage() {
       }
 
       if (order.status === 'mock_success') {
-        setPaymentModal({ isOpen: true, status: 'success', message: 'Success! Mock payment completed.' })
+        setPaymentModal({ 
+          isOpen: true, 
+          status: 'success', 
+          message: order.message || 'Success! Itinerary unlocked.' 
+        })
         return
       }
 

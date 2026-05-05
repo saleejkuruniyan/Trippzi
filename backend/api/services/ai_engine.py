@@ -45,12 +45,13 @@ class AIEngine:
             except:
                 return None
 
-    def generate_itinerary(self, country, selected_destinations, duration, budget, style, interests):
+    def generate_itinerary(self, country, selected_destinations, duration, budget, style, interests, source_country="India"):
         """
         Generates a day-wise itinerary structure using AI enhanced with Tavily search.
+        Tailors recommendations for travelers from source_country.
         """
         # 1. Fetch real-time context from Tavily
-        search_context = self.search_service.search_travel_info(country, selected_destinations)
+        search_context = self.search_service.search_travel_info(country, selected_destinations, source_country)
         
         from datetime import datetime
         current_date_str = datetime.now().strftime("%B %Y")
@@ -77,9 +78,15 @@ class AIEngine:
             Strictly use ONLY these destinations within {country}: {selected_destinations}.
             
             User Preferences:
+            - Traveler Passport Country: {source_country}
             - Budget: {budget}
             - Travel Style: {style}
             - Interests: {interests}
+            
+            Special Instructions for {source_country} travelers:
+            - Suggest restaurants that are popular or highly rated by travelers from {source_country}.
+            - Mention if certain attractions have special discounts or easier access for {source_country} citizens (based on the search context).
+            - Consider cultural preferences and dietary habits common in {source_country} (e.g., veg/non-veg options if applicable).
             
             {format_instructions}
             
@@ -103,6 +110,7 @@ class AIEngine:
             budget=budget,
             style=style,
             interests=interests,
+            source_country=source_country,
             format_instructions=format_instructions
         )
         

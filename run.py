@@ -48,6 +48,15 @@ def kill_port(port: int):
     except Exception:
         pass
 
+def kill_node():
+    """Kills all node.exe processes (Windows only)."""
+    if os.name == "nt":
+        print("🧹 Killing all Node.js processes...")
+        try:
+            subprocess.run(["taskkill", "/F", "/IM", "node.exe"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except Exception:
+            pass
+
 def register_process(proc: subprocess.Popen):
     ACTIVE_PROCESSES.append(proc)
 
@@ -142,6 +151,7 @@ def setup_frontend(path, name):
 def main():
     print("🚀 Trippzi Startup Script\n")
     
+    kill_node()
     kill_port(8000)
     kill_port(3000)
     kill_port(3001)

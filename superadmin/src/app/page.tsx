@@ -24,6 +24,7 @@ import { IndianRupee, FileText, Users, Globe, Sparkles, MapPin, Camera } from "l
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard")
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
   const [authData, setAuthData] = useState({ username: "", password: "" })
   const [authError, setAuthError] = useState("")
   const [stats, setStats] = useState<any[]>([])
@@ -40,7 +41,6 @@ export default function AdminDashboard() {
     e.preventDefault()
     setAuthError("")
     
-    // Use FormData to ensure we capture autofilled values that React state might miss
     const formData = new FormData(e.currentTarget)
     const username = formData.get('username') as string || authData.username
     const password = formData.get('password') as string || authData.password
@@ -104,9 +104,27 @@ export default function AdminDashboard() {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('trippzi-token')
-    if (token) { setIsAuthenticated(true); loadStats() }
+    const check = () => {
+      try {
+        const token = localStorage.getItem('trippzi-token')
+        setIsAuthenticated(!!token)
+      } catch (e) {
+        console.error("Auth check failed", e)
+      } finally {
+        setHasMounted(true)
+      }
+    }
+    
+    check()
+    window.addEventListener('pageshow', check)
+    return () => window.removeEventListener('pageshow', check)
   }, [])
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadStats()
+    }
+  }, [isAuthenticated])
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -153,92 +171,186 @@ export default function AdminDashboard() {
     
     try {
       const newItem = await cloneItinerary(item.id, copyPdf)
-      setActiveTab("itineraries") // Switch to standard tab
-      setEditingItem(newItem) // Open edit form for the new item
+      setActiveTab("itineraries") 
+      setEditingItem(newItem) 
       loadStats()
     } catch (err) { alert("Failed to clone") }
   }
 
-  if (!isAuthenticated) return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950 p-4">
-      <div className="w-full max-w-md bg-white dark:bg-zinc-900 p-8 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-2xl">
-        <form onSubmit={handleLogin} className="space-y-4">
-          <h1 className="text-2xl font-bold text-center mb-8">Trippzi Superadmin</h1>
-          <input 
-            type="text" 
-            name="username"
-            placeholder="Username" 
-            required 
-            className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800" 
-            value={authData.username} 
-            onChange={e => setAuthData({ ...authData, username: e.target.value })} 
-          />
-          <input 
-            type="password" 
-            name="password"
-            placeholder="Password" 
-            required 
-            className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800" 
-            value={authData.password} 
-            onChange={e => setAuthData({ ...authData, password: e.target.value })} 
-          />
-          {authError && <p className="text-red-500 text-xs text-center font-medium bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">{authError}</p>}
-          <button type="submit" className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-transform">Sign In</button>
-        </form>
-      </div>
-    </div>
-  )
-
   return (
-    <div className="flex min-h-screen bg-zinc-50 dark:bg-zinc-950">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={() => { localStorage.removeItem('trippzi-token'); setIsAuthenticated(false) }} />
-      <main className="flex-1 p-8">
-        <div className="max-w-7xl mx-auto">
-          <header className="mb-10">
-            <h1 className="text-3xl font-bold mb-2 capitalize">{activeTab}</h1>
-            <p className="text-zinc-500">Managing Trippzi Platform Data</p>
-          </header>
-
-          {activeTab === 'dashboard' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              {stats.map((stat, idx) => <StatsCard key={stat.name} {...stat} index={idx} />)}
+    <div className={`min-h-screen bg-zinc-50 dark:bg-zinc-950 ${!hasMounted ? 'opacity-0' : 'opacity-100 transition-opacity duration-500'}`}>
+      {!isAuthenticated ? (
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white dark:bg-zinc-900 p-8 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-2xl">
+            <div className="flex justify-center mb-8">
+              <Image src="/logo.png" alt="Trippzi" width={48} height={48} className="w-12 h-12 object-contain" />
             </div>
-          )}
-
-          {(editingItem || isCreating) ? (
-            (activeTab === 'itineraries' || activeTab === 'custom') ? <ItineraryForm initialData={editingItem} onSave={handleSave} onCancel={() => { setEditingItem(null); setIsCreating(false) }} onDelete={handleDelete} /> :
-            activeTab === 'countries' ? <CountryForm initialData={editingItem} onSave={handleSave} onCancel={() => { setEditingItem(null); setIsCreating(false) }} onDelete={handleDelete} /> :
-            activeTab === 'destinations' ? <DestinationForm initialData={editingItem} onSave={handleSave} onCancel={() => { setEditingItem(null); setIsCreating(false) }} onDelete={handleDelete} /> :
-            <AttractionForm initialData={editingItem} onSave={handleSave} onCancel={() => { setEditingItem(null); setIsCreating(false) }} onDelete={handleDelete} />
-          ) : activeTab === 'settings' ? (
-            <SettingsForm initialData={settings} onSave={async (d) => { await updateSettings(d); loadTabData() }} />
-          ) : (
-            activeTab !== 'dashboard' && (
-              <DataTable
-                title={activeTab}
-                data={data}
-                loading={loading}
-                onEdit={setEditingItem}
-                onAdd={() => setIsCreating(true)}
-                showAdd={['itineraries', 'countries', 'destinations', 'attractions'].includes(activeTab)}
-                showEdit={['itineraries', 'custom', 'countries', 'destinations', 'attractions'].includes(activeTab)}
-                currentPage={currentPage}
-                totalCount={totalCount}
-                onPageChange={(p) => {
-                  setCurrentPage(p)
-                  loadTabData(p)
-                }}
-                onSearch={(q) => {
-                  setSearchQuery(q)
-                  setCurrentPage(1)
-                  loadTabData(1, q)
-                }}
-                onClone={handleClone}
-              />
-            )
-          )}
+            <h1 className="text-2xl font-black text-center mb-2 italic tracking-tighter uppercase">Superadmin Login</h1>
+            <p className="text-center text-zinc-500 text-sm mb-8 font-medium">Enter your credentials to manage Trippzi</p>
+            
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-1.5 ml-1">Username</label>
+                <input 
+                  name="username"
+                  type="text" 
+                  className="w-full px-5 py-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-blue-600 outline-none transition-all font-medium"
+                  placeholder="admin"
+                  value={authData.username}
+                  onChange={(e) => setAuthData({...authData, username: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-1.5 ml-1">Password</label>
+                <input 
+                  name="password"
+                  type="password" 
+                  className="w-full px-5 py-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-blue-600 outline-none transition-all font-medium"
+                  placeholder="••••••••"
+                  value={authData.password}
+                  onChange={(e) => setAuthData({...authData, password: e.target.value})}
+                />
+              </div>
+              {authError && <p className="text-red-600 text-xs font-bold text-center bg-red-50 dark:bg-red-900/20 py-2 rounded-lg">{authError}</p>}
+              <button 
+                type="submit"
+                className="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20 active:scale-95"
+              >
+                Sign In
+              </button>
+            </form>
+          </div>
         </div>
-      </main>
+      ) : (
+        <div className="flex h-screen overflow-hidden">
+          <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={() => { localStorage.removeItem('trippzi-token'); setIsAuthenticated(false); }} />
+          
+          <main className="flex-1 overflow-y-auto p-4 md:p-8">
+            <div className="max-w-7xl mx-auto space-y-8">
+              <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-3xl font-black italic tracking-tighter uppercase">{activeTab}</h2>
+                  <p className="text-zinc-500 font-medium">Manage and monitor {activeTab} activity</p>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                  <div className="relative">
+                    <input 
+                      type="text" 
+                      placeholder="Search..."
+                      className="px-6 py-3 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 focus:ring-2 focus:ring-blue-600 outline-none w-full md:w-64 transition-all font-medium"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && loadTabData(1)}
+                    />
+                  </div>
+                  
+                  {['itineraries', 'custom', 'countries', 'destinations', 'attractions'].includes(activeTab) && (
+                    <button 
+                      onClick={() => { setEditingItem(null); setIsCreating(true); }}
+                      className="bg-zinc-950 dark:bg-white text-white dark:text-black px-6 py-3 rounded-2xl font-black italic tracking-tighter hover:scale-105 transition-transform shadow-xl"
+                    >
+                      CREATE NEW
+                    </button>
+                  )}
+                </div>
+              </header>
+
+              {activeTab === 'dashboard' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {stats.map((stat, i) => (
+                    <StatsCard key={i} {...stat} />
+                  ))}
+                </div>
+              )}
+
+              <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden min-h-[600px] flex flex-col">
+                {isCreating ? (
+                  <div className="p-8">
+                    <div className="flex items-center justify-between mb-8">
+                      <h3 className="text-2xl font-black italic uppercase tracking-tighter">Create New {activeTab.slice(0, -1)}</h3>
+                      <button onClick={() => setIsCreating(false)} className="text-zinc-500 font-bold hover:text-zinc-950">Cancel</button>
+                    </div>
+                    {activeTab === 'itineraries' || activeTab === 'custom' ? (
+                      <ItineraryForm onSave={handleSave} isCustom={activeTab === 'custom'} />
+                    ) : activeTab === 'countries' ? (
+                      <CountryForm onSave={handleSave} />
+                    ) : activeTab === 'destinations' ? (
+                      <DestinationForm onSave={handleSave} />
+                    ) : activeTab === 'attractions' ? (
+                      <AttractionForm onSave={handleSave} />
+                    ) : null}
+                  </div>
+                ) : editingItem ? (
+                  <div className="p-8">
+                    <div className="flex items-center justify-between mb-8">
+                      <h3 className="text-2xl font-black italic uppercase tracking-tighter">Edit {activeTab.slice(0, -1)}</h3>
+                      <button onClick={() => setEditingItem(null)} className="text-zinc-500 font-bold hover:text-zinc-950">Cancel</button>
+                    </div>
+                    {activeTab === 'itineraries' || activeTab === 'custom' ? (
+                      <ItineraryForm initialData={editingItem} onSave={handleSave} isCustom={activeTab === 'custom'} />
+                    ) : activeTab === 'countries' ? (
+                      <CountryForm initialData={editingItem} onSave={handleSave} />
+                    ) : activeTab === 'destinations' ? (
+                      <DestinationForm initialData={editingItem} onSave={handleSave} />
+                    ) : activeTab === 'attractions' ? (
+                      <AttractionForm initialData={editingItem} onSave={handleSave} />
+                    ) : null}
+                  </div>
+                ) : activeTab === 'settings' ? (
+                  <div className="p-8">
+                    <div className="flex items-center justify-between mb-8">
+                      <h3 className="text-2xl font-black italic uppercase tracking-tighter">Site Settings</h3>
+                    </div>
+                    <SettingsForm settings={settings} onSave={async (val) => {
+                      await updateSettings(val)
+                      const s = await fetchSettings()
+                      setSettings(s)
+                      alert("Settings updated")
+                    }} />
+                  </div>
+                ) : (
+                  <DataTable 
+                    title={activeTab} 
+                    data={data} 
+                    loading={loading}
+                    onEdit={setEditingItem}
+                    onDelete={handleDelete}
+                    onClone={handleClone}
+                    currentPage={currentPage}
+                    totalCount={totalCount}
+                    onPageChange={(p) => {
+                        setCurrentPage(p)
+                        loadTabData(p)
+                    }}
+                  />
+                )}
+              </div>
+              
+              {!isCreating && !editingItem && activeTab !== 'settings' && totalCount > 10 && (
+                <div className="flex items-center justify-center gap-2 pb-8">
+                  {Array.from({ length: Math.ceil(totalCount / 10) }).map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => {
+                        setCurrentPage(i + 1)
+                        loadTabData(i + 1)
+                      }}
+                      className={`w-10 h-10 rounded-xl font-bold transition-all ${
+                        currentPage === i + 1 
+                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' 
+                          : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50'
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </main>
+        </div>
+      )}
     </div>
   )
 }

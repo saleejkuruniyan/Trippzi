@@ -4,7 +4,7 @@ from rest_framework import status, viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
-from django.db.models import Sum, Count, Q
+from django.db.models import Sum, Count, Q, Exists, OuterRef
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
@@ -24,11 +24,27 @@ from .serializers import (
 )
 
 class CountryViewSet(viewsets.ModelViewSet):
-    queryset = Country.objects.all().order_by('name')
     serializer_class = CountrySerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', 'description']
     permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        queryset = Country.objects.all().order_by('name')
+        user = self.request.user
+        
+        # For public/user view, only show countries with at least one approved standard itinerary
+        # This checks both direct links to country and indirect links via destinations
+        if not (user and user.is_staff):
+            from .models import Itinerary
+            approved_itineraries = Itinerary.objects.filter(
+                Q(country=OuterRef('pk')) | Q(destinations__country=OuterRef('pk')),
+                is_approved=True,
+                is_custom=False
+            )
+            queryset = queryset.filter(Exists(approved_itineraries))
+            
+        return queryset
 
     def get_object(self):
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
@@ -212,7 +228,8 @@ class GenerateItineraryView(APIView):
             duration=duration,
             budget=budget,
             style=style,
-            interests=interests
+            interests=interests,
+            source_country=source_country
         )
         
         if "error" in itinerary_data:
@@ -524,13 +541,24 @@ class DownloadItineraryPDFView(APIView):
             import uuid
             pdf_bytes = None
             
+            # Common data for all PDF engines
+            day_images = ItineraryDay.objects.filter(itinerary=itinerary)
+            
+            # Normalize days to ensure day_number exists (AI sometimes returns 'day')
+            normalized_days = []
+            for d in (itinerary.content or []):
+                if isinstance(d, dict):
+                    if 'day_number' not in d and 'day' in d:
+                        d['day_number'] = d['day']
+                normalized_days.append(d)
+
             # Attempt WeasyPrint first (better CSS support)
             try:
                 from weasyprint import HTML
-                day_images = ItineraryDay.objects.filter(itinerary=itinerary)
+
                 context = {
                     'itinerary': itinerary,
-                    'days': itinerary.content,
+                    'days': normalized_days,
                     'day_images': day_images,
                     'user': request.user,
                 }
@@ -538,15 +566,16 @@ class DownloadItineraryPDFView(APIView):
                 pdf_bytes = HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf()
             except (ImportError, OSError, Exception) as e:
                 # Fallback to xhtml2pdf or fpdf2
-                print(f"WeasyPrint failed: {str(e)}")
+                print(f"WeasyPrint failed (likely missing GTK runtime): {str(e)}")
                 try:
                     # Try xhtml2pdf (HTML support)
                     from xhtml2pdf import pisa
                     from io import BytesIO
-                    day_images = ItineraryDay.objects.filter(itinerary=itinerary)
+                    
+                    # Use the same normalized_days
                     context = {
                         'itinerary': itinerary,
-                        'days': itinerary.content,
+                        'days': normalized_days,
                         'day_images': day_images,
                         'user': request.user,
                     }
@@ -554,7 +583,7 @@ class DownloadItineraryPDFView(APIView):
                     result = BytesIO()
                     pisa_status = pisa.CreatePDF(html_string, dest=result)
                     if pisa_status.err:
-                        raise Exception("xhtml2pdf failed")
+                        raise Exception(f"xhtml2pdf rendering error: {pisa_status.err}")
                     pdf_bytes = result.getvalue()
                 except Exception as ex:
                         # FINAL FALLBACK: fpdf2 (Pure Python, no HTML, very robust)
@@ -583,9 +612,9 @@ class DownloadItineraryPDFView(APIView):
                             pdf.multi_cell(0, 10, pdf.safe_text(itinerary.description))
                             pdf.ln(10)
                             
-                            for day in (itinerary.content or []):
+                            for day in (normalized_days or []):
                                 pdf.set_font("Helvetica", 'B', 14)
-                                day_num = day.get('day', day.get('day_number', ''))
+                                day_num = day.get('day_number', day.get('day', ''))
                                 theme = day.get('theme', '')
                                 pdf.cell(0, 10, pdf.safe_text(f"Day {day_num}: {theme}"), ln=True)
                                 pdf.ln(2)
