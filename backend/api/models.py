@@ -157,6 +157,7 @@ class UserProfile(models.Model):
     address = models.TextField(blank=True)
     city = models.CharField(max_length=100, blank=True)
     country = models.CharField(max_length=100, blank=True, default='India')
+    nationality = models.ForeignKey('Country', on_delete=models.SET_NULL, null=True, blank=True, related_name='profiles')
     zip_code = models.CharField(max_length=20, blank=True)
 
     def __str__(self):

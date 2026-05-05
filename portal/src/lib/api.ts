@@ -184,3 +184,7 @@ export async function downloadItineraryPDF(itineraryId: number) {
     throw new Error("Failed to generate PDF. The server returned an unexpected response.");
   }
 }
+export async function fetchCountries() {
+  const res = await apiRequest(`${API_BASE}/destinations/list_all/?show_all=true`);
+  return res.json();
+}

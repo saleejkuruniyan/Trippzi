@@ -4,11 +4,13 @@ import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { fetchProfile, updateProfile } from "@/lib/api"
-import { User, Phone, MapPin, Save, ShieldCheck } from "lucide-react"
+import { fetchProfile, updateProfile, fetchCountries } from "@/lib/api"
+import { User, Phone, MapPin, Save, ShieldCheck, Globe } from "lucide-react"
+import { CountryDropdown } from "@/components/country-dropdown"
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<any>(null)
+  const [countries, setCountries] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState("")
@@ -16,8 +18,12 @@ export default function ProfilePage() {
   useEffect(() => {
     async function load() {
       try {
-        const data = await fetchProfile()
-        setProfile(data)
+        const [profileData, countriesData] = await Promise.all([
+          fetchProfile(),
+          fetchCountries()
+        ])
+        setProfile(profileData)
+        setCountries(Array.isArray(countriesData) ? countriesData : countriesData.results || [])
       } catch (err) {
         console.error(err)
       } finally {
@@ -41,6 +47,7 @@ export default function ProfilePage() {
           city: profile.profile?.city || "",
           country: profile.profile?.country || "",
           zip_code: profile.profile?.zip_code || "",
+          nationality: profile.profile?.nationality || null,
         }
       })
       setProfile(data)
@@ -72,9 +79,9 @@ export default function ProfilePage() {
             <div className="lg:col-span-1 space-y-6">
               <div className="bg-white dark:bg-zinc-900 p-8 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 text-center">
                 <div className="w-24 h-24 bg-blue-600 rounded-full mx-auto mb-6 flex items-center justify-center text-white text-3xl font-black shadow-xl shadow-blue-500/20">
-                  {profile.email[0].toUpperCase()}
+                  {profile.email?.[0].toUpperCase() || "U"}
                 </div>
-                <h2 className="text-xl font-bold">{profile.full_name}</h2>
+                <h2 className="text-xl font-bold">{profile.full_name || profile.username}</h2>
                 <p className="text-sm text-zinc-500">{profile.email}</p>
                 <div className="mt-6 pt-6 border-t border-zinc-100 dark:border-zinc-800">
                   <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Account Status</span>
@@ -121,6 +128,26 @@ export default function ProfilePage() {
                       value={profile.profile?.phone_number || ""}
                       onChange={e => setProfile({...profile, profile: {...profile.profile, phone_number: e.target.value}})}
                     />
+                  </div>
+                  <div className="space-y-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                    <CountryDropdown 
+                      label="Passport Country (Nationality)"
+                      icon={<Globe className="w-4 h-4 text-blue-500" />}
+                      selectedCountryName={profile.profile?.nationality_details?.name}
+                      countries={countries}
+                      onSelect={(c) => setProfile({
+                        ...profile, 
+                        profile: {
+                          ...profile.profile, 
+                          nationality: c.id,
+                          nationality_details: c
+                        }
+                      })}
+                      placeholder="Select your passport country"
+                    />
+                    <p className="text-[10px] text-zinc-400 font-medium italic">
+                      * This helps us provide accurate visa and entry requirements for your trips.
+                    </p>
                   </div>
                 </section>
 

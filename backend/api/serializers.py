@@ -174,9 +174,11 @@ class ItinerarySerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    nationality_details = CountrySerializer(source='nationality', read_only=True)
+    
     class Meta:
         model = UserProfile
-        fields = ['phone_number', 'address', 'city', 'country', 'zip_code']
+        fields = ['phone_number', 'address', 'city', 'country', 'zip_code', 'nationality', 'nationality_details']
 
 class UserSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()

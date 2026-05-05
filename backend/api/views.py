@@ -490,6 +490,11 @@ class ProfileView(APIView):
         profile.city = profile_data.get('city', profile.city)
         profile.country = profile_data.get('country', profile.country)
         profile.zip_code = profile_data.get('zip_code', profile.zip_code)
+        
+        nationality_id = profile_data.get('nationality')
+        if nationality_id:
+            profile.nationality_id = nationality_id
+            
         profile.save()
         
         return Response(UserSerializer(user).data)

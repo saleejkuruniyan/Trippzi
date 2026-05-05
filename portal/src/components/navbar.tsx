@@ -7,6 +7,7 @@ import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
 import { googleLogin } from "@/lib/api"
 import { AuthModal } from "./auth-modal"
+import { NationalityModal } from "./nationality-modal"
 
 export function Navbar() {
   const { theme, setTheme } = useTheme()
@@ -14,13 +15,25 @@ export function Navbar() {
   const [user, setUser] = useState<any>(null)
   const [showUserModal, setShowUserModal] = useState(false)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const [isNationalityModalOpen, setIsNationalityModalOpen] = useState(false)
 
   useEffect(() => {
     setMounted(true)
     const checkUser = () => {
       const savedUser = localStorage.getItem('trippzi-user')
-      if (savedUser) setUser(JSON.parse(savedUser))
-      else setUser(null)
+      if (savedUser) {
+        const u = JSON.parse(savedUser)
+        setUser(u)
+        // Only show if nationality is completely missing (null or undefined)
+        const hasNationality = u.profile?.nationality || u.profile?.nationality_details;
+        const isGeneratePage = window.location.pathname === '/generate';
+
+        if (!hasNationality && !isNationalityModalOpen && !isGeneratePage) {
+          setIsNationalityModalOpen(true)
+        }
+      } else {
+        setUser(null)
+      }
     }
     checkUser()
     window.addEventListener('storage', checkUser)
@@ -105,6 +118,7 @@ export function Navbar() {
                             localStorage.removeItem('trippzi-user')
                             localStorage.removeItem('trippzi-token')
                             window.dispatchEvent(new Event('storage'))
+                            window.location.href = '/'
                           }}
                           className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors font-medium"
                         >
@@ -139,7 +153,22 @@ export function Navbar() {
 
     </nav>
 
-    <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
+    <AuthModal 
+      isOpen={isAuthModalOpen} 
+      onClose={() => setIsAuthModalOpen(false)} 
+      onSuccess={(userData) => {
+        if (!userData.profile?.nationality) {
+          setIsNationalityModalOpen(true)
+        }
+      }}
+    />
+    <NationalityModal 
+      isOpen={isNationalityModalOpen} 
+      onClose={() => setIsNationalityModalOpen(false)}
+      onSuccess={(updatedUser) => {
+        setUser(updatedUser)
+      }}
+    />
     </>
   )
 }

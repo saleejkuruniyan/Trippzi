@@ -40,6 +40,18 @@ export default function GeneratePage() {
         return a.name.localeCompare(b.name)
       })
       setCountries(sorted)
+
+      // Default nationality from profile
+      const userJson = localStorage.getItem('trippzi-user')
+      if (userJson) {
+        try {
+          const u = JSON.parse(userJson)
+          const profileNationality = u.profile?.nationality_details?.name
+          if (profileNationality) {
+            setFormData(prev => ({...prev, source_country: profileNationality}))
+          }
+        } catch (e) { console.error(e) }
+      }
     })
   }, [])
 
@@ -82,6 +94,24 @@ export default function GeneratePage() {
 
     setLoading(true)
     try {
+      // If we just logged in, save the selected passport country to profile
+      if (token && force) {
+        const sourceCountryObj = countries.find(c => c.name === formData.source_country)
+        if (sourceCountryObj) {
+          const { updateProfile } = await import("@/lib/api")
+          await updateProfile({ profile: { nationality: sourceCountryObj.id } })
+          const userJson = localStorage.getItem('trippzi-user')
+          if (userJson) {
+            const user = JSON.parse(userJson)
+            if (user.profile) {
+              user.profile.nationality = sourceCountryObj.id
+              localStorage.setItem('trippzi-user', JSON.stringify(user))
+              window.dispatchEvent(new Event('storage'))
+            }
+          }
+        }
+      }
+
       const data = await generateItinerary({
         ...formData,
         country_id: selectedCountry.id,

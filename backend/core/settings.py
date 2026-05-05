@@ -177,7 +177,8 @@ REST_AUTH = {
     'USE_JWT': True,
     'JWT_AUTH_COOKIE': 'trippzi-auth',
     'JWT_AUTH_REFRESH_COOKIE': 'trippzi-refresh-token',
-    'JWT_AUTH_HTTPONLY': False,  # Allow frontend to read the token if needed
+    'JWT_AUTH_HTTPONLY': False,
+    'USER_DETAILS_SERIALIZER': 'api.serializers.UserSerializer',
 }
 
 from datetime import timedelta
