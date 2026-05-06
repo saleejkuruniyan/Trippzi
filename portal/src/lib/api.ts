@@ -19,24 +19,25 @@ export async function fetchSubDestinations(countrySlug: string) {
 }
 
 async function handleResponse(res: Response) {
-  if (res.status === 401) {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('trippzi-token');
-      // Only logout if we actually had a token (to avoid loops)
-      if (token) {
-        localStorage.removeItem('trippzi-token');
-        localStorage.removeItem('trippzi-user');
-        window.dispatchEvent(new Event('storage')); // Notify other components
-        window.location.href = '/'; 
-      }
-    }
-  }
   return res;
 }
 
 async function apiRequest(url: string, options: RequestInit = {}) {
   const res = await fetch(url, options);
-  return handleResponse(res);
+  
+  if (res.status === 401) {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('trippzi-token');
+      if (token) {
+        localStorage.removeItem('trippzi-token');
+        localStorage.removeItem('trippzi-user');
+        window.dispatchEvent(new Event('storage'));
+        window.location.href = '/'; 
+      }
+    }
+  }
+
+  return res;
 }
 
 // Helper for Auth Headers

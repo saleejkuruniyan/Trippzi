@@ -9,16 +9,6 @@ function getHeaders() {
 }
 
 async function handleResponse(res: Response) {
-  if (res.status === 401) {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('trippzi-token');
-      // Only logout if we actually had a token (to avoid loops on failed login)
-      if (token) {
-        localStorage.removeItem('trippzi-token');
-        window.location.href = '/';
-      }
-    }
-  }
   return res;
 }
 
@@ -31,13 +21,23 @@ async function apiRequest(url: string, options: RequestInit = {}) {
     }
   });
   
+  if (res.status === 401) {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('trippzi-token');
+      if (token) {
+        localStorage.removeItem('trippzi-token');
+        window.location.href = '/';
+      }
+    }
+  }
+
   if (!res.ok) {
     const errorBody = await res.json().catch(() => ({}));
     const errorMsg = errorBody.detail || errorBody.error || JSON.stringify(errorBody) || res.statusText;
     throw new Error(errorMsg);
   }
   
-  return handleResponse(res);
+  return res;
 }
 
 export async function login(data: { username: string, password: string }) {
