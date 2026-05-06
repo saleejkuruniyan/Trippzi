@@ -71,7 +71,7 @@ export function NationalityModal({ isOpen, onClose, onSuccess }: NationalityModa
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className="relative w-full max-w-lg bg-white dark:bg-zinc-900 rounded-[3rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden"
           >
-            <div className="relative h-48 bg-gradient-to-br from-blue-600 to-indigo-700 flex flex-col items-center justify-center text-center p-8">
+            <div className="relative h-48 bg-gradient-to-br from-primary to-indigo-700 flex flex-col items-center justify-center text-center p-8">
               <div className="absolute inset-0 opacity-10">
                  <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent" />
               </div>
@@ -79,27 +79,27 @@ export function NationalityModal({ isOpen, onClose, onSuccess }: NationalityModa
                 <Globe className="w-8 h-8 text-white animate-pulse" />
               </div>
               <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase">One Last Step</h2>
-              <p className="text-blue-100 text-sm font-medium">To provide accurate visa intelligence, we need your passport country.</p>
+              <p className="text-primary/10 text-sm font-medium">To provide accurate visa intelligence, we need your passport country.</p>
             </div>
 
             <div className="p-10 space-y-8">
               <div className="space-y-6">
                 <CountryDropdown 
                   label="Select Your Passport Country"
-                  icon={<ShieldCheck className="w-4 h-4 text-blue-500" />}
+                  icon={<ShieldCheck className="w-4 h-4 text-primary/80" />}
                   selectedCountryName={selectedCountry?.name}
                   countries={countries}
                   onSelect={(c) => setSelectedCountry(c)}
                   placeholder="Which passport do you hold?"
                 />
 
-                <div className="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-3xl border border-blue-100 dark:border-blue-900/30 flex items-start gap-4">
+                <div className="p-6 bg-primary/5 dark:bg-primary/20/20 rounded-3xl border border-primary/10 dark:border-primary/20/30 flex items-start gap-4">
                   <div className="w-10 h-10 bg-white dark:bg-zinc-900 rounded-xl flex items-center justify-center shrink-0 shadow-sm">
-                    <Sparkles className="w-5 h-5 text-blue-600" />
+                    <Sparkles className="w-5 h-5 text-primary" />
                   </div>
                   <div className="space-y-1">
-                    <h4 className="text-sm font-bold text-blue-900 dark:text-blue-100 italic">Personalized Visa IQ</h4>
-                    <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
+                    <h4 className="text-sm font-bold text-primary/20 dark:text-primary/10 italic">Personalized Visa IQ</h4>
+                    <p className="text-xs text-primary/90 dark:text-primary/40 leading-relaxed">
                       We'll automatically calculate visa requirements, costs, and processing times specifically for your nationality.
                     </p>
                   </div>
@@ -109,7 +109,7 @@ export function NationalityModal({ isOpen, onClose, onSuccess }: NationalityModa
               <button 
                 onClick={handleSave}
                 disabled={!selectedCountry || loading}
-                className="w-full flex items-center justify-center gap-3 bg-zinc-950 dark:bg-blue-600 text-white py-6 rounded-[2rem] font-black text-xl italic tracking-tighter hover:bg-blue-600 dark:hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-3 bg-zinc-950 dark:bg-primary text-white py-6 rounded-[2rem] font-black text-xl italic tracking-tighter hover:bg-primary dark:hover:bg-primary/90 transition-all shadow-xl shadow-primary/80/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? <Zap className="w-6 h-6 animate-spin" /> : <Zap className="w-6 h-6 fill-current" />}
                 {loading ? "SAVING..." : "START EXPLORING"}

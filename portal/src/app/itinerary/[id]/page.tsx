@@ -244,7 +244,7 @@ export default function ItineraryProductPage() {
       <main className="flex-1 pt-24 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          <Link href="/destinations" className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-blue-600 mb-8 transition-colors">
+          <Link href="/destinations" className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-primary mb-8 transition-colors">
             <ArrowLeft className="w-4 h-4" /> Back to Destinations
           </Link>
 
@@ -273,7 +273,7 @@ export default function ItineraryProductPage() {
             <div className="space-y-8">
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
-                  <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">SALE</span>
+                  <span className="bg-primary text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">SALE</span>
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />)}
                     <span className="text-xs text-zinc-400 ml-2">(4.9/5 based on 128 reviews)</span>
@@ -291,7 +291,7 @@ export default function ItineraryProductPage() {
                         {itinerary.nationality_details.flag_url && (
                           <Image src={itinerary.nationality_details.flag_url} alt="Flag" width={14} height={14} className="rounded-sm" />
                         )}
-                        <span className="text-blue-600 dark:text-blue-400 font-bold uppercase text-[11px] tracking-tight">
+                        <span className="text-primary dark:text-primary/70 font-bold uppercase text-[11px] tracking-tight">
                           For {itinerary.nationality_details.name} Nationalities
                         </span>
                       </div>
@@ -313,7 +313,7 @@ export default function ItineraryProductPage() {
                   <div className="flex items-end gap-4">
                     <div className="space-y-1">
                       <span className="text-zinc-400 line-through text-sm italic">Regular price ₹{itinerary.regular_price}</span>
-                      <div className="text-5xl font-black text-blue-600 italic">₹{itinerary.sale_price}</div>
+                      <div className="text-5xl font-black text-primary italic">₹{itinerary.sale_price}</div>
                     </div>
                     {itinerary.regular_price && itinerary.sale_price && (
                       <span className="bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-3 py-1 rounded-lg text-xs font-bold mb-2">
@@ -343,9 +343,9 @@ export default function ItineraryProductPage() {
                     ) : (
                       <button
                         onClick={handlePurchase}
-                        className="group w-full flex items-center justify-center gap-3 bg-zinc-950 text-white p-6 rounded-[2rem] text-xl font-black hover:bg-blue-600 transition-all shadow-2xl shadow-blue-500/20 active:scale-95"
+                        className="group w-full flex items-center justify-center gap-3 bg-zinc-950 text-white p-6 rounded-[2rem] text-xl font-black hover:bg-primary transition-all shadow-2xl shadow-primary/80/20 active:scale-95"
                       >
-                        <Zap className="w-6 h-6 fill-current text-blue-400" /> UNLOCK FULL BOOKLET
+                        <Zap className="w-6 h-6 fill-current text-primary/70" /> UNLOCK FULL BOOKLET
                       </button>
                     )}
                   </div>
@@ -390,7 +390,7 @@ export default function ItineraryProductPage() {
             <div className="flex flex-col md:flex-row items-center justify-center gap-4">
               <h2 className="text-4xl font-black italic tracking-tighter">Day-wise Breakdown</h2>
               {isTeaser && (
-                <div className="bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 border border-blue-100 dark:border-blue-900/30">
+                <div className="bg-primary/5 dark:bg-primary/20/20 text-primary dark:text-primary/70 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 border border-primary/10 dark:border-primary/20/30">
                   <Sparkles className="w-4 h-4" /> Unlock to see all {itinerary.duration_days} days
                 </div>
               )}
@@ -420,7 +420,7 @@ export default function ItineraryProductPage() {
                         </div>
                       )}
                       <div className="p-8 flex-1 flex flex-col">
-                        <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-black mb-6">
+                        <div className="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center font-black mb-6">
                           {item.day || item.day_number}
                         </div>
                         <h4 className="text-xl font-bold mb-4">Day {item.day || item.day_number}: {item.theme}</h4>
@@ -429,7 +429,7 @@ export default function ItineraryProductPage() {
                           {activities.map((act: any, idx: number) => (
                             <div key={idx} className="space-y-3">
                               <div className="flex gap-4">
-                                <span className="font-black text-blue-600 shrink-0 text-xs w-16">{act.time}</span>
+                                <span className="font-black text-primary shrink-0 text-xs w-16">{act.time}</span>
                                 <div className="space-y-2 flex-1">
                                   <h5 className="font-bold text-lg leading-tight">{act.activity}</h5>
                                   {act.image_url && (
@@ -446,7 +446,7 @@ export default function ItineraryProductPage() {
                                       </div>
                                     )}
                                     {act.duration_at_spot && (
-                                      <div className="flex items-center gap-1 text-[10px] font-bold text-blue-500 uppercase tracking-tighter bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-md">
+                                      <div className="flex items-center gap-1 text-[10px] font-bold text-primary/80 uppercase tracking-tighter bg-primary/5 dark:bg-primary/20/20 px-2 py-1 rounded-md">
                                         ⏱ {act.duration_at_spot}
                                       </div>
                                     )}
@@ -499,14 +499,14 @@ export default function ItineraryProductPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {itinerary.destinations_details.map((dest: any, idx: number) => (
                     <div key={idx} className="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 space-y-4">
-                      <h4 className="text-2xl font-black text-blue-600 italic">{dest.name}</h4>
+                      <h4 className="text-2xl font-black text-primary italic">{dest.name}</h4>
                       <div className="prose prose-sm dark:prose-invert max-w-none text-zinc-500 dark:text-zinc-400 leading-relaxed">
                         <Markdown>
                           {dest.description}
                         </Markdown>
                       </div>
                       {dest.culture && (
-                        <div className="p-6 bg-zinc-50 dark:bg-zinc-950 rounded-2xl border-l-4 border-blue-600">
+                        <div className="p-6 bg-zinc-50 dark:bg-zinc-950 rounded-2xl border-l-4 border-primary">
                           <h5 className="text-xs font-black uppercase tracking-widest text-zinc-400 mb-2">Culture & Heritage</h5>
                           <p className="text-xs italic text-zinc-500">{dest.culture}</p>
                         </div>
@@ -528,7 +528,7 @@ export default function ItineraryProductPage() {
                   {/* Visa Process */}
                   <div className="lg:col-span-2 bg-white dark:bg-zinc-900 p-8 md:p-12 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-8">
                     <div className="space-y-4">
-                      <div className="flex items-center gap-3 text-blue-600">
+                      <div className="flex items-center gap-3 text-primary">
                         <ShieldCheck className="w-6 h-6" />
                         <h4 className="text-2xl font-black italic uppercase tracking-tight">Visa Process</h4>
                       </div>
@@ -580,7 +580,7 @@ export default function ItineraryProductPage() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {Object.entries(itinerary.country_details.days_recommendation).map(([days, desc]: [any, any], idx: number) => (
                             <div key={idx} className="p-4 bg-zinc-50 dark:bg-zinc-950 rounded-2xl border border-zinc-100 dark:border-zinc-800">
-                              <span className="text-sm font-black text-blue-600 block mb-1">{days} Days</span>
+                              <span className="text-sm font-black text-primary block mb-1">{days} Days</span>
                               <p className="text-[11px] text-zinc-500 leading-relaxed font-medium">{desc}</p>
                             </div>
                           ))}
@@ -591,14 +591,14 @@ export default function ItineraryProductPage() {
 
                   {/* Pro Tips Side Card */}
                   <div className="bg-white dark:bg-zinc-900 p-8 md:p-12 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-8 flex flex-col">
-                    <div className="flex items-center gap-3 text-blue-600">
+                    <div className="flex items-center gap-3 text-primary">
                       <Sparkles className="w-6 h-6" />
                       <h4 className="text-2xl font-black italic uppercase tracking-tight">Pro Tips</h4>
                     </div>
                     <ul className="space-y-4 flex-1">
                       {itinerary.country_details.tips?.map((tip: string, idx: number) => (
                         <li key={idx} className="flex items-start gap-3 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed group">
-                          <span className="text-blue-600 font-black mt-0.5 opacity-30 group-hover:opacity-100 transition-opacity">0{idx+1}</span>
+                          <span className="text-primary font-black mt-0.5 opacity-30 group-hover:opacity-100 transition-opacity">0{idx+1}</span>
                           {tip}
                         </li>
                       ))}
@@ -615,7 +615,7 @@ export default function ItineraryProductPage() {
                 <h3 className="text-3xl font-black italic tracking-tighter">YOU MAY ALSO LIKE</h3>
                 <p className="text-zinc-500 mt-2">More adventures curated for your soul.</p>
               </div>
-              <Link href="/destinations" className="text-sm font-bold text-blue-600 hover:underline">View all</Link>
+              <Link href="/destinations" className="text-sm font-bold text-primary hover:underline">View all</Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {related.map((item: any) => (
@@ -634,8 +634,8 @@ export default function ItineraryProductPage() {
                     />
                   </div>
                   <div>
-                    <h5 className="font-bold group-hover:text-blue-600 transition-colors">{item.title}</h5>
-                    <p className="text-sm text-blue-600 font-black italic">₹{item.sale_price}</p>
+                    <h5 className="font-bold group-hover:text-primary transition-colors">{item.title}</h5>
+                    <p className="text-sm text-primary font-black italic">₹{item.sale_price}</p>
                   </div>
                 </Link>
               ))}

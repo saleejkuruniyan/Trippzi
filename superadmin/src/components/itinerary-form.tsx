@@ -165,7 +165,7 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
           <button 
             onClick={handleSubmit}
             disabled={submitting}
-            className="px-8 py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50 flex items-center gap-2"
+            className="px-8 py-3 bg-primary text-white rounded-xl text-sm font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/80/20 disabled:opacity-50 flex items-center gap-2"
           >
             <Save className="w-4 h-4" /> {submitting ? "Saving..." : "Save Changes"}
           </button>
@@ -181,20 +181,20 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Itinerary Title</label>
-                  <input required className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
+                  <input required className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-primary/80" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Display Destination (Summary)</label>
-                  <input required className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.destination} onChange={e => setFormData({...formData, destination: e.target.value})} placeholder="e.g. Bangkok + Phuket" />
+                  <input required className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-primary/80" value={formData.destination} onChange={e => setFormData({...formData, destination: e.target.value})} placeholder="e.g. Bangkok + Phuket" />
                 </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium flex items-center gap-2 text-blue-600"><Globe className="w-4 h-4" /> Target Country</label>
+                  <label className="text-sm font-medium flex items-center gap-2 text-primary"><Globe className="w-4 h-4" /> Target Country</label>
                   <select 
                     required 
-                    className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+                    className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-primary/80 appearance-none"
                     value={formData.country}
                     onChange={e => setFormData({...formData, country: e.target.value ? parseInt(e.target.value) : ""})}
                   >
@@ -205,7 +205,7 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
                 <div className="space-y-2">
                   <label className="text-sm font-medium flex items-center gap-2 text-amber-600"><Globe className="w-4 h-4" /> Targeted Nationality (Optional)</label>
                   <select 
-                    className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+                    className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-primary/80 appearance-none"
                     value={formData.nationality}
                     onChange={e => setFormData({...formData, nationality: e.target.value ? parseInt(e.target.value) : ""})}
                   >
@@ -223,7 +223,7 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
                         onClick={() => toggleDestination(d.id)}
                         className={`px-3 py-1 rounded-lg text-[10px] font-bold transition-all ${
                           formData.destinations.includes(d.id)
-                          ? "bg-blue-600 text-white"
+                          ? "bg-primary text-white"
                           : "bg-zinc-200 dark:bg-zinc-700 text-zinc-500"
                         }`}
                       >
@@ -238,15 +238,15 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Duration (Days)</label>
-                  <input type="number" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.duration_days} onChange={e => setFormData({...formData, duration_days: parseInt(e.target.value)})} />
+                  <input type="number" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-primary/80" value={formData.duration_days} onChange={e => setFormData({...formData, duration_days: parseInt(e.target.value)})} />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Sale Price (₹)</label>
-                  <input type="number" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.sale_price} onChange={e => setFormData({...formData, sale_price: parseFloat(e.target.value), price: parseFloat(e.target.value)})} />
+                  <input type="number" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-primary/80" value={formData.sale_price} onChange={e => setFormData({...formData, sale_price: parseFloat(e.target.value), price: parseFloat(e.target.value)})} />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Regular Price (₹)</label>
-                  <input type="number" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.regular_price} onChange={e => setFormData({...formData, regular_price: parseFloat(e.target.value)})} />
+                  <input type="number" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-primary/80" value={formData.regular_price} onChange={e => setFormData({...formData, regular_price: parseFloat(e.target.value)})} />
                 </div>
               </div>
             </div>
@@ -275,15 +275,15 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
         {/* Visibility & Flags */}
         <section className="p-6 bg-zinc-50 dark:bg-zinc-800/30 rounded-2xl border border-zinc-100 dark:border-zinc-800 grid grid-cols-1 md:grid-cols-3 gap-6">
            <div className="flex items-center gap-3">
-              <input type="checkbox" id="is_approved" className="w-5 h-5 rounded border-zinc-300 text-blue-600" checked={formData.is_approved} onChange={e => setFormData({...formData, is_approved: e.target.checked})} />
+              <input type="checkbox" id="is_approved" className="w-5 h-5 rounded border-zinc-300 text-primary" checked={formData.is_approved} onChange={e => setFormData({...formData, is_approved: e.target.checked})} />
               <label htmlFor="is_approved" className="text-sm font-bold text-green-600">Approved / Publicly Visible</label>
            </div>
            <div className="flex items-center gap-3">
-              <input type="checkbox" id="is_premium" className="w-5 h-5 rounded border-zinc-300 text-blue-600" checked={formData.is_premium} onChange={e => setFormData({...formData, is_premium: e.target.checked})} />
+              <input type="checkbox" id="is_premium" className="w-5 h-5 rounded border-zinc-300 text-primary" checked={formData.is_premium} onChange={e => setFormData({...formData, is_premium: e.target.checked})} />
               <label htmlFor="is_premium" className="text-sm font-medium">Premium Destination</label>
            </div>
            <div className="flex items-center gap-3">
-              <input type="checkbox" id="is_custom" className="w-5 h-5 rounded border-zinc-300 text-blue-600" checked={formData.is_custom} onChange={e => setFormData({...formData, is_custom: e.target.checked})} />
+              <input type="checkbox" id="is_custom" className="w-5 h-5 rounded border-zinc-300 text-primary" checked={formData.is_custom} onChange={e => setFormData({...formData, is_custom: e.target.checked})} />
               <label htmlFor="is_custom" className="text-sm font-medium text-amber-600">Custom User Generated</label>
            </div>
            {initialData?.has_pdf && (
@@ -298,11 +298,11 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
         <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-2">
             <label className="text-sm font-medium">Marketing Description</label>
-            <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
+            <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-primary/80" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">Highlights Summary</label>
-            <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500" value={formData.highlights} onChange={e => setFormData({...formData, highlights: e.target.value})} placeholder="e.g. Bangkok + Phuket + Pattaya" />
+            <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-primary/80" value={formData.highlights} onChange={e => setFormData({...formData, highlights: e.target.value})} placeholder="e.g. Bangkok + Phuket + Pattaya" />
           </div>
         </section>
 
@@ -323,7 +323,7 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
                 onClick={() => setActiveDayIndex(i)}
                 className={`px-6 py-3 rounded-xl text-sm font-bold whitespace-nowrap transition-all flex items-center gap-2 ${
                   activeDayIndex === i 
-                  ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20" 
+                  ? "bg-primary text-white shadow-lg shadow-primary/80/20" 
                   : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 hover:bg-zinc-200 dark:hover:bg-zinc-700"
                 }`}
               >
@@ -340,7 +340,7 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
                <div className="space-y-2">
                   <label className="text-xs font-black uppercase tracking-wider text-zinc-400">Day {activeDayIndex + 1} Theme / Location</label>
                   <input 
-                    className="text-2xl font-bold bg-transparent border-b border-zinc-200 dark:border-zinc-700 w-full outline-none focus:border-blue-500 pb-2"
+                    className="text-2xl font-bold bg-transparent border-b border-zinc-200 dark:border-zinc-700 w-full outline-none focus:border-primary/80 pb-2"
                     value={formData.content[activeDayIndex].theme}
                     onChange={(e) => updateDayTheme(activeDayIndex, e.target.value)}
                     placeholder="Enter day theme..."
@@ -381,7 +381,7 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
                         <div className="md:col-span-3 space-y-4">
                            <div className="space-y-2">
                               <label className="text-[10px] font-bold uppercase text-zinc-400">Activity Name</label>
-                              <input className="text-lg font-bold w-full bg-transparent border-b border-zinc-100 dark:border-zinc-800 outline-none focus:border-blue-500" value={act.activity} onChange={e => updateActivity(activeDayIndex, idx, 'activity', e.target.value)} />
+                              <input className="text-lg font-bold w-full bg-transparent border-b border-zinc-100 dark:border-zinc-800 outline-none focus:border-primary/80" value={act.activity} onChange={e => updateActivity(activeDayIndex, idx, 'activity', e.target.value)} />
                            </div>
                            <div className="space-y-2">
                               <label className="text-[10px] font-bold uppercase text-zinc-400">Description</label>
@@ -441,7 +441,7 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
                     </div>
                   ))}
                   
-                  <button type="button" onClick={() => addActivity(activeDayIndex)} className="w-full py-4 border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-blue-500 hover:border-blue-500 transition-all flex items-center justify-center gap-2 font-bold text-sm">
+                  <button type="button" onClick={() => addActivity(activeDayIndex)} className="w-full py-4 border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-primary/80 hover:border-primary/80 transition-all flex items-center justify-center gap-2 font-bold text-sm">
                     <Plus className="w-4 h-4" /> Add Activity to Day {activeDayIndex + 1}
                   </button>
                </div>

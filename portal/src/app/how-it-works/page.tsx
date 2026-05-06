@@ -50,7 +50,7 @@ export default function HowItWorks() {
                 transition={{ delay: i * 0.1 }}
                 className="p-8 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800"
               >
-                <div className="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center mb-6">
+                <div className="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center mb-6">
                   {step.icon}
                 </div>
                 <h3 className="text-xl font-bold mb-3">{step.title}</h3>

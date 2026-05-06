@@ -68,7 +68,7 @@ export default function AdminDashboard() {
       const s = await fetchStats()
       if (s) setStats([
         { name: "Total Sales", value: `₹${s.total_sales}`, icon: IndianRupee, color: "text-green-600", tab: "sales" },
-        { name: "Total Itineraries", value: s.total_itineraries, icon: FileText, color: "text-blue-600" },
+        { name: "Total Itineraries", value: s.total_itineraries, icon: FileText, color: "text-primary" },
         { name: "Standard Trips", value: s.total_standard, icon: FileText, color: "text-indigo-600", tab: "itineraries" },
         { name: "Custom Trips", value: s.total_custom, icon: Sparkles, color: "text-purple-600", tab: "custom" },
         { name: "Active Users", value: s.total_users, icon: Users, color: "text-orange-600", tab: "users" },
@@ -203,7 +203,7 @@ export default function AdminDashboard() {
                 <input 
                   name="username"
                   type="text" 
-                  className="w-full px-5 py-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-blue-600 outline-none transition-all font-medium"
+                  className="w-full px-5 py-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary outline-none transition-all font-medium"
                   placeholder="admin"
                   value={authData.username}
                   onChange={(e) => setAuthData({...authData, username: e.target.value})}
@@ -214,7 +214,7 @@ export default function AdminDashboard() {
                 <input 
                   name="password"
                   type="password" 
-                  className="w-full px-5 py-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-blue-600 outline-none transition-all font-medium"
+                  className="w-full px-5 py-3.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary outline-none transition-all font-medium"
                   placeholder="••••••••"
                   value={authData.password}
                   onChange={(e) => setAuthData({...authData, password: e.target.value})}
@@ -223,7 +223,7 @@ export default function AdminDashboard() {
               {authError && <p className="text-red-600 text-xs font-bold text-center bg-red-50 dark:bg-red-900/20 py-2 rounded-lg">{authError}</p>}
               <button 
                 type="submit"
-                className="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20 active:scale-95"
+                className="w-full bg-primary text-white py-4 rounded-2xl font-black text-lg hover:bg-primary/90 transition-all shadow-xl shadow-primary/20 active:scale-95"
               >
                 Sign In
               </button>

@@ -87,7 +87,7 @@ export const CountryForm = ({ initialData, onSave, onCancel, onDelete }: Country
               required
               value={formData.name} 
               onChange={e => setFormData({ ...formData, name: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium"
             />
           </div>
           <div className="space-y-2">
@@ -97,7 +97,7 @@ export const CountryForm = ({ initialData, onSave, onCancel, onDelete }: Country
               value={formData.airports} 
               onChange={e => setFormData({ ...formData, airports: e.target.value })}
               placeholder="BKK, DMK, HKT"
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium"
             />
           </div>
         </div>
@@ -109,38 +109,38 @@ export const CountryForm = ({ initialData, onSave, onCancel, onDelete }: Country
             rows={3}
             value={formData.description} 
             onChange={e => setFormData({ ...formData, description: e.target.value })}
-            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium resize-none"
+            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium resize-none"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 flex items-center gap-2">
-              <Clock className="w-3 h-3 text-blue-500" /> Best Time to Visit
+              <Clock className="w-3 h-3 text-primary/80" /> Best Time to Visit
             </label>
             <textarea 
               rows={4}
               value={formData.best_time} 
               onChange={e => setFormData({ ...formData, best_time: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium resize-none"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium resize-none"
             />
           </div>
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 flex items-center gap-2">
-              <Globe className="w-3 h-3 text-blue-500" /> Visa Process Overview
+              <Globe className="w-3 h-3 text-primary/80" /> Visa Process Overview
             </label>
             <textarea 
               rows={4}
               value={formData.visa_process} 
               onChange={e => setFormData({ ...formData, visa_process: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium resize-none"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium resize-none"
             />
           </div>
         </div>
 
         <div className="space-y-4">
           <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 flex items-center gap-2">
-            <Calendar className="w-3 h-3 text-blue-500" /> Duration Recommendations
+            <Calendar className="w-3 h-3 text-primary/80" /> Duration Recommendations
           </label>
           <div className="space-y-3">
             {daysRec.map((rec, idx) => (
@@ -150,14 +150,14 @@ export const CountryForm = ({ initialData, onSave, onCancel, onDelete }: Country
                   placeholder="Days (e.g. 3)"
                   value={rec.days}
                   onChange={e => updateDayRec(idx, 'days', e.target.value)}
-                  className="w-24 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 transition-all font-bold text-sm"
+                  className="w-24 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/80 transition-all font-bold text-sm"
                 />
                 <input 
                   type="text" 
                   placeholder="Recommendation description..."
                   value={rec.desc}
                   onChange={e => updateDayRec(idx, 'desc', e.target.value)}
-                  className="flex-1 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 transition-all text-sm font-medium"
+                  className="flex-1 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/80 transition-all text-sm font-medium"
                 />
                 <button type="button" onClick={() => removeDayRec(idx)} className="p-3 text-zinc-400 hover:text-red-500">
                   <X className="w-4 h-4" />
@@ -167,7 +167,7 @@ export const CountryForm = ({ initialData, onSave, onCancel, onDelete }: Country
             <button 
               type="button" 
               onClick={addDayRec}
-              className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-blue-600 hover:text-blue-700 ml-1"
+              className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary hover:text-primary/90 ml-1"
             >
               <Plus className="w-3 h-3" /> Add Recommendation
             </button>
@@ -176,25 +176,25 @@ export const CountryForm = ({ initialData, onSave, onCancel, onDelete }: Country
 
         <div className="space-y-2">
           <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 flex items-center gap-2">
-            <Info className="w-3 h-3 text-blue-500" /> Pro Tips (one per line)
+            <Info className="w-3 h-3 text-primary/80" /> Pro Tips (one per line)
           </label>
           <textarea 
             rows={4}
             value={formData.tips} 
             onChange={e => setFormData({ ...formData, tips: e.target.value })}
             placeholder="Respect local customs&#10;Carry cash for markets"
-            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium resize-none"
+            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium resize-none"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 text-blue-600">Hero Image URL (Unsplash)</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 text-primary">Hero Image URL (Unsplash)</label>
             <input 
               type="url" 
               value={formData.image_url} 
               onChange={e => setFormData({ ...formData, image_url: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium"
             />
           </div>
           <div className="space-y-2">
@@ -203,12 +203,12 @@ export const CountryForm = ({ initialData, onSave, onCancel, onDelete }: Country
               type="url" 
               value={formData.flag_url} 
               onChange={e => setFormData({ ...formData, flag_url: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium"
             />
           </div>
         </div>
 
-        <button type="submit" className="w-full py-6 bg-blue-600 text-white rounded-[2rem] font-black italic uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-blue-500/20 active:scale-[0.98] transition-all mt-10">
+        <button type="submit" className="w-full py-6 bg-primary text-white rounded-[2rem] font-black italic uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-primary/80/20 active:scale-[0.98] transition-all mt-10">
           <Save className="w-6 h-6" /> {initialData ? "Update Country Data" : "Initialize Country"}
         </button>
       </form>

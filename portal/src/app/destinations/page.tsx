@@ -49,14 +49,14 @@ export default function DestinationsPage() {
               animate={{ opacity: 1, y: 0 }}
               className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6"
             >
-              Explore the <span className="text-blue-600">World</span>
+              Explore the <span className="text-primary">World</span>
             </motion.h1>
             <p className="text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto text-lg mb-10">
               Expertly curated travel guides and itineraries for every budget. Start your journey below.
             </p>
 
             {/* Search Bar */}
-            <div className="flex max-w-2xl mx-auto p-2 bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-xl shadow-blue-500/5">
+            <div className="flex max-w-2xl mx-auto p-2 bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-xl shadow-primary/80/5">
               <div className="flex-1 flex items-center px-4 gap-3">
                 <Search className="w-5 h-5 text-zinc-400" />
                 <input 
@@ -67,7 +67,7 @@ export default function DestinationsPage() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <button className="bg-blue-600 text-white px-8 py-3 rounded-2xl text-sm font-bold hover:bg-blue-700 transition-all">
+              <button className="bg-primary text-white px-8 py-3 rounded-2xl text-sm font-bold hover:bg-primary/90 transition-all">
                 Find
               </button>
             </div>
@@ -107,7 +107,7 @@ function DestinationCard({ dest, index }: { dest: any, index: number }) {
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
-      className="group relative flex flex-col bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 overflow-hidden hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500"
+      className="group relative flex flex-col bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 overflow-hidden hover:shadow-2xl hover:shadow-primary/80/10 transition-all duration-500"
     >
       <div className="aspect-[4/5] relative overflow-hidden">
         <Image 
@@ -121,7 +121,7 @@ function DestinationCard({ dest, index }: { dest: any, index: number }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
         
         <div className="absolute top-6 left-6 bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full flex items-center gap-2">
-          <Globe className="w-3 h-3 text-blue-400" />
+          <Globe className="w-3 h-3 text-primary/70" />
           <span className="text-[10px] font-bold text-white uppercase tracking-wider">{dest.itineraries_count || 0} Itineraries</span>
         </div>
 
@@ -135,7 +135,7 @@ function DestinationCard({ dest, index }: { dest: any, index: number }) {
             <h3 className="text-3xl font-extrabold text-white leading-tight">{dest.name}</h3>
           </div>
           <p className="text-white/70 text-sm line-clamp-2 mb-4">{dest.description}</p>
-          <Link href={`/destinations/${dest.slug}`} className="inline-flex items-center gap-2 text-blue-400 font-bold text-sm hover:text-blue-300 transition-colors">
+          <Link href={`/destinations/${dest.slug}`} className="inline-flex items-center gap-2 text-primary/70 font-bold text-sm hover:text-primary/40 transition-colors">
             View Travel Guide <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

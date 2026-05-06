@@ -86,7 +86,7 @@ export function AddressModal({ isOpen, onClose, onSave, initialData }: AddressMo
                     type="tel"
                     value={formData.phone_number}
                     onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
-                    className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-blue-500 transition-all"
+                    className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-primary/80 transition-all"
                     placeholder="+91 9876543210"
                   />
                 </div>
@@ -100,7 +100,7 @@ export function AddressModal({ isOpen, onClose, onSave, initialData }: AddressMo
                     type="text"
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-blue-500 transition-all"
+                    className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-primary/80 transition-all"
                     placeholder="123 Luxury Lane, Apt 4B"
                   />
                 </div>
@@ -115,7 +115,7 @@ export function AddressModal({ isOpen, onClose, onSave, initialData }: AddressMo
                       type="text"
                       value={formData.city}
                       onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                      className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-blue-500 transition-all"
+                      className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-primary/80 transition-all"
                       placeholder="Mumbai"
                     />
                   </div>
@@ -128,7 +128,7 @@ export function AddressModal({ isOpen, onClose, onSave, initialData }: AddressMo
                       type="text"
                       value={formData.country}
                       onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                      className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-blue-500 transition-all"
+                      className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-primary/80 transition-all"
                       placeholder="India"
                     />
                   </div>
@@ -143,7 +143,7 @@ export function AddressModal({ isOpen, onClose, onSave, initialData }: AddressMo
                     type="text"
                     value={formData.zip_code}
                     onChange={(e) => setFormData({ ...formData, zip_code: e.target.value })}
-                    className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-blue-500 transition-all"
+                    className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-primary/80 transition-all"
                     placeholder="400001"
                   />
                 </div>
@@ -151,7 +151,7 @@ export function AddressModal({ isOpen, onClose, onSave, initialData }: AddressMo
                 <button
                   disabled={loading}
                   type="submit"
-                  className="w-full bg-blue-600 text-white p-5 rounded-3xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full bg-primary text-white p-5 rounded-3xl font-black text-lg hover:bg-primary/90 transition-all shadow-xl shadow-primary/80/20 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>

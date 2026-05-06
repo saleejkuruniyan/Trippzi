@@ -49,12 +49,12 @@ export default function Pricing() {
                 transition={{ delay: i * 0.1 }}
                 className={`relative p-8 rounded-3xl border ${
                   plan.popular 
-                    ? "border-blue-600 ring-1 ring-blue-600 bg-blue-50/50 dark:bg-blue-900/10" 
+                    ? "border-primary ring-1 ring-primary bg-primary/5/50 dark:bg-primary/20/10" 
                     : "border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50"
                 }`}
               >
                 {plan.popular && (
-                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
+                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
                     Most Popular
                   </span>
                 )}
@@ -63,13 +63,13 @@ export default function Pricing() {
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex items-center gap-3 text-sm text-zinc-600 dark:text-zinc-400">
-                      <Check className="w-4 h-4 text-blue-600" />
+                      <Check className="w-4 h-4 text-primary" />
                       {feature}
                     </li>
                   ))}
                 </ul>
                 <button className={`w-full py-3 rounded-xl font-bold transition-all ${
-                  plan.popular ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-zinc-900 dark:bg-white text-white dark:text-black hover:opacity-90"
+                  plan.popular ? "bg-primary text-white hover:bg-primary/90" : "bg-zinc-900 dark:bg-white text-white dark:text-black hover:opacity-90"
                 }`}>
                   {plan.button}
                 </button>

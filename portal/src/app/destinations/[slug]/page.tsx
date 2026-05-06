@@ -67,7 +67,7 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
         </div>
 
         {/* The "Stop Scrolling" Header */}
-        <div className="bg-blue-600 py-12 text-center text-white">
+        <div className="bg-primary py-12 text-center text-white">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-3xl md:text-5xl font-black mb-4 animate-bounce">STOP SCROLLING!</h2>
             <p className="text-xl md:text-2xl font-bold opacity-90">
@@ -87,7 +87,7 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
               initial={{ opacity: 0, x: -20 }}
               className="p-8 rounded-[2rem] bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800"
             >
-              <div className="flex items-center gap-4 mb-6 text-blue-600">
+              <div className="flex items-center gap-4 mb-6 text-primary">
                 <Plane className="w-8 h-8" />
                 <h3 className="text-2xl font-bold">Major Airports</h3>
               </div>
@@ -122,9 +122,9 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
             <motion.div 
               whileInView={{ opacity: 1, y: 0 }}
               initial={{ opacity: 0, y: 20 }}
-              className="lg:col-span-2 p-10 rounded-[2.5rem] bg-white dark:bg-zinc-900 border-2 border-blue-100 dark:border-blue-900/30 shadow-xl shadow-blue-500/5"
+              className="lg:col-span-2 p-10 rounded-[2.5rem] bg-white dark:bg-zinc-900 border-2 border-primary/10 dark:border-primary/20/30 shadow-xl shadow-primary/80/5"
             >
-              <div className="flex items-center gap-4 mb-8 text-blue-600">
+              <div className="flex items-center gap-4 mb-8 text-primary">
                 <ShieldCheck className="w-10 h-10" />
                 <h3 className="text-3xl font-black">Visa & Immigration Process</h3>
               </div>
@@ -143,7 +143,7 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {Object.entries(dest.days_recommendation || {}).map(([days, desc]: [any, any], i) => (
                   <div key={i} className="p-6 rounded-2xl bg-zinc-50 dark:bg-zinc-900 flex items-start gap-4 border border-zinc-200 dark:border-zinc-800">
-                    <div className="bg-blue-600 text-white p-3 rounded-xl font-bold shrink-0">
+                    <div className="bg-primary text-white p-3 rounded-xl font-bold shrink-0">
                       {days}
                     </div>
                     <p className="font-bold text-zinc-700 dark:text-zinc-200">{desc}</p>
@@ -159,7 +159,7 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
               className="lg:col-span-2 p-10 rounded-[2.5rem] bg-zinc-950 text-white overflow-hidden relative"
             >
               <div className="relative z-10">
-                <div className="flex items-center gap-4 mb-8 text-blue-400">
+                <div className="flex items-center gap-4 mb-8 text-primary/70">
                   <Lightbulb className="w-10 h-10" />
                   <h3 className="text-3xl font-black">Things to keep in mind</h3>
                 </div>
@@ -169,13 +169,13 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
                     : (typeof dest.tips === 'string' ? dest.tips.split(',').map(t => t.trim()).filter(Boolean) : [])
                   ).map((tip: string, i: number) => (
                     <div key={i} className="flex gap-4 items-start">
-                      <div className="w-2 h-2 rounded-full bg-blue-500 mt-2 shrink-0" />
+                      <div className="w-2 h-2 rounded-full bg-primary/80 mt-2 shrink-0" />
                       <p className="text-lg font-medium text-zinc-300 leading-relaxed">{tip}</p>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-[100px] -mr-32 -mt-32" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -mr-32 -mt-32" />
             </motion.div>
 
           </div>
@@ -208,7 +208,7 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
                   <div className="p-8">
                     <div className="flex flex-wrap items-center gap-y-4 gap-x-6 text-[10px] font-black text-zinc-500 mb-6 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-2xl border border-zinc-100 dark:border-zinc-800/50 uppercase tracking-widest">
                        <div className="flex items-center gap-2 shrink-0">
-                         <Clock className="w-3.5 h-3.5 text-blue-600" />
+                         <Clock className="w-3.5 h-3.5 text-primary" />
                          {itinerary.duration_days} Days
                        </div>
                        
@@ -223,7 +223,7 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
                              {itinerary.nationality_details.flag_url && (
                                <Image src={itinerary.nationality_details.flag_url} alt="Flag" width={14} height={14} className="rounded-sm" />
                              )}
-                             <span className="text-blue-700 dark:text-blue-300">For {itinerary.nationality_details.name} Nationalities</span>
+                             <span className="text-primary/90 dark:text-primary/40">For {itinerary.nationality_details.name} Nationalities</span>
                            </>
                          ) : (
                            <>
@@ -239,11 +239,11 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
                         <span className="text-xs text-zinc-400 line-through">₹{itinerary.regular_price}</span>
-                        <span className="text-2xl font-black text-blue-600 italic">₹{itinerary.sale_price}</span>
+                        <span className="text-2xl font-black text-primary italic">₹{itinerary.sale_price}</span>
                       </div>
                       <Link 
                         href={`/itinerary/${itinerary.id}`} 
-                        className="bg-zinc-950 text-white px-6 py-3 rounded-2xl font-bold hover:bg-blue-600 transition-colors flex items-center gap-2"
+                        className="bg-zinc-950 text-white px-6 py-3 rounded-2xl font-bold hover:bg-primary transition-colors flex items-center gap-2"
                       >
                         View Itinerary <Zap className="w-4 h-4 fill-current" />
                       </Link>

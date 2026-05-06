@@ -28,9 +28,14 @@ export const Sidebar = ({ activeTab, setActiveTab, onLogout }: SidebarProps) => 
 
   return (
     <aside className="w-64 border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hidden lg:flex flex-col sticky top-0 h-screen">
-      <div className="p-6 flex items-center gap-2">
-        <Image src="/logo.png" alt="Trippzi Logo" width={32} height={32} className="w-8 h-8 object-contain" />
-        <span className="font-bold text-xl tracking-tight">Trippzi Admin</span>
+      <div className="p-6 flex items-center justify-center">
+        <Image 
+          src="/logo.png" 
+          alt="Trippzi Logo" 
+          width={200} 
+          height={80} 
+          className="h-16 w-auto object-contain logo-primary" 
+        />
       </div>
       <nav className="flex-1 px-4 space-y-2 mt-4">
         {menuItems.map(item => (
@@ -39,7 +44,7 @@ export const Sidebar = ({ activeTab, setActiveTab, onLogout }: SidebarProps) => 
             onClick={() => setActiveTab(item.id)}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium ${
               activeTab === item.id 
-              ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20" 
+              ? "bg-primary text-white shadow-lg shadow-primary/80/20" 
               : "hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
             }`}
           >

@@ -89,7 +89,7 @@ export default function ItineraryPreviewPage() {
           </button>
           
           <div className="flex flex-wrap items-center gap-3 mb-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-600/20 text-blue-400 text-[10px] font-black uppercase tracking-widest border border-blue-500/30">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary/70 text-[10px] font-black uppercase tracking-widest border border-primary/80/30">
               <Sparkles className="w-3 h-3" /> Exclusive Preview
             </div>
           </div>
@@ -104,7 +104,7 @@ export default function ItineraryPreviewPage() {
                 {itinerary.nationality_details.flag_url && (
                   <Image src={itinerary.nationality_details.flag_url} alt="Flag" width={14} height={14} className="rounded-sm" />
                 )}
-                <span className="text-blue-400 font-bold uppercase text-[11px] tracking-tight">For {itinerary.nationality_details.name} Nationalities</span>
+                <span className="text-primary/70 font-bold uppercase text-[11px] tracking-tight">For {itinerary.nationality_details.name} Nationalities</span>
               </div>
             ) : (
               <div className="flex items-center gap-2"><Globe className="w-4 h-4" /> Global Travelers</div>
@@ -121,7 +121,7 @@ export default function ItineraryPreviewPage() {
             
             {day1 && (
               <div className="space-y-8 relative">
-                <h3 className="text-2xl font-bold text-blue-500">Theme: {day1.theme}</h3>
+                <h3 className="text-2xl font-bold text-primary/80">Theme: {day1.theme}</h3>
                 
                 <div className="space-y-12 relative">
                     {(() => {
@@ -147,14 +147,14 @@ export default function ItineraryPreviewPage() {
                             )}
                             <div className="flex-1 space-y-3">
                               <div className="flex items-center justify-between">
-                                <div className="text-blue-600 font-black text-xs uppercase tracking-widest">{act.time}</div>
+                                <div className="text-primary font-black text-xs uppercase tracking-widest">{act.time}</div>
                                 <div className="flex gap-2">
                                   {act.duration_at_spot && (
                                     <span className="text-[10px] font-bold text-zinc-500 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded">⏱ {act.duration_at_spot}</span>
                                   )}
                                 </div>
                               </div>
-                              <h4 className="text-2xl font-bold group-hover:text-blue-400 transition-colors leading-tight">{act.activity}</h4>
+                              <h4 className="text-2xl font-bold group-hover:text-primary/70 transition-colors leading-tight">{act.activity}</h4>
                               <p className="text-zinc-400 leading-relaxed font-light text-sm">{act.description}</p>
                               
                               {act.transport_to_next && (
@@ -173,9 +173,9 @@ export default function ItineraryPreviewPage() {
                     {!itinerary.is_purchased_by_user && (
                       <div className="relative flex flex-col items-center gap-3 pt-12 pb-8 animate-pulse">
                          <div className="absolute inset-x-0 -top-32 h-32 bg-gradient-to-t from-zinc-950 to-transparent pointer-events-none" />
-                         <div className="w-2 h-2 rounded-full bg-blue-500/40" />
-                         <div className="w-2 h-2 rounded-full bg-blue-500/60" />
-                         <div className="w-2 h-2 rounded-full bg-blue-500/80" />
+                         <div className="w-2 h-2 rounded-full bg-primary/80/40" />
+                         <div className="w-2 h-2 rounded-full bg-primary/80/60" />
+                         <div className="w-2 h-2 rounded-full bg-primary/80/80" />
                       </div>
                     )}
                 </div>
@@ -190,11 +190,11 @@ export default function ItineraryPreviewPage() {
           <div className="bg-zinc-900/50 border border-zinc-800 p-8 rounded-[2.5rem]">
             <h4 className="text-sm font-black text-zinc-500 uppercase tracking-widest mb-6">What's Included</h4>
             <ul className="space-y-4 text-sm font-medium">
-              <li className="flex items-center gap-3"><span className="text-blue-500">✓</span> Full Day-by-Day Plan</li>
-              <li className="flex items-center gap-3"><span className="text-blue-500">✓</span> High-Res Magazine PDF</li>
-              <li className="flex items-center gap-3"><span className="text-blue-500">✓</span> Budget Breakdown</li>
-              <li className="flex items-center gap-3"><span className="text-blue-500">✓</span> Visa Information</li>
-              <li className="flex items-center gap-3"><span className="text-blue-500">✓</span> Pro Travel Tips</li>
+              <li className="flex items-center gap-3"><span className="text-primary/80">✓</span> Full Day-by-Day Plan</li>
+              <li className="flex items-center gap-3"><span className="text-primary/80">✓</span> High-Res Magazine PDF</li>
+              <li className="flex items-center gap-3"><span className="text-primary/80">✓</span> Budget Breakdown</li>
+              <li className="flex items-center gap-3"><span className="text-primary/80">✓</span> Visa Information</li>
+              <li className="flex items-center gap-3"><span className="text-primary/80">✓</span> Pro Travel Tips</li>
             </ul>
           </div>
 
@@ -203,7 +203,7 @@ export default function ItineraryPreviewPage() {
             <div className="relative">
               <div className="relative z-20 text-center space-y-6">
                 <div className="bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-8 rounded-[2.5rem] shadow-2xl">
-                  <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-blue-500/20">
+                  <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-primary/80/20">
                     <Zap className="w-8 h-8 text-white fill-current" />
                   </div>
                   <h3 className="text-xl font-black mb-4 uppercase italic">Unlock the full experience</h3>
@@ -212,7 +212,7 @@ export default function ItineraryPreviewPage() {
                   </p>
                   <button 
                     onClick={handlePurchase}
-                    className="w-full bg-blue-600 text-white py-4 rounded-2xl text-lg font-black hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 active:scale-95"
+                    className="w-full bg-primary text-white py-4 rounded-2xl text-lg font-black hover:bg-primary/90 transition-all shadow-xl shadow-primary/80/20 active:scale-95"
                   >
                     UNLOCK — ₹{itinerary.sale_price}
                   </button>
@@ -248,7 +248,7 @@ export default function ItineraryPreviewPage() {
             <h3 className="text-3xl font-black italic tracking-tighter">YOU MAY ALSO LIKE</h3>
             <p className="text-zinc-500 mt-2">More adventures curated for your soul.</p>
           </div>
-          <Link href="/destinations" className="text-sm font-bold text-blue-600 hover:underline">View all</Link>
+          <Link href="/destinations" className="text-sm font-bold text-primary hover:underline">View all</Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {related.map((item: any) => (
@@ -263,8 +263,8 @@ export default function ItineraryPreviewPage() {
                 />
               </div>
               <div>
-                <h5 className="font-bold group-hover:text-blue-400 transition-colors">{item.title}</h5>
-                <p className="text-sm text-blue-600 font-black italic">₹{item.sale_price}</p>
+                <h5 className="font-bold group-hover:text-primary/70 transition-colors">{item.title}</h5>
+                <p className="text-sm text-primary font-black italic">₹{item.sale_price}</p>
               </div>
             </Link>
           ))}

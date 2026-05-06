@@ -79,7 +79,7 @@ export default function ProfilePage() {
             {/* Left: Account Overview */}
             <div className="lg:col-span-1 space-y-6">
               <div className="bg-white dark:bg-zinc-900 p-8 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 text-center">
-                <div className="w-24 h-24 bg-blue-600 rounded-full mx-auto mb-6 flex items-center justify-center text-white text-3xl font-black shadow-xl shadow-blue-500/20">
+                <div className="w-24 h-24 bg-primary rounded-full mx-auto mb-6 flex items-center justify-center text-white text-3xl font-black shadow-xl shadow-primary/80/20">
                   {profile.email?.[0].toUpperCase() || "U"}
                 </div>
                 <h2 className="text-xl font-bold">{profile.full_name || profile.username}</h2>
@@ -97,7 +97,7 @@ export default function ProfilePage() {
                 
                 {/* Personal Info */}
                 <section className="space-y-6">
-                  <div className="flex items-center gap-2 text-blue-600">
+                  <div className="flex items-center gap-2 text-primary">
                     <User className="w-5 h-5" />
                     <h3 className="font-black uppercase text-xs tracking-widest">Personal Information</h3>
                   </div>
@@ -105,7 +105,7 @@ export default function ProfilePage() {
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-zinc-500 uppercase">First Name</label>
                       <input 
-                        className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500 outline-none"
+                        className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary/80 outline-none"
                         value={profile.first_name || ""}
                         onChange={e => setProfile({...profile, first_name: e.target.value})}
                       />
@@ -113,7 +113,7 @@ export default function ProfilePage() {
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-zinc-500 uppercase">Last Name</label>
                       <input 
-                        className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500 outline-none"
+                        className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary/80 outline-none"
                         value={profile.last_name || ""}
                         onChange={e => setProfile({...profile, last_name: e.target.value})}
                       />
@@ -125,7 +125,7 @@ export default function ProfilePage() {
                     </label>
                     <input 
                       placeholder="+91 XXXXX XXXXX"
-                      className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500 outline-none"
+                      className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary/80 outline-none"
                       value={profile.profile?.phone_number || ""}
                       onChange={e => setProfile({...profile, profile: {...profile.profile, phone_number: e.target.value}})}
                     />
@@ -133,7 +133,7 @@ export default function ProfilePage() {
                   <div className="space-y-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
                     <CountryDropdown 
                       label="Passport Country (Nationality)"
-                      icon={<Globe className="w-4 h-4 text-blue-500" />}
+                      icon={<Globe className="w-4 h-4 text-primary/80" />}
                       selectedCountryName={profile.profile?.nationality_details?.name}
                       countries={countries}
                       onSelect={(c) => setProfile({
@@ -154,7 +154,7 @@ export default function ProfilePage() {
 
                 {/* Shipping/Billing Address */}
                 <section className="space-y-6 pt-8 border-t border-zinc-100 dark:border-zinc-800">
-                  <div className="flex items-center gap-2 text-blue-600">
+                  <div className="flex items-center gap-2 text-primary">
                     <MapPin className="w-5 h-5" />
                     <h3 className="font-black uppercase text-xs tracking-widest">Checkout Address</h3>
                   </div>
@@ -162,7 +162,7 @@ export default function ProfilePage() {
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-zinc-500 uppercase">Street Address</label>
                       <input 
-                        className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500 outline-none"
+                        className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary/80 outline-none"
                         value={profile.profile?.address || ""}
                         onChange={e => setProfile({...profile, profile: {...profile.profile, address: e.target.value}})}
                       />
@@ -171,7 +171,7 @@ export default function ProfilePage() {
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-zinc-500 uppercase">City</label>
                         <input 
-                          className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500 outline-none"
+                          className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary/80 outline-none"
                           value={profile.profile?.city || ""}
                           onChange={e => setProfile({...profile, profile: {...profile.profile, city: e.target.value}})}
                         />
@@ -179,7 +179,7 @@ export default function ProfilePage() {
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-zinc-500 uppercase">Country</label>
                         <input 
-                          className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500 outline-none"
+                          className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary/80 outline-none"
                           value={profile.profile?.country || ""}
                           onChange={e => setProfile({...profile, profile: {...profile.profile, country: e.target.value}})}
                         />
@@ -187,7 +187,7 @@ export default function ProfilePage() {
                       <div className="space-y-2 col-span-2">
                         <label className="text-xs font-bold text-zinc-500 uppercase">Pincode / ZIP Code</label>
                         <input 
-                          className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-blue-500 outline-none"
+                          className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-primary/80 outline-none"
                           value={profile.profile?.zip_code || ""}
                           onChange={e => setProfile({...profile, profile: {...profile.profile, zip_code: e.target.value}})}
                         />
@@ -201,11 +201,11 @@ export default function ProfilePage() {
                     <ShieldCheck className="w-4 h-4 text-green-500" /> Secure Data Encryption
                   </div>
                   <div className="flex items-center gap-4">
-                    {message && <span className="text-sm font-bold text-blue-600 animate-pulse">{message}</span>}
+                    {message && <span className="text-sm font-bold text-primary animate-pulse">{message}</span>}
                     <button 
                       type="submit"
                       disabled={saving}
-                      className="flex items-center gap-2 bg-zinc-950 text-white px-8 py-4 rounded-2xl font-black hover:bg-blue-600 transition-all shadow-xl shadow-zinc-500/10 disabled:opacity-50"
+                      className="flex items-center gap-2 bg-zinc-950 text-white px-8 py-4 rounded-2xl font-black hover:bg-primary transition-all shadow-xl shadow-zinc-500/10 disabled:opacity-50"
                     >
                       <Save className="w-5 h-5" /> {saving ? "Saving..." : "Save Profile"}
                     </button>

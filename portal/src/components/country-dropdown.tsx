@@ -63,12 +63,12 @@ export function CountryDropdown({
               <Image src={selectedCountry.flag_url} alt="Flag" width={32} height={32} className="object-cover w-full h-full" />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-zinc-100">
-                {label.includes("Passport") ? <ShieldCheck className="w-4 h-4 text-blue-600" /> : <MapPin className="w-4 h-4 text-zinc-400" />}
+                {label.includes("Passport") ? <ShieldCheck className="w-4 h-4 text-primary" /> : <MapPin className="w-4 h-4 text-zinc-400" />}
               </div>
             )}
           </div>
           <span className="truncate">{selectedCountry?.name || placeholder}</span>
-          <Zap className={`w-4 h-4 text-blue-500 transition-transform duration-300 ${isOpen ? 'rotate-180 scale-125' : ''}`} />
+          <Zap className={`w-4 h-4 text-primary/80 transition-transform duration-300 ${isOpen ? 'rotate-180 scale-125' : ''}`} />
         </button>
         
         <AnimatePresence>
@@ -84,7 +84,7 @@ export function CountryDropdown({
                   autoFocus
                   type="text"
                   placeholder="Search country..."
-                  className="w-full px-4 py-2 bg-zinc-50 dark:bg-zinc-800 rounded-xl text-sm font-sans font-bold outline-none border border-transparent focus:border-blue-500"
+                  className="w-full px-4 py-2 bg-zinc-50 dark:bg-zinc-800 rounded-xl text-sm font-sans font-bold outline-none border border-transparent focus:border-primary/80"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                 />
@@ -98,8 +98,8 @@ export function CountryDropdown({
                     onClick={() => { onSelect(c); setIsOpen(false); setSearch(""); }}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl transition-all text-left font-sans text-sm font-medium ${
                       selectedCountry?.id === c.id 
-                        ? 'bg-blue-600 text-white' 
-                        : 'hover:bg-blue-50 dark:hover:bg-blue-900/20 text-zinc-600 dark:text-zinc-300'
+                        ? 'bg-primary text-white' 
+                        : 'hover:bg-primary/5 dark:hover:bg-primary/20/20 text-zinc-600 dark:text-zinc-300'
                     }`}
                   >
                     <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 border border-white/20">

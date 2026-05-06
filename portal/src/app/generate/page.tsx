@@ -157,7 +157,7 @@ export default function GeneratePage() {
             <form onSubmit={handleSubmit} className="space-y-8">
               <CountryDropdown 
                 label="1. Your Passport Country"
-                icon={<ShieldCheck className="w-4 h-4 text-blue-500" />}
+                icon={<ShieldCheck className="w-4 h-4 text-primary/80" />}
                 selectedCountryName={formData.source_country}
                 countries={countries}
                 onSelect={(c) => setFormData({...formData, source_country: c.name})}
@@ -165,7 +165,7 @@ export default function GeneratePage() {
 
               <CountryDropdown 
                 label="2. Select Target Country"
-                icon={<MapPin className="w-4 h-4 text-blue-500" />}
+                icon={<MapPin className="w-4 h-4 text-primary/80" />}
                 selectedCountryName={selectedCountry?.name}
                 countries={countries}
                 onSelect={handleCountryChange}
@@ -186,14 +186,14 @@ export default function GeneratePage() {
                     />
 
                     <div className="grid grid-cols-2 gap-6">
-                      <FormInput label="Duration" icon={<Calendar className="w-4 h-4 text-blue-500" />} type="number" value={formData.duration} onChange={(val) => setFormData({...formData, duration: parseInt(val) || 0})} />
-                      <FormSelect label="Budget" icon={<Wallet className="w-4 h-4 text-blue-500" />} value={formData.budget} options={["Budget", "Mid-range", "Luxury"]} onChange={(val) => setFormData({...formData, budget: val})} />
+                      <FormInput label="Duration" icon={<Calendar className="w-4 h-4 text-primary/80" />} type="number" value={formData.duration} onChange={(val) => setFormData({...formData, duration: parseInt(val) || 0})} />
+                      <FormSelect label="Budget" icon={<Wallet className="w-4 h-4 text-primary/80" />} value={formData.budget} options={["Budget", "Mid-range", "Luxury"]} onChange={(val) => setFormData({...formData, budget: val})} />
                     </div>
 
                     <div className="space-y-3">
                       <label className="block text-sm font-bold flex items-center gap-2"><Heart className="w-4 h-4 text-pink-500" /> Your Interests</label>
                       <textarea 
-                        className="w-full px-6 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border border-transparent focus:border-blue-500 outline-none font-sans font-bold h-24 transition-all"
+                        className="w-full px-6 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border border-transparent focus:border-primary/80 outline-none font-sans font-bold h-24 transition-all"
                         placeholder="e.g. Anime, street food, temples, nightlife..."
                         value={formData.interests}
                         onChange={e => setFormData({...formData, interests: e.target.value})}
@@ -216,7 +216,7 @@ export default function GeneratePage() {
 
               <button
                 type="submit" disabled={loading}
-                className="w-full py-6 rounded-[2rem] bg-blue-600 text-white font-black text-xl italic tracking-tighter hover:bg-blue-700 transition-all shadow-2xl shadow-blue-500/20 active:scale-95 flex items-center justify-center gap-3"
+                className="w-full py-6 rounded-[2rem] bg-primary text-white font-black text-xl italic tracking-tighter hover:bg-primary/90 transition-all shadow-2xl shadow-primary/80/20 active:scale-95 flex items-center justify-center gap-3"
               >
                 {loading ? <Zap className="w-6 h-6 animate-spin" /> : <Zap className="w-6 h-6 fill-current" />}
                 {loading ? "GENERATING..." : "GENERATE ITINERARY"}
@@ -234,7 +234,7 @@ export default function GeneratePage() {
 function HeaderSection() {
   return (
     <div className="text-center space-y-4">
-      <div className="w-20 h-20 bg-blue-600 rounded-3xl flex items-center justify-center mx-auto shadow-2xl shadow-blue-500/20">
+      <div className="w-20 h-20 bg-primary rounded-3xl flex items-center justify-center mx-auto shadow-2xl shadow-primary/80/20">
         <Sparkles className="w-10 h-10 text-white" />
       </div>
       <h1 className="text-4xl font-black italic tracking-tighter uppercase">AI Trip Planner</h1>
@@ -247,14 +247,14 @@ function DestinationSection({ destinations, selected, onToggle, isOtherOpen, onO
   return (
     <div className="space-y-4">
       <label className="block text-sm font-bold flex items-center gap-2">
-        <Sparkles className="w-4 h-4 text-blue-500" /> 3. Select Destinations
+        <Sparkles className="w-4 h-4 text-primary/80" /> 3. Select Destinations
       </label>
       <div className="flex flex-wrap gap-2">
         {destinations.map((dest: any) => (
           <button
             key={dest.id} type="button" onClick={() => onToggle(dest.id)}
             className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
-              selected.includes(dest.id) ? 'bg-blue-600 text-white' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400'
+              selected.includes(dest.id) ? 'bg-primary text-white' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400'
             }`}
           >
             {selected.includes(dest.id) && <Check className="w-4 h-4" />}
@@ -299,7 +299,7 @@ function FormSelect({ label, icon, value, options, onChange }: any) {
     <div className="space-y-3">
       <label className="block text-sm font-bold flex items-center gap-2">{icon} {label}</label>
       <select 
-        className="w-full px-6 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800 font-sans font-bold appearance-none outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-6 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800 font-sans font-bold appearance-none outline-none focus:ring-2 focus:ring-primary/80"
         value={value} onChange={e => onChange(e.target.value)}
       >
         {options.map((opt: string) => <option key={opt} className="font-sans">{opt}</option>)}

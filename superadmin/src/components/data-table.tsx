@@ -49,11 +49,11 @@ export const DataTable = ({
       {/* Table Header with Search and Add */}
       <div className="p-6 border-b border-zinc-100 dark:border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
-            {title.toLowerCase().includes('itineraries') ? <Globe className="w-5 h-5 text-blue-600" /> :
-             title.toLowerCase().includes('destinations') ? <MapPin className="w-5 h-5 text-blue-600" /> :
-             title.toLowerCase().includes('attractions') ? <Camera className="w-5 h-5 text-blue-600" /> :
-             <Filter className="w-5 h-5 text-blue-600" />}
+          <div className="p-2 bg-primary/5 dark:bg-primary/20/20 rounded-xl">
+            {title.toLowerCase().includes('itineraries') ? <Globe className="w-5 h-5 text-primary" /> :
+             title.toLowerCase().includes('destinations') ? <MapPin className="w-5 h-5 text-primary" /> :
+             title.toLowerCase().includes('attractions') ? <Camera className="w-5 h-5 text-primary" /> :
+             <Filter className="w-5 h-5 text-primary" />}
           </div>
           <h3 className="text-xl font-black italic uppercase tracking-tighter">{title}</h3>
           <span className="bg-zinc-100 dark:bg-zinc-800 text-zinc-500 text-[10px] font-black px-2 py-0.5 rounded-full">
@@ -64,11 +64,11 @@ export const DataTable = ({
         <div className="flex items-center gap-3">
           {onSearch && (
             <div className="relative group">
-              <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
+              <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-primary/80 transition-colors" />
               <input 
                 type="text" 
                 placeholder={`Search ${title}...`}
-                className="pl-11 pr-6 py-2.5 bg-zinc-50 dark:bg-zinc-800/50 border border-transparent focus:border-blue-500/30 focus:ring-4 focus:ring-blue-500/5 rounded-xl outline-none text-sm transition-all w-full md:w-64"
+                className="pl-11 pr-6 py-2.5 bg-zinc-50 dark:bg-zinc-800/50 border border-transparent focus:border-primary/80/30 focus:ring-4 focus:ring-primary/80/5 rounded-xl outline-none text-sm transition-all w-full md:w-64"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -161,7 +161,7 @@ export const DataTable = ({
                             <div className="text-xs text-zinc-500">
                               {title.toLowerCase() === 'sales'
                                 ? (<div className="mt-1 flex items-center gap-1.5">
-                                      <span className={`px-1.5 py-0.5 rounded text-[9px] font-black uppercase ${item.itinerary_is_custom ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'}`}>
+                                      <span className={`px-1.5 py-0.5 rounded text-[9px] font-black uppercase ${item.itinerary_is_custom ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' : 'bg-primary/10 text-primary/90 dark:bg-primary/20/30 dark:text-primary/70'}`}>
                                         {item.itinerary_is_custom ? 'Custom' : 'Curated'}
                                       </span>
                                       <span className="text-zinc-400 font-bold">#{item.itinerary_id}</span>
@@ -176,7 +176,7 @@ export const DataTable = ({
                         <>
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">
-                              <span className={`text-sm font-black ${item.custom_itineraries_count > 0 ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400'}`}>
+                              <span className={`text-sm font-black ${item.custom_itineraries_count > 0 ? 'text-primary dark:text-primary/70' : 'text-zinc-400'}`}>
                                 {item.custom_itineraries_count}
                               </span>
                               <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-tighter">Trips</span>
@@ -188,7 +188,7 @@ export const DataTable = ({
                             </span>
                           </td>
                           <td className="px-6 py-4">
-                            <span className={`text-sm font-black ${item.total_spent > 0 ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400'}`}>
+                            <span className={`text-sm font-black ${item.total_spent > 0 ? 'text-primary dark:text-primary/70' : 'text-zinc-400'}`}>
                               ₹{item.total_spent}
                             </span>
                           </td>
@@ -198,7 +198,7 @@ export const DataTable = ({
                       {title.toLowerCase() === 'countries' && (
                         <>
                           <td className="px-6 py-4 text-center">
-                            <span className="text-sm font-black text-blue-600">{item.itineraries_count || 0}</span>
+                            <span className="text-sm font-black text-primary">{item.itineraries_count || 0}</span>
                           </td>
                           <td className="px-6 py-4 text-center">
                             <span className="text-sm font-black text-zinc-400">{item.destinations?.length || 0}</span>
@@ -225,7 +225,7 @@ export const DataTable = ({
                       {title.toLowerCase() === 'sales' && (
                         <>
                           <td className="px-6 py-4">
-                            <p className="font-black text-blue-600 dark:text-blue-400">
+                            <p className="font-black text-primary dark:text-primary/70">
                               ₹{item.amount}
                             </p>
                           </td>
@@ -243,7 +243,7 @@ export const DataTable = ({
 
                       {['itineraries', 'custom'].includes(title.toLowerCase()) && (
                         <td className="px-6 py-4 text-center">
-                           <p className="text-sm font-black text-blue-600">₹{item.price}</p>
+                           <p className="text-sm font-black text-primary">₹{item.price}</p>
                            {item.sale_price < item.regular_price && (
                              <p className="text-[9px] text-zinc-400 line-through">₹{item.regular_price}</p>
                            )}
@@ -260,7 +260,7 @@ export const DataTable = ({
                               </span>
                             )}
                             {item.is_premium && (
-                              <span className="text-[9px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 uppercase font-black italic tracking-tighter flex items-center gap-1">
+                              <span className="text-[9px] px-2 py-0.5 rounded-full bg-primary/10 text-primary/90 dark:bg-primary/20/30 dark:text-primary/70 uppercase font-black italic tracking-tighter flex items-center gap-1">
                                 <Star className="w-2 h-2 fill-current" /> Premium
                               </span>
                             )}
@@ -290,7 +290,7 @@ export const DataTable = ({
                           )}
                           <button 
                             onClick={() => onEdit?.(item)}
-                            className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase hover:bg-blue-100 transition-colors"
+                            className="bg-primary/5 text-primary/90 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase hover:bg-primary/10 transition-colors"
                           >
                             Edit
                           </button>

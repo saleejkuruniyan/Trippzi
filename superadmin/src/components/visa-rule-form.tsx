@@ -54,7 +54,7 @@ export const VisaRuleForm = ({ initialData, onSave, onCancel, onDelete }: VisaRu
             <label className="text-sm font-medium">Source Country</label>
             <input 
               required
-              className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-primary/80"
               value={formData.source_country}
               onChange={e => setFormData({...formData, source_country: e.target.value})}
             />
@@ -63,7 +63,7 @@ export const VisaRuleForm = ({ initialData, onSave, onCancel, onDelete }: VisaRu
             <label className="text-sm font-medium">Destination Country</label>
             <input 
               required
-              className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-primary/80"
               value={formData.destination_country}
               onChange={e => setFormData({...formData, destination_country: e.target.value})}
             />
@@ -74,7 +74,7 @@ export const VisaRuleForm = ({ initialData, onSave, onCancel, onDelete }: VisaRu
           <input 
             type="checkbox"
             id="visa_required"
-            className="w-5 h-5 rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
+            className="w-5 h-5 rounded border-zinc-300 text-primary focus:ring-primary/80"
             checked={formData.visa_required}
             onChange={e => setFormData({...formData, visa_required: e.target.checked})}
           />
@@ -86,7 +86,7 @@ export const VisaRuleForm = ({ initialData, onSave, onCancel, onDelete }: VisaRu
           <textarea 
             rows={6}
             required
-            className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 outline-none focus:ring-2 focus:ring-primary/80"
             value={formData.requirements}
             onChange={e => setFormData({...formData, requirements: e.target.value})}
             placeholder="Detailed visa process, documentation, costs, etc."
@@ -104,7 +104,7 @@ export const VisaRuleForm = ({ initialData, onSave, onCancel, onDelete }: VisaRu
           <button 
             type="submit"
             disabled={submitting}
-            className="px-8 py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50"
+            className="px-8 py-3 bg-primary text-white rounded-xl text-sm font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/80/20 disabled:opacity-50"
           >
             {submitting ? "Saving..." : "Save Visa Rule"}
           </button>

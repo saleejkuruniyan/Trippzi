@@ -14,7 +14,7 @@ export function HomePageContent() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-xs font-bold tracking-widest uppercase mb-8"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 dark:bg-primary/20/20 text-primary dark:text-primary/70 text-xs font-bold tracking-widest uppercase mb-8"
             >
               <Zap className="w-3 h-3 fill-current" /> AI-Powered Travel
             </motion.div>
@@ -25,7 +25,7 @@ export function HomePageContent() {
               className="text-5xl lg:text-7xl font-sans font-bold tracking-tight mb-8 leading-[1.1]"
             >
               Your Next Great <br />
-              <span className="text-blue-600 italic">Adventure</span>, Predicted.
+              <span className="text-primary italic">Adventure</span>, Predicted.
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -43,7 +43,7 @@ export function HomePageContent() {
               transition={{ delay: 0.3 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-4"
             >
-              <Link href="/generate" className="w-full sm:w-auto bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/25 flex items-center justify-center gap-2">
+              <Link href="/generate" className="w-full sm:w-auto bg-primary text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-primary/90 transition-all shadow-xl shadow-primary/80/25 flex items-center justify-center gap-2">
                 Plan My Trip
               </Link>
               <Link href="/destinations" className="w-full sm:w-auto px-8 py-4 rounded-full text-lg font-bold border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all flex items-center justify-center">
@@ -55,7 +55,7 @@ export function HomePageContent() {
         
         {/* Decorative Elements */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl opacity-10 pointer-events-none">
-          <div className="absolute top-0 left-0 w-64 h-64 bg-blue-500 rounded-full blur-[120px]" />
+          <div className="absolute top-0 left-0 w-64 h-64 bg-primary/80 rounded-full blur-[120px]" />
           <div className="absolute bottom-0 right-0 w-64 h-64 bg-green-500 rounded-full blur-[120px]" />
         </div>
       </section>
@@ -77,7 +77,7 @@ export function HomePageContent() {
                 transition={{ delay: i * 0.1 }}
                 className="p-8 rounded-[2rem] bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 hover:shadow-xl transition-all"
               >
-                <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-primary/10 dark:bg-primary/20/30 text-primary dark:text-primary/70 flex items-center justify-center mb-6">
                   {f.icon}
                 </div>
                 <h3 className="text-xl font-sans font-bold mb-3">{f.title}</h3>

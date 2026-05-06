@@ -50,7 +50,7 @@ export const SettingsForm = ({ initialData, onSave }: SettingsFormProps) => {
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="space-y-6">
           <h2 className="text-2xl font-bold flex items-center gap-2">
-            <DollarSign className="w-6 h-6 text-blue-600" />
+            <DollarSign className="w-6 h-6 text-primary" />
             Custom Itinerary Pricing
           </h2>
           <p className="text-zinc-500 text-sm">
@@ -65,7 +65,7 @@ export const SettingsForm = ({ initialData, onSave }: SettingsFormProps) => {
                 type="number"
                 step="0.01"
                 required
-                className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800 focus:ring-2 focus:ring-primary/80 outline-none transition-all"
                 value={formData.custom_itinerary_price}
                 onChange={e => setFormData({ ...formData, custom_itinerary_price: e.target.value })}
               />
@@ -76,7 +76,7 @@ export const SettingsForm = ({ initialData, onSave }: SettingsFormProps) => {
                 type="number"
                 step="0.01"
                 required
-                className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                className="w-full px-4 py-3 rounded-xl border dark:border-zinc-800 dark:bg-zinc-800 focus:ring-2 focus:ring-primary/80 outline-none transition-all"
                 value={formData.custom_itinerary_regular_price}
                 onChange={e => setFormData({ ...formData, custom_itinerary_regular_price: e.target.value })}
               />
@@ -88,7 +88,7 @@ export const SettingsForm = ({ initialData, onSave }: SettingsFormProps) => {
           <button
             type="submit"
             disabled={saving}
-            className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-4 rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98] disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 bg-primary text-white py-4 rounded-2xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/80/20 active:scale-[0.98] disabled:opacity-50"
           >
             {saving ? (
               <RefreshCw className="w-5 h-5 animate-spin" />

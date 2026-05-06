@@ -7,7 +7,7 @@ interface LoadingScreenProps {
   color?: string;
 }
 
-export function LoadingScreen({ message, color = "blue-600" }: LoadingScreenProps) {
+export function LoadingScreen({ message, color = "primary" }: LoadingScreenProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-50 dark:bg-zinc-950">
       <motion.div

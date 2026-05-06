@@ -181,7 +181,7 @@ export default function MyTripsPage() {
               <Sparkles className="w-16 h-16 text-zinc-300 mx-auto mb-6" />
               <h2 className="text-xl font-bold mb-2">No itineraries yet</h2>
               <p className="text-zinc-500 mb-8">Generate your first custom trip or explore curated ones.</p>
-              <Link href="/destinations" className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition-all">
+              <Link href="/destinations" className="bg-primary text-white px-8 py-3 rounded-full font-bold hover:bg-primary/90 transition-all">
                 Explore Destinations
               </Link>
             </div>
@@ -193,7 +193,7 @@ export default function MyTripsPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.08 }}
-                  className="group bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 overflow-hidden hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 flex flex-col"
+                  className="group bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 overflow-hidden hover:shadow-2xl hover:shadow-primary/80/10 transition-all duration-500 flex flex-col"
                 >
                   <div 
                     onClick={() => router.push(trip.is_purchased_by_user ? `/itinerary/${trip.id}` : `/itinerary/${trip.id}/preview`)}
@@ -250,7 +250,7 @@ export default function MyTripsPage() {
                       ) : (
                         <button 
                           onClick={() => handleUnlock(trip.id)}
-                          className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-2xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20"
+                          className="w-full flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-2xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/80/20"
                         >
                           <Zap className="w-4 h-4 fill-current" /> Unlock Full Plan (₹{trip.sale_price})
                         </button>

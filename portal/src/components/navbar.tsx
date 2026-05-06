@@ -45,15 +45,21 @@ export function Navbar() {
     <nav className="fixed top-0 w-full z-50 border-b border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center text-zinc-900 dark:text-zinc-50">
-          <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.png" alt="Trippzi Logo" width={32} height={32} className="w-8 h-8 object-contain" />
-            <span className="text-xl font-sans font-bold tracking-tight">Trippzi</span>
+          <Link href="/" className="flex items-center">
+            <Image 
+              src="/logo.png" 
+              alt="Trippzi Logo" 
+              width={180} 
+              height={70} 
+              className="h-14 w-auto object-contain logo-primary" 
+              priority
+            />
           </Link>
           
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-            <Link href="/destinations" className="hover:text-blue-600 transition-colors">Destinations</Link>
-            <Link href="/how-it-works" className="hover:text-blue-600 transition-colors">How it Works</Link>
-            <Link href="/pricing" className="hover:text-blue-600 transition-colors">Pricing</Link>
+            <Link href="/destinations" className="hover:text-primary transition-colors">Destinations</Link>
+            <Link href="/how-it-works" className="hover:text-primary transition-colors">How it Works</Link>
+            <Link href="/pricing" className="hover:text-primary transition-colors">Pricing</Link>
           </div>
 
           <div className="flex items-center gap-4">
@@ -72,7 +78,7 @@ export function Navbar() {
                 <div className="relative">
                   <button 
                     onClick={() => setShowUserModal(!showUserModal)}
-                    className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-bold border-2 border-white dark:border-zinc-800 shadow-md hover:scale-105 transition-transform"
+                    className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold border-2 border-white dark:border-zinc-800 shadow-md hover:scale-105 transition-transform"
                   >
                     {user.email[0].toUpperCase()}
                   </button>
@@ -144,7 +150,7 @@ export function Navbar() {
               )
             )}
 
-            <Link href="/generate" className="hidden sm:block bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20">
+            <Link href="/generate" className="hidden sm:block bg-primary text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-primary/90 transition-all shadow-lg shadow-primary/80/20">
               Get Started
             </Link>
           </div>

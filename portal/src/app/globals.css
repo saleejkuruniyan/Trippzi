@@ -4,13 +4,15 @@
 @theme {
   --font-sans: var(--font-baloo);
   --font-serif: var(--font-lora), serif;
+  --color-primary: #DC0000;
+  --color-primary-foreground: #ffffff;
 }
 
 :root {
   --background: #faf9f6; /* Soft Cream */
   --foreground: #1c1917; /* Warm Black */
   --card: #ffffff;
-  --primary: #2563eb;
+  --primary: #DC0000;
   --accent: #15803d; /* Forest Green accent */
 }
 
@@ -25,7 +27,7 @@
     @apply border-zinc-200 dark:border-zinc-800 transition-colors duration-200;
   }
   body {
-    @apply bg-[var(--background)] text-[var(--foreground)] selection:bg-blue-100 dark:selection:bg-blue-900/30;
+    @apply bg-[var(--background)] text-[var(--foreground)] selection:bg-red-100 dark:selection:bg-red-900/30;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-sans font-bold tracking-tight;
@@ -35,6 +37,10 @@
 /* Custom Utilities */
 .glass-panel {
   @apply bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md border border-white/20 dark:border-zinc-800/50;
+}
+
+.logo-primary {
+  filter: brightness(0) saturate(100%) invert(11%) sepia(93%) saturate(6747%) hue-rotate(2deg) brightness(96%) contrast(115%);
 }
 
 .no-scrollbar::-webkit-scrollbar {

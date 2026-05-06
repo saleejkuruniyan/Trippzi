@@ -45,8 +45,8 @@ export function PaymentStatusModal({ isOpen, status, message, onClose }: Payment
           >
             <div className="mb-6 flex justify-center">
               {status === 'processing' && (
-                <div className="w-20 h-20 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center">
-                  <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
+                <div className="w-20 h-20 bg-primary/5 dark:bg-primary/20/20 rounded-full flex items-center justify-center">
+                  <Loader2 className="w-10 h-10 text-primary animate-spin" />
                 </div>
               )}
               {status === 'success' && (
@@ -79,7 +79,7 @@ export function PaymentStatusModal({ isOpen, status, message, onClose }: Payment
                     initial={{ width: "100%" }}
                     animate={{ width: "0%" }}
                     transition={{ duration: 3, ease: "linear" }}
-                    className="h-full bg-blue-600"
+                    className="h-full bg-primary"
                   />
                 </div>
                 <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mt-2">

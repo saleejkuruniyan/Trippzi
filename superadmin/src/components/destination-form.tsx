@@ -60,7 +60,7 @@ export const DestinationForm = ({ initialData, onSave, onCancel, onDelete }: Des
               required
               value={formData.name} 
               onChange={e => setFormData({ ...formData, name: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium"
             />
           </div>
           <div className="space-y-2">
@@ -69,7 +69,7 @@ export const DestinationForm = ({ initialData, onSave, onCancel, onDelete }: Des
               required
               value={formData.country} 
               onChange={e => setFormData({ ...formData, country: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium appearance-none"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium appearance-none"
             >
               <option value="">Select Country</option>
               {countries.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -84,34 +84,34 @@ export const DestinationForm = ({ initialData, onSave, onCancel, onDelete }: Des
             rows={2}
             value={formData.description} 
             onChange={e => setFormData({ ...formData, description: e.target.value })}
-            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium resize-none"
+            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium resize-none"
           />
         </div>
 
         <div className="space-y-2">
           <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 flex items-center gap-2">
-            <Sparkles className="w-3 h-3 text-blue-500" /> Culture & Heritage Deep-Dive
+            <Sparkles className="w-3 h-3 text-primary/80" /> Culture & Heritage Deep-Dive
           </label>
           <textarea 
             rows={6}
             value={formData.culture} 
             onChange={e => setFormData({ ...formData, culture: e.target.value })}
             placeholder="Describe the unique traditions, food, and local life..."
-            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium resize-none"
+            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium resize-none"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 text-blue-600">Primary Image URL</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 text-primary">Primary Image URL</label>
           <input 
             type="url" 
             value={formData.image_url} 
             onChange={e => setFormData({ ...formData, image_url: e.target.value })}
-            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium"
           />
         </div>
 
-        <button type="submit" className="w-full py-6 bg-blue-600 text-white rounded-[2rem] font-black italic uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-blue-500/20 active:scale-[0.98] transition-all mt-10">
+        <button type="submit" className="w-full py-6 bg-primary text-white rounded-[2rem] font-black italic uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-primary/80/20 active:scale-[0.98] transition-all mt-10">
           <Save className="w-6 h-6" /> {initialData ? "Update Destination" : "Save Destination"}
         </button>
       </form>

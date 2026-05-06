@@ -41,7 +41,7 @@ export default function MyWishlistPage() {
               <Heart className="w-16 h-16 text-zinc-300 mx-auto mb-6" />
               <h2 className="text-xl font-bold mb-2">Your wishlist is empty</h2>
               <p className="text-zinc-500 mb-8">Browse itineraries and click the ❤️ button to save them here.</p>
-              <Link href="/destinations" className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition-all">
+              <Link href="/destinations" className="bg-primary text-white px-8 py-3 rounded-full font-bold hover:bg-primary/90 transition-all">
                 Explore Destinations
               </Link>
             </div>

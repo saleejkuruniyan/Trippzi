@@ -64,7 +64,7 @@ export const AttractionForm = ({ initialData, onSave, onCancel, onDelete }: Attr
               required
               value={formData.name} 
               onChange={e => setFormData({ ...formData, name: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium"
             />
           </div>
           <div className="space-y-2">
@@ -73,7 +73,7 @@ export const AttractionForm = ({ initialData, onSave, onCancel, onDelete }: Attr
               required
               value={formData.destination} 
               onChange={e => setFormData({ ...formData, destination: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium appearance-none"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium appearance-none"
             >
               <option value="">Select Destination</option>
               {destinations.map(d => <option key={d.id} value={d.id}>{d.name} ({d.country_name})</option>)}
@@ -88,21 +88,21 @@ export const AttractionForm = ({ initialData, onSave, onCancel, onDelete }: Attr
             rows={3}
             value={formData.description} 
             onChange={e => setFormData({ ...formData, description: e.target.value })}
-            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium resize-none"
+            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium resize-none"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 flex items-center gap-2">
-              <Clock className="w-3 h-3 text-blue-500" /> Opening Time
+              <Clock className="w-3 h-3 text-primary/80" /> Opening Time
             </label>
             <input 
               type="text" 
               placeholder="09:00 AM"
               value={formData.opening_time} 
               onChange={e => setFormData({ ...formData, opening_time: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium"
             />
           </div>
           <div className="space-y-2">
@@ -114,19 +114,19 @@ export const AttractionForm = ({ initialData, onSave, onCancel, onDelete }: Attr
               placeholder="06:00 PM"
               value={formData.closing_time} 
               onChange={e => setFormData({ ...formData, closing_time: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium"
             />
           </div>
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 flex items-center gap-2">
-              <Calendar className="w-3 h-3 text-blue-500" /> Suggested Stay
+              <Calendar className="w-3 h-3 text-primary/80" /> Suggested Stay
             </label>
             <input 
               type="text" 
               placeholder="2 hours"
               value={formData.suggested_duration} 
               onChange={e => setFormData({ ...formData, suggested_duration: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium"
             />
           </div>
         </div>
@@ -141,7 +141,7 @@ export const AttractionForm = ({ initialData, onSave, onCancel, onDelete }: Attr
               placeholder="500 THB or Free"
               value={formData.ticket_price} 
               onChange={e => setFormData({ ...formData, ticket_price: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium"
             />
           </div>
           <div className="space-y-2">
@@ -153,22 +153,22 @@ export const AttractionForm = ({ initialData, onSave, onCancel, onDelete }: Attr
               placeholder="Mondays, Public Holidays"
               value={formData.closing_days} 
               onChange={e => setFormData({ ...formData, closing_days: e.target.value })}
-              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+              className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium"
             />
           </div>
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 text-blue-600">Spot Image URL (Unsplash)</label>
+          <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 text-primary">Spot Image URL (Unsplash)</label>
           <input 
             type="url" 
             value={formData.image_url} 
             onChange={e => setFormData({ ...formData, image_url: e.target.value })}
-            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+            className="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/80 transition-all font-medium"
           />
         </div>
 
-        <button type="submit" className="w-full py-6 bg-blue-600 text-white rounded-[2rem] font-black italic uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-blue-500/20 active:scale-[0.98] transition-all mt-10">
+        <button type="submit" className="w-full py-6 bg-primary text-white rounded-[2rem] font-black italic uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-primary/80/20 active:scale-[0.98] transition-all mt-10">
           <Save className="w-6 h-6" /> {initialData ? "Update Attraction" : "Save Attraction"}
         </button>
       </form>

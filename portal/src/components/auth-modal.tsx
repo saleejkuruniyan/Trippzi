@@ -61,7 +61,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
             className="relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden"
           >
             {/* Header with Background */}
-            <div className="relative h-32 bg-blue-600 flex items-center justify-center">
+            <div className="relative h-32 bg-primary flex items-center justify-center">
               <div className="absolute inset-0 opacity-20">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent" />
               </div>
@@ -95,7 +95,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
                 <div className="flex items-center justify-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
                   <ShieldCheck className="w-3 h-3 text-green-500" /> Secure Login
                   <span className="mx-1">•</span>
-                  <Sparkles className="w-3 h-3 text-blue-500" /> One-click setup
+                  <Sparkles className="w-3 h-3 text-primary/80" /> One-click setup
                 </div>
                 <p className="text-[10px] text-zinc-400 max-w-[200px] mx-auto">
                   By continuing, you agree to Trippzi's Terms of Service and Privacy Policy.
