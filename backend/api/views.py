@@ -10,6 +10,7 @@ from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from .services.ai_engine import AIEngine
 from .services.image_service import ImageService
+from .services.pdf_service import PDFService
 from .models import Itinerary, Transaction, Country, Destination, Attraction, Wishlist, ItineraryDay, SiteSettings
 from .storage import R2Storage
 from django.conf import settings
@@ -591,154 +592,14 @@ class DownloadItineraryPDFView(APIView):
         if not is_purchased:
             return Response({'error': 'Purchase required to download booklet.'}, status=403)
 
-        # 2. Check if PDF already exists in R2
-        storage = R2Storage()
-        country_slug = itinerary.country.slug if itinerary.country else "global"
-        
-        # Check if we already have a generated PDF for this itinerary/user combination
-        # We'll look into the specific directory for any .pdf file to reuse
-        prefix = f"itinerary/{country_slug}/{itinerary_id}/"
+        # 2. Use PDFService to get or generate the PDF
+        pdf_service = PDFService()
         try:
-            dirs, files = storage.listdir(prefix)
-            pdf_files = [f for f in files if f.endswith('.pdf')]
-            if pdf_files:
-                pdf_url = storage.url(f"{prefix}{pdf_files[0]}")
-                return Response({'pdf_url': pdf_url})
-        except:
-            pass
-
-        # 3. Generate PDF fresh
-        try:
-            import uuid
-            pdf_bytes = None
-            
-            # Common data for all PDF engines
-            day_images = ItineraryDay.objects.filter(itinerary=itinerary)
-            
-            # Normalize days to ensure day_number exists (AI sometimes returns 'day')
-            normalized_days = []
-            for d in (itinerary.content or []):
-                if isinstance(d, dict):
-                    if 'day_number' not in d and 'day' in d:
-                        d['day_number'] = d['day']
-                normalized_days.append(d)
-
-            # Attempt WeasyPrint first (better CSS support)
-            try:
-                from weasyprint import HTML
-
-                # Get Visa Requirements from Matrix
-                from .models import VisaRequirement
-                visa_content = ""
-                if itinerary.nationality and itinerary.country:
-                    rule = VisaRequirement.objects.filter(
-                        source_country=itinerary.nationality,
-                        destination_country=itinerary.country
-                    ).first()
-                    if rule:
-                        visa_content = rule.content
-                
-                # Fallback to Country.visa_process (Global itineraries or missing rules)
-                if not visa_content and itinerary.country:
-                    visa_content = itinerary.country.visa_process
-
-                context = {
-                    'itinerary': itinerary,
-                    'days': normalized_days,
-                    'day_images': day_images,
-                    'user': request.user,
-                    'visa_requirements': visa_content,
-                }
-                html_string = render_to_string('itinerary_pdf.html', context)
-                pdf_bytes = HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf()
-            except (ImportError, OSError, Exception) as e:
-                # Fallback to xhtml2pdf or fpdf2
-                print(f"WeasyPrint failed (likely missing GTK runtime): {str(e)}")
-                try:
-                    # Try xhtml2pdf (HTML support)
-                    from xhtml2pdf import pisa
-                    from io import BytesIO
-                    
-                    # Use the same normalized_days
-                    context = {
-                        'itinerary': itinerary,
-                        'days': normalized_days,
-                        'day_images': day_images,
-                        'user': request.user,
-                        'visa_requirements': visa_content,
-                    }
-                    html_string = render_to_string('itinerary_pdf.html', context)
-                    result = BytesIO()
-                    pisa_status = pisa.CreatePDF(html_string, dest=result)
-                    if pisa_status.err:
-                        raise Exception(f"xhtml2pdf rendering error: {pisa_status.err}")
-                    pdf_bytes = result.getvalue()
-                except Exception as ex:
-                        # FINAL FALLBACK: fpdf2 (Pure Python, no HTML, very robust)
-                        print(f"xhtml2pdf failed: {str(ex)}. Using fpdf2 fallback.")
-                        try:
-                            from fpdf import FPDF
-                            
-                            class SafePDF(FPDF):
-                                def safe_text(self, text):
-                                    if not text: return ""
-                                    # Convert to latin-1 and replace unknown chars with '?' to avoid UnicodeEncodeError
-                                    return str(text).encode('latin-1', 'replace').decode('latin-1')
-
-                            pdf = SafePDF()
-                            pdf.add_page()
-                            pdf.set_font("Helvetica", 'B', 16)
-                            pdf.cell(0, 10, pdf.safe_text(f"Itinerary: {itinerary.title}"), ln=True)
-                            pdf.ln(5)
-                            
-                            pdf.set_font("Helvetica", '', 12)
-                            pdf.cell(0, 10, pdf.safe_text(f"Destination: {itinerary.destination}"), ln=True)
-                            pdf.cell(0, 10, pdf.safe_text(f"Duration: {itinerary.duration_days} Days"), ln=True)
-                            pdf.ln(5)
-                            
-                            pdf.set_font("Helvetica", 'I', 10)
-                            pdf.multi_cell(0, 10, pdf.safe_text(itinerary.description))
-                            pdf.ln(10)
-                            
-                            for day in (normalized_days or []):
-                                pdf.set_font("Helvetica", 'B', 14)
-                                day_num = day.get('day_number', day.get('day', ''))
-                                theme = day.get('theme', '')
-                                pdf.cell(0, 10, pdf.safe_text(f"Day {day_num}: {theme}"), ln=True)
-                                pdf.ln(2)
-                                
-                                pdf.set_font("Helvetica", '', 10)
-                                for act in day.get('activities', []):
-                                    time = act.get('time', '')
-                                    activity = act.get('activity', '')
-                                    desc = act.get('description', '')
-                                    
-                                    pdf.set_font("Helvetica", 'B', 10)
-                                    pdf.cell(0, 8, pdf.safe_text(f"- {time}: {activity}"), ln=True)
-                                    pdf.set_font("Helvetica", '', 10)
-                                    pdf.multi_cell(0, 6, pdf.safe_text(desc))
-                                    pdf.ln(2)
-                                pdf.ln(5)
-                            
-                            pdf_bytes = pdf.output()
-                        except Exception as final_ex:
-                            instructions = "Please install GTK3 runtime for better PDFs: https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases" if os.name == 'nt' else "Please run: brew install pango"
-                            return Response({
-                                'error': 'All PDF Engines failed to load.',
-                                'details': f"WeasyPrint: {str(e)} | xhtml2pdf: {str(ex)} | fpdf2: {str(final_ex)}",
-                                'instructions': instructions
-                            }, status=500)
-
+            base_url = request.build_absolute_uri('/')
+            pdf_url = pdf_service.get_itinerary_pdf_url(itinerary, request.user, base_url)
+            return Response({'pdf_url': pdf_url})
         except Exception as e:
             return Response({'error': f'PDF Generation failed: {str(e)}'}, status=500)
-
-        # 4. Upload to R2 and return URL
-        new_uuid = uuid.uuid4()
-        r2_key = f"{prefix}{new_uuid}.pdf"
-        storage.save(r2_key, ContentFile(pdf_bytes))
-        pdf_url = storage.url(r2_key)
-        
-        return Response({'pdf_url': pdf_url})
 
 from .serializers import SiteSettingsSerializer
 
