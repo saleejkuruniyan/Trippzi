@@ -196,7 +196,7 @@ export default function MyTripsPage() {
                   className="group bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 overflow-hidden hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 flex flex-col"
                 >
                   <div 
-                    onClick={() => router.push(trip.is_owned ? `/itinerary/${trip.id}` : `/itinerary/${trip.id}/preview`)}
+                    onClick={() => router.push(trip.is_purchased_by_user ? `/itinerary/${trip.id}` : `/itinerary/${trip.id}/preview`)}
                     className="cursor-pointer"
                   >
                     <div className="relative aspect-[4/3] overflow-hidden">
@@ -230,7 +230,7 @@ export default function MyTripsPage() {
 
                   <div className="p-6 pt-0 mt-auto" onClick={e => e.stopPropagation()}>
                     <div className="pt-4 space-y-3">
-                      {trip.is_owned ? (
+                      {trip.is_purchased_by_user ? (
                         <div className="flex gap-2">
                           <button 
                             onClick={() => router.push(`/itinerary/${trip.id}`)}

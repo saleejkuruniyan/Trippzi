@@ -32,27 +32,48 @@ export default function GeneratePage() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
 
   useEffect(() => {
-    fetchDestinations(true).then(data => {
-      const raw = Array.isArray(data) ? data : data.results || []
-      const sorted = [...raw].sort((a, b) => {
-        if (a.name === "India") return -1
-        if (b.name === "India") return 1
-        return a.name.localeCompare(b.name)
-      })
-      setCountries(sorted)
+    const initData = async () => {
+      try {
+        const data = await fetchDestinations(true)
+        const raw = Array.isArray(data) ? data : data.results || []
+        
+        // Get user nationality from profile
+        let userNationality = "";
+        const userJson = localStorage.getItem('trippzi-user')
+        if (userJson) {
+          try {
+            const u = JSON.parse(userJson)
+            // Handle both structure variations
+            userNationality = u.profile?.nationality_details?.name || u.nationality_details?.name || "";
+          } catch (e) { console.error(e) }
+        }
 
-      // Default nationality from profile
-      const userJson = localStorage.getItem('trippzi-user')
-      if (userJson) {
-        try {
-          const u = JSON.parse(userJson)
-          const profileNationality = u.profile?.nationality_details?.name
-          if (profileNationality) {
-            setFormData(prev => ({...prev, source_country: profileNationality}))
+        const sorted = [...raw].sort((a, b) => {
+          if (userNationality) {
+            if (a.name === userNationality) return -1
+            if (b.name === userNationality) return 1
           }
-        } catch (e) { console.error(e) }
+          if (a.name === "India") return -1
+          if (b.name === "India") return 1
+          return a.name.localeCompare(b.name)
+        })
+        
+        setCountries(sorted)
+
+        if (userNationality) {
+          setFormData(prev => ({...prev, source_country: userNationality}))
+        }
+      } catch (err) {
+        console.error("Failed to init generation page", err)
       }
-    })
+    }
+
+    initData()
+    
+    // Listen for storage changes (login/profile updates)
+    const handleStorage = () => initData();
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
   }, [])
 
   const handleCountryChange = async (country: any) => {

@@ -126,7 +126,14 @@ function DestinationCard({ dest, index }: { dest: any, index: number }) {
         </div>
 
         <div className="absolute bottom-6 left-6 right-6">
-          <h3 className="text-3xl font-extrabold text-white mb-2 leading-tight">{dest.name}</h3>
+          <div className="flex items-center gap-3 mb-2">
+            {dest.flag_url && (
+              <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-white/30 shrink-0">
+                <Image src={dest.flag_url} alt="Flag" width={32} height={32} className="object-cover w-full h-full" />
+              </div>
+            )}
+            <h3 className="text-3xl font-extrabold text-white leading-tight">{dest.name}</h3>
+          </div>
           <p className="text-white/70 text-sm line-clamp-2 mb-4">{dest.description}</p>
           <Link href={`/destinations/${dest.slug}`} className="inline-flex items-center gap-2 text-blue-400 font-bold text-sm hover:text-blue-300 transition-colors">
             View Travel Guide <ArrowRight className="w-4 h-4" />

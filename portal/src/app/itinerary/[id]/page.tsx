@@ -12,7 +12,7 @@ import Image from "next/image"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { fetchItineraries } from "@/lib/api"
-import ReactMarkdown from 'react-markdown'
+import Markdown from 'markdown-to-jsx'
 import { googleLogin } from "@/lib/api"
 import { AuthModal } from "@/components/auth-modal"
 import { AddressModal } from "@/components/address-modal"
@@ -235,7 +235,7 @@ export default function ItineraryProductPage() {
   if (loading) return <LoadingScreen message="Unpacking your adventure..." />
   if (!itinerary) return <div className="min-h-screen flex items-center justify-center">Product not found.</div>
 
-  const isTeaser = itinerary.is_custom && !itinerary.is_owned;
+  const isTeaser = !itinerary.is_purchased_by_user;
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-zinc-950">
@@ -274,16 +274,6 @@ export default function ItineraryProductPage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
                   <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">SALE</span>
-                  {itinerary.nationality_details && (
-                    <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded-full border border-blue-100 dark:border-blue-900/30">
-                      {itinerary.nationality_details.flag_url && (
-                        <Image src={itinerary.nationality_details.flag_url} alt="Flag" width={14} height={14} className="rounded-sm" />
-                      )}
-                      <span className="text-[10px] font-black uppercase text-blue-700 dark:text-blue-300 italic tracking-tight">
-                        Optimized for {itinerary.nationality_details.name} Nationalities
-                      </span>
-                    </div>
-                  )}
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />)}
                     <span className="text-xs text-zinc-400 ml-2">(4.9/5 based on 128 reviews)</span>
@@ -294,17 +284,32 @@ export default function ItineraryProductPage() {
                   <MapPin className="w-4 h-4" /> {itinerary.destination}
                   <span className="mx-2">•</span>
                   <Clock className="w-4 h-4" /> {itinerary.duration_days} Days
-                  {!itinerary.nationality_details && (
+                  {itinerary.nationality_details ? (
                     <>
                       <span className="mx-2">•</span>
-                      <Globe className="w-4 h-4" /> Global Travelers
+                      <div className="flex items-center gap-1.5">
+                        {itinerary.nationality_details.flag_url && (
+                          <Image src={itinerary.nationality_details.flag_url} alt="Flag" width={14} height={14} className="rounded-sm" />
+                        )}
+                        <span className="text-blue-600 dark:text-blue-400 font-bold uppercase text-[11px] tracking-tight">
+                          For {itinerary.nationality_details.name} Nationalities
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <span className="mx-2">•</span>
+                      <div className="flex items-center gap-1.5">
+                        <Globe className="w-4 h-4" /> 
+                        <span>Global Travelers</span>
+                      </div>
                     </>
                   )}
                 </div>
               </div>
 
               <div className="p-8 bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-6">
-                {!itinerary.is_owned && (
+                {!itinerary.is_purchased_by_user && (
                   <div className="flex items-end gap-4">
                     <div className="space-y-1">
                       <span className="text-zinc-400 line-through text-sm italic">Regular price ₹{itinerary.regular_price}</span>
@@ -319,14 +324,14 @@ export default function ItineraryProductPage() {
                 )}
 
                 <div className="prose prose-sm dark:prose-invert max-w-none text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
-                  <ReactMarkdown>
+                  <Markdown>
                     {itinerary.description}
-                  </ReactMarkdown>
+                  </Markdown>
                 </div>
 
                 <div className="space-y-4">
                   <div className="pt-4">
-                    {itinerary.is_owned ? (
+                    {itinerary.is_purchased_by_user ? (
                       <button
                         onClick={handleDownload}
                         disabled={isDownloading}
@@ -496,9 +501,9 @@ export default function ItineraryProductPage() {
                     <div key={idx} className="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 space-y-4">
                       <h4 className="text-2xl font-black text-blue-600 italic">{dest.name}</h4>
                       <div className="prose prose-sm dark:prose-invert max-w-none text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                        <ReactMarkdown>
+                        <Markdown>
                           {dest.description}
-                        </ReactMarkdown>
+                        </Markdown>
                       </div>
                       {dest.culture && (
                         <div className="p-6 bg-zinc-50 dark:bg-zinc-950 rounded-2xl border-l-4 border-blue-600">
@@ -527,11 +532,23 @@ export default function ItineraryProductPage() {
                         <ShieldCheck className="w-6 h-6" />
                         <h4 className="text-2xl font-black italic uppercase tracking-tight">Visa Process</h4>
                       </div>
-                      <div className="prose prose-lg dark:prose-invert max-w-none">
+                      <div className="prose prose-blue dark:prose-invert max-w-none">
                         <div className="font-medium text-zinc-700 dark:text-zinc-300">
-                          <ReactMarkdown>
-                            {itinerary.visa_requirements || itinerary.country_details?.visa_process}
-                          </ReactMarkdown>
+                          <div className="prose prose-blue dark:prose-invert max-w-none prose-p:leading-relaxed prose-li:my-2">
+                            <Markdown options={{ 
+                              overrides: {
+                                h1: { props: { className: 'text-2xl font-black mb-4' } },
+                                h2: { props: { className: 'text-xl font-bold mt-8 mb-3' } },
+                                h3: { props: { className: 'text-lg font-bold mt-6 mb-2' } }
+                              }
+                            }}>
+                              {(() => {
+                                let text = (itinerary.visa_requirements || itinerary.country_details?.visa_process || "").replace(/\\n/g, '\n');
+                                // Strip ```markdown and ``` markers if present
+                                return text.replace(/^```markdown\n?/, '').replace(/```$/, '').trim();
+                              })()}
+                            </Markdown>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -573,15 +590,15 @@ export default function ItineraryProductPage() {
                   </div>
 
                   {/* Pro Tips Side Card */}
-                  <div className="bg-zinc-950 text-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl space-y-8 flex flex-col">
-                    <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
-                      <Sparkles className="w-6 h-6 text-white" />
+                  <div className="bg-white dark:bg-zinc-900 p-8 md:p-12 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-8 flex flex-col">
+                    <div className="flex items-center gap-3 text-blue-600">
+                      <Sparkles className="w-6 h-6" />
+                      <h4 className="text-2xl font-black italic uppercase tracking-tight">Pro Tips</h4>
                     </div>
-                    <h4 className="text-2xl font-black italic uppercase tracking-tight">Pro Tips</h4>
                     <ul className="space-y-4 flex-1">
                       {itinerary.country_details.tips?.map((tip: string, idx: number) => (
-                        <li key={idx} className="flex items-start gap-3 text-sm text-zinc-400 leading-relaxed group">
-                          <span className="text-blue-500 font-black mt-0.5 opacity-40 group-hover:opacity-100 transition-opacity">0{idx+1}</span>
+                        <li key={idx} className="flex items-start gap-3 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed group">
+                          <span className="text-blue-600 font-black mt-0.5 opacity-30 group-hover:opacity-100 transition-opacity">0{idx+1}</span>
                           {tip}
                         </li>
                       ))}

@@ -27,6 +27,19 @@ class AIEngine:
         self.search_service = SearchService()
         self.visa_service = VisaService(self)
 
+    def _clean_ai_text(self, text):
+        """
+        Strips markdown code block markers (e.g., ```markdown ... ```) from a string.
+        """
+        if not text:
+            return ""
+        # Remove opening ```markdown or ```
+        import re
+        text = re.sub(r'^```[a-zA-Z]*\n?', '', text.strip())
+        # Remove closing ```
+        text = re.sub(r'\n?```$', '', text)
+        return text.strip()
+
     def _extract_json(self, text):
         """
         Helper to extract JSON from a potentially messy AI response.
@@ -155,8 +168,8 @@ class AIEngine:
         try:
             data = self._extract_json(self.low_cost_llm.invoke(messages).content)
             if data:
-                country_obj.visa_process = data.get('visa_process', country_obj.visa_process)
-                country_obj.best_time = data.get('best_time', country_obj.best_time)
+                country_obj.visa_process = self._clean_ai_text(data.get('visa_process', country_obj.visa_process))
+                country_obj.best_time = self._clean_ai_text(data.get('best_time', country_obj.best_time))
                 country_obj.days_recommendation = data.get('days_recommendation', country_obj.days_recommendation)
                 country_obj.airports = data.get('airports', country_obj.airports)
                 country_obj.tips = data.get('tips', country_obj.tips)
@@ -193,7 +206,7 @@ class AIEngine:
                 attraction_obj.suggested_duration = data.get('suggested_duration', attraction_obj.suggested_duration)
                 attraction_obj.ticket_price = data.get('ticket_price', attraction_obj.ticket_price)
                 attraction_obj.closing_days = data.get('closing_days', attraction_obj.closing_days)
-                attraction_obj.description = data.get('description', attraction_obj.description)
+                attraction_obj.description = self._clean_ai_text(data.get('description', attraction_obj.description))
                 attraction_obj.save()
         except:
             pass
@@ -209,7 +222,7 @@ class AIEngine:
         
         try:
             summary = self.low_cost_llm.invoke(messages).content
-            destination_obj.culture = summary
+            destination_obj.culture = self._clean_ai_text(summary)
             destination_obj.save()
         except:
             pass

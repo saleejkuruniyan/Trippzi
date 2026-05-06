@@ -37,7 +37,8 @@ class VisaService:
         ]
         
         try:
-            content = self.ai_engine.low_cost_llm.invoke(messages).content
+            raw_content = self.ai_engine.low_cost_llm.invoke(messages).content
+            content = self.ai_engine._clean_ai_text(raw_content)
             
             # Save/Update DB
             if not requirement:

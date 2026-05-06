@@ -80,24 +80,34 @@ class CountrySerializer(serializers.ModelSerializer):
 class SimpleItinerarySerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=True, required=False)
     nationality_details = CountrySerializer(source='nationality', read_only=True)
+    is_purchased_by_user = serializers.SerializerMethodField()
     
     class Meta:
         model = Itinerary
         fields = '__all__'
+
+    def get_is_purchased_by_user(self, obj):
+        request = self.context.get('request')
+        user = request.user if request else None
+        if user and user.is_authenticated:
+            return Transaction.objects.filter(user=user, itinerary=obj, status='COMPLETED').exists()
+        return False
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         request = self.context.get('request')
         user = request.user if request else None
         
-        is_owned = False
+        # Ownership check: Staff or paid transaction
+        is_purchased = False
         if user and user.is_authenticated:
-            if instance.user == user:
-                is_owned = True
+            if user.is_staff:
+                is_purchased = True
             elif Transaction.objects.filter(user=user, itinerary=instance, status='COMPLETED').exists():
-                is_owned = True
-        if instance.is_custom and not is_owned and not (user and user.is_staff):
-            # Mask image and sensitive metadata for unapproved/unowned custom trips
+                is_purchased = True
+
+        if instance.is_custom and not is_purchased:
+            # Mask image and sensitive metadata for unowned custom trips
             if not instance.is_approved:
                 data['image'] = None
                 data['image_url'] = None
@@ -107,7 +117,7 @@ class SimpleItinerarySerializer(serializers.ModelSerializer):
                 data['content'] = data['content'][:1]
             else:
                 data['content'] = []
-        elif not instance.is_approved and not is_owned and not (user and user.is_staff):
+        elif not instance.is_approved and not is_purchased:
             data['image'] = None
             data['image_url'] = None
 
@@ -128,7 +138,7 @@ class ItinerarySerializer(serializers.ModelSerializer):
     day_details = ItineraryDaySerializer(many=True, read_only=True)
     nationality_details = CountrySerializer(source='nationality', read_only=True)
     image = serializers.ImageField(use_url=True, required=False)
-    is_owned = serializers.SerializerMethodField()
+    is_purchased_by_user = serializers.SerializerMethodField()
     visa_requirements = serializers.SerializerMethodField()
     
     class Meta:
@@ -142,13 +152,14 @@ class ItinerarySerializer(serializers.ModelSerializer):
         
         # Check ownership and paid status
         is_paid = False
-        is_owner = False
         if user and user.is_authenticated:
-            is_paid = Transaction.objects.filter(user=user, itinerary=instance, status='COMPLETED').exists()
-            is_owner = instance.user == user
+            if user.is_staff:
+                is_paid = True
+            else:
+                is_paid = Transaction.objects.filter(user=user, itinerary=instance, status='COMPLETED').exists()
 
-        # If not paid AND not owner AND not staff, mask all days except Day 1
-        if not is_paid and not is_owner and not (user and user.is_staff):
+        # If not paid AND not staff, mask all days except Day 1
+        if not is_paid:
             original_content = data.get('content', [])
             if isinstance(original_content, list) and len(original_content) > 0:
                 data['content'] = original_content[:1] # Only Day 1
@@ -157,9 +168,8 @@ class ItinerarySerializer(serializers.ModelSerializer):
             if 'day_details' in data:
                 data['day_details'] = [d for d in data['day_details'] if d.get('day_number') == 1]
         
-        # Inject dynamic pricing from SiteSettings for custom itineraries if not owned/paid
-        # ONLY for non-staff users
-        if instance.is_custom and not is_paid and not (user and user.is_staff):
+        # Inject dynamic pricing from SiteSettings for custom itineraries if not paid
+        if instance.is_custom and not is_paid:
             from .models import SiteSettings
             settings_obj = SiteSettings.get_settings()
             data['sale_price'] = str(settings_obj.custom_itinerary_price)
@@ -179,12 +189,14 @@ class ItinerarySerializer(serializers.ModelSerializer):
                 
         return data
 
-    def get_is_owned(self, obj):
+    def get_is_purchased_by_user(self, obj):
         request = self.context.get('request')
         user = request.user if request else None
+        
         if user and user.is_authenticated:
-            if obj.user == user:
+            if user.is_staff:
                 return True
+            # Check for a successful purchase
             return Transaction.objects.filter(user=user, itinerary=obj, status='COMPLETED').exists()
         return False
 

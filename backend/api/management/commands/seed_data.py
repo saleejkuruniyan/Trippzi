@@ -27,16 +27,31 @@ class Command(BaseCommand):
 
         def get_iso_code(name):
             try:
-                # Common overrides
-                overrides = {"USA": "us", "UK": "gb", "UAE": "ae", "South Korea": "kr", "Vietnam": "vn"}
+                # Common overrides for accuracy
+                overrides = {
+                    "USA": "us", "United States": "us", "UK": "gb", "United Kingdom": "gb",
+                    "UAE": "ae", "United Arab Emirates": "ae", "South Korea": "kr", 
+                    "Vietnam": "vn", "India": "in", "Australia": "au", "Germany": "de",
+                    "France": "fr", "Italy": "it", "Spain": "es", "Japan": "jp", "China": "cn",
+                    "Singapore": "sg", "Malaysia": "my", "Thailand": "th", "Switzerland": "ch",
+                    "Netherlands": "nl", "Canada": "ca", "Brazil": "br", "Russia": "ru"
+                }
                 if name in overrides: return overrides[name]
 
+                # Attempt 1: Full text exact match
                 url = f"https://restcountries.com/v3.1/name/{urllib.parse.quote(name)}?fullText=true"
-                with urllib.request.urlopen(url) as response:
+                with urllib.request.urlopen(url, timeout=5) as response:
                     data = json.loads(response.read().decode())
                     return data[0]['cca2'].lower()
             except:
-                return "un"
+                # Attempt 2: Fuzzy match
+                try:
+                    url = f"https://restcountries.com/v3.1/name/{urllib.parse.quote(name)}"
+                    with urllib.request.urlopen(url, timeout=5) as response:
+                        data = json.loads(response.read().decode())
+                        return data[0]['cca2'].lower()
+                except:
+                    return "in" # Safe default for your primary market if all else fails
 
         for c_data in countries_data:
             name = c_data['name']

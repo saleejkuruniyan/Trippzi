@@ -92,14 +92,6 @@ export default function ItineraryPreviewPage() {
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-600/20 text-blue-400 text-[10px] font-black uppercase tracking-widest border border-blue-500/30">
               <Sparkles className="w-3 h-3" /> Exclusive Preview
             </div>
-            {itinerary.nationality_details && (
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-600/20 text-amber-400 text-[10px] font-black uppercase tracking-widest border border-amber-500/30 italic">
-                {itinerary.nationality_details.flag_url && (
-                  <Image src={itinerary.nationality_details.flag_url} alt="Flag" width={14} height={14} className="rounded-sm" />
-                )}
-                <span>For {itinerary.nationality_details.name} Nationalities</span>
-              </div>
-            )}
           </div>
           <h1 className="text-5xl md:text-7xl font-black italic tracking-tighter uppercase mb-4">
             {itinerary.title}
@@ -107,7 +99,14 @@ export default function ItineraryPreviewPage() {
           <div className="flex items-center gap-6 text-zinc-400 font-medium">
             <div className="flex items-center gap-2"><MapPin className="w-4 h-4" /> {itinerary.destination}</div>
             <div className="flex items-center gap-2"><Clock className="w-4 h-4" /> {itinerary.duration_days} Days</div>
-            {!itinerary.nationality_details && (
+            {itinerary.nationality_details ? (
+              <div className="flex items-center gap-2">
+                {itinerary.nationality_details.flag_url && (
+                  <Image src={itinerary.nationality_details.flag_url} alt="Flag" width={14} height={14} className="rounded-sm" />
+                )}
+                <span className="text-blue-400 font-bold uppercase text-[11px] tracking-tight">For {itinerary.nationality_details.name} Nationalities</span>
+              </div>
+            ) : (
               <div className="flex items-center gap-2"><Globe className="w-4 h-4" /> Global Travelers</div>
             )}
           </div>
@@ -127,7 +126,7 @@ export default function ItineraryPreviewPage() {
                 <div className="space-y-12 relative">
                     {(() => {
                       let activities = day1.activities || [];
-                      if (itinerary.is_custom && !itinerary.is_owned) {
+                      if (!itinerary.is_purchased_by_user) {
                         activities = activities.slice(0, Math.max(1, Math.ceil(activities.length / 2)));
                       }
                       return activities.map((act: any, i: number) => {
@@ -171,7 +170,7 @@ export default function ItineraryPreviewPage() {
                     })()}
                     
                     {/* Fade out effect and Continuation dots below the list */}
-                    {itinerary.is_custom && !itinerary.is_owned && (
+                    {!itinerary.is_purchased_by_user && (
                       <div className="relative flex flex-col items-center gap-3 pt-12 pb-8 animate-pulse">
                          <div className="absolute inset-x-0 -top-32 h-32 bg-gradient-to-t from-zinc-950 to-transparent pointer-events-none" />
                          <div className="w-2 h-2 rounded-full bg-blue-500/40" />
@@ -200,7 +199,7 @@ export default function ItineraryPreviewPage() {
           </div>
 
           {/* The Paywall / Unlock Section (Now in Sidebar) */}
-          {!itinerary.is_owned && (
+          {!itinerary.is_purchased_by_user && (
             <div className="relative">
               <div className="relative z-20 text-center space-y-6">
                 <div className="bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-8 rounded-[2.5rem] shadow-2xl">
@@ -225,7 +224,7 @@ export default function ItineraryPreviewPage() {
             </div>
           )}
 
-          {itinerary.is_owned && (
+          {itinerary.is_purchased_by_user && (
             <div className="bg-zinc-900 border border-green-500/30 p-8 rounded-[2.5rem] text-center space-y-6 shadow-2xl">
               <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-green-500/20">
                 <ShieldCheck className="w-8 h-8 text-white" />

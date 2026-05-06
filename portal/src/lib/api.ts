@@ -79,7 +79,10 @@ export async function fetchItineraries() {
 }
 
 export async function fetchItineraryById(id: string | number) {
-  const res = await apiRequest(`${API_BASE}/itineraries/${id}/`, { headers: getAuthHeaders() });
+  const res = await apiRequest(`${API_BASE}/itineraries/${id}/?t=${Date.now()}`, { 
+    headers: getAuthHeaders(),
+    cache: 'no-store' as RequestCache
+  });
   if (!res.ok) return null;
   return res.json();
 }
