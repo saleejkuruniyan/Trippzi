@@ -61,7 +61,7 @@ export function PaymentStatusModal({ isOpen, status, message, onClose }: Payment
               )}
             </div>
 
-            <h2 className="text-3xl font-black italic tracking-tighter uppercase mb-4">
+            <h2 className="text-3xl font-black tracking-tighter uppercase mb-4">
               {status === 'processing' ? 'Processing Payment' : 
                status === 'success' ? 'Payment Successful!' : 'Payment Failed'}
             </h2>

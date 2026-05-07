@@ -65,7 +65,7 @@ export function AddressModal({ isOpen, onClose, onSave, initialData }: AddressMo
             <div className="p-8">
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h2 className="text-2xl font-black italic uppercase tracking-tight">Billing Details</h2>
+                  <h2 className="text-2xl font-black uppercase tracking-tight">Billing Details</h2>
                   <p className="text-sm text-zinc-500">Required for booklet delivery & tax</p>
                 </div>
                 <button 

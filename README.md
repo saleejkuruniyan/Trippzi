@@ -1,6 +1,6 @@
 # Trippzi 🌍
 
-Trippzi is a premium, AI-powered travel content engine and marketplace. It leverages Large Language Models (LLMs) to generate personalized, high-quality travel itineraries while providing real-time visa and documentation requirements based on the user's passport.
+Trippzi is a premium, smart travel content engine and marketplace. It leverages Large Language Models (LLMs) to generate personalized, high-quality travel itineraries while providing real-time visa and documentation requirements based on the user's passport.
 
 ## 🚀 Key Features
 

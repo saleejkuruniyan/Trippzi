@@ -312,8 +312,8 @@ export default function ItineraryProductPage() {
                 {!itinerary.is_purchased_by_user && (
                   <div className="flex items-end gap-4">
                     <div className="space-y-1">
-                      <span className="text-zinc-400 line-through text-sm italic">Regular price ₹{itinerary.regular_price}</span>
-                      <div className="text-5xl font-black text-primary italic">₹{itinerary.sale_price}</div>
+                      <span className="text-zinc-400 line-through text-sm">Regular price ₹{itinerary.regular_price}</span>
+                      <div className="text-5xl font-black text-primary">₹{itinerary.sale_price}</div>
                     </div>
                     {itinerary.regular_price && itinerary.sale_price && (
                       <span className="bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-3 py-1 rounded-lg text-xs font-bold mb-2">
@@ -388,7 +388,7 @@ export default function ItineraryProductPage() {
           {/* Detailed Content / Day-wise */}
           <div className="mt-32 space-y-12">
             <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-              <h2 className="text-4xl font-black italic tracking-tighter">Day-wise Breakdown</h2>
+              <h2 className="text-4xl font-black tracking-tighter">Day-wise Breakdown</h2>
               {isTeaser && (
                 <div className="bg-primary/5 dark:bg-primary/20/20 text-primary dark:text-primary/70 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 border border-primary/10 dark:border-primary/20/30">
                   <Sparkles className="w-4 h-4" /> Unlock to see all {itinerary.duration_days} days
@@ -493,13 +493,13 @@ export default function ItineraryProductPage() {
             {itinerary.destinations_details && itinerary.destinations_details.length > 0 && (
               <div className="mt-32 space-y-12">
                 <div className="text-center">
-                  <h2 className="text-4xl font-black italic tracking-tighter uppercase">Destination Highlights</h2>
+                  <h2 className="text-4xl font-black tracking-tighter uppercase">Destination Highlights</h2>
                   <p className="text-zinc-500 mt-2">Deeper look into the cities you'll explore</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {itinerary.destinations_details.map((dest: any, idx: number) => (
                     <div key={idx} className="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 space-y-4">
-                      <h4 className="text-2xl font-black text-primary italic">{dest.name}</h4>
+                      <h4 className="text-2xl font-black text-primary">{dest.name}</h4>
                       <div className="prose prose-sm dark:prose-invert max-w-none text-zinc-500 dark:text-zinc-400 leading-relaxed">
                         <Markdown>
                           {dest.description}
@@ -508,7 +508,7 @@ export default function ItineraryProductPage() {
                       {dest.culture && (
                         <div className="p-6 bg-zinc-50 dark:bg-zinc-950 rounded-2xl border-l-4 border-primary">
                           <h5 className="text-xs font-black uppercase tracking-widest text-zinc-400 mb-2">Culture & Heritage</h5>
-                          <p className="text-xs italic text-zinc-500">{dest.culture}</p>
+                          <p className="text-xs text-zinc-500">{dest.culture}</p>
                         </div>
                       )}
                     </div>
@@ -521,7 +521,7 @@ export default function ItineraryProductPage() {
             {itinerary.country_details && (
               <div className="mt-32 space-y-12">
                 <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-                  <h2 className="text-4xl font-black italic tracking-tighter">Country Essentials</h2>
+                  <h2 className="text-4xl font-black tracking-tighter">Country Essentials</h2>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -530,7 +530,7 @@ export default function ItineraryProductPage() {
                     <div className="space-y-4">
                       <div className="flex items-center gap-3 text-primary">
                         <ShieldCheck className="w-6 h-6" />
-                        <h4 className="text-2xl font-black italic uppercase tracking-tight">Visa Process</h4>
+                        <h4 className="text-2xl font-black uppercase tracking-tight">Visa Process</h4>
                       </div>
                       <div className="prose prose-blue dark:prose-invert max-w-none">
                         <div className="font-medium text-zinc-700 dark:text-zinc-300">
@@ -593,7 +593,7 @@ export default function ItineraryProductPage() {
                   <div className="bg-white dark:bg-zinc-900 p-8 md:p-12 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-8 flex flex-col">
                     <div className="flex items-center gap-3 text-primary">
                       <Sparkles className="w-6 h-6" />
-                      <h4 className="text-2xl font-black italic uppercase tracking-tight">Pro Tips</h4>
+                      <h4 className="text-2xl font-black uppercase tracking-tight">Pro Tips</h4>
                     </div>
                     <ul className="space-y-4 flex-1">
                       {itinerary.country_details.tips?.map((tip: string, idx: number) => (
@@ -612,7 +612,7 @@ export default function ItineraryProductPage() {
           <div className="mt-40 space-y-12">
             <div className="flex items-end justify-between">
               <div>
-                <h3 className="text-3xl font-black italic tracking-tighter">YOU MAY ALSO LIKE</h3>
+                <h3 className="text-3xl font-black tracking-tighter">YOU MAY ALSO LIKE</h3>
                 <p className="text-zinc-500 mt-2">More adventures curated for your soul.</p>
               </div>
               <Link href="/destinations" className="text-sm font-bold text-primary hover:underline">View all</Link>
@@ -635,7 +635,7 @@ export default function ItineraryProductPage() {
                   </div>
                   <div>
                     <h5 className="font-bold group-hover:text-primary transition-colors">{item.title}</h5>
-                    <p className="text-sm text-primary font-black italic">₹{item.sale_price}</p>
+                    <p className="text-sm text-primary font-black">₹{item.sale_price}</p>
                   </div>
                 </Link>
               ))}

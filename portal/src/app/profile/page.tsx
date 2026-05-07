@@ -70,7 +70,7 @@ export default function ProfilePage() {
       <main className="flex-1 pt-32 pb-20 px-4">
         <div className="max-w-4xl mx-auto">
           <header className="mb-12">
-            <h1 className="text-4xl font-black italic tracking-tighter">My Account</h1>
+            <h1 className="text-4xl font-black tracking-tighter">My Account</h1>
             <p className="text-zinc-500 mt-2">Manage your personal details and checkout information.</p>
           </header>
 
@@ -146,7 +146,7 @@ export default function ProfilePage() {
                       })}
                       placeholder="Select your passport country"
                     />
-                    <p className="text-[10px] text-zinc-400 font-medium italic">
+                    <p className="text-[10px] text-zinc-400 font-medium">
                       * This helps us provide accurate visa and entry requirements for your trips.
                     </p>
                   </div>

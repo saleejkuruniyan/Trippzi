@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { generateItinerary, fetchDestinations, fetchSubDestinations } from "@/lib/api"
 import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
 import { Sparkles, MapPin, Calendar, Wallet, Zap, Check, ShieldCheck, Heart } from "lucide-react"
 import { AuthModal } from "@/components/auth-modal"
 import { CountryDropdown } from "@/components/country-dropdown"
@@ -15,7 +16,7 @@ export default function GeneratePage() {
   const [loading, setLoading] = useState(false)
   const [countries, setCountries] = useState<any[]>([])
   const [availableDestinations, setAvailableDestinations] = useState<any[]>([])
-  
+
   const [selectedCountry, setSelectedCountry] = useState<any>(null)
   const [selectedDestinations, setSelectedDestinations] = useState<number[]>([])
 
@@ -36,7 +37,7 @@ export default function GeneratePage() {
       try {
         const data = await fetchDestinations(true)
         const raw = Array.isArray(data) ? data : data.results || []
-        
+
         // Get user nationality from profile
         let userNationality = "";
         const userJson = localStorage.getItem('trippzi-user')
@@ -57,11 +58,11 @@ export default function GeneratePage() {
           if (b.name === "India") return 1
           return a.name.localeCompare(b.name)
         })
-        
+
         setCountries(sorted)
 
         if (userNationality) {
-          setFormData(prev => ({...prev, source_country: userNationality}))
+          setFormData(prev => ({ ...prev, source_country: userNationality }))
         }
       } catch (err) {
         console.error("Failed to init generation page", err)
@@ -69,7 +70,7 @@ export default function GeneratePage() {
     }
 
     initData()
-    
+
     // Listen for storage changes (login/profile updates)
     const handleStorage = () => initData();
     window.addEventListener('storage', handleStorage);
@@ -92,7 +93,7 @@ export default function GeneratePage() {
   }
 
   const toggleDestination = (id: number) => {
-    setSelectedDestinations(prev => 
+    setSelectedDestinations(prev =>
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     )
   }
@@ -155,15 +156,15 @@ export default function GeneratePage() {
             <HeaderSection />
 
             <form onSubmit={handleSubmit} className="space-y-8">
-              <CountryDropdown 
+              <CountryDropdown
                 label="1. Your Passport Country"
                 icon={<ShieldCheck className="w-4 h-4 text-primary/80" />}
                 selectedCountryName={formData.source_country}
                 countries={countries}
-                onSelect={(c) => setFormData({...formData, source_country: c.name})}
+                onSelect={(c) => setFormData({ ...formData, source_country: c.name })}
               />
 
-              <CountryDropdown 
+              <CountryDropdown
                 label="2. Select Target Country"
                 icon={<MapPin className="w-4 h-4 text-primary/80" />}
                 selectedCountryName={selectedCountry?.name}
@@ -175,28 +176,28 @@ export default function GeneratePage() {
               <AnimatePresence>
                 {selectedCountry && (
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-                    <DestinationSection 
+                    <DestinationSection
                       destinations={availableDestinations}
                       selected={selectedDestinations}
                       onToggle={toggleDestination}
                       isOtherOpen={isOtherOpen}
                       onOtherToggle={() => setIsOtherOpen(!isOtherOpen)}
                       customValue={formData.custom_destination}
-                      onCustomChange={(val) => setFormData({...formData, custom_destination: val})}
+                      onCustomChange={(val) => setFormData({ ...formData, custom_destination: val })}
                     />
 
                     <div className="grid grid-cols-2 gap-6">
-                      <FormInput label="Duration" icon={<Calendar className="w-4 h-4 text-primary/80" />} type="number" value={formData.duration} onChange={(val) => setFormData({...formData, duration: parseInt(val) || 0})} />
-                      <FormSelect label="Budget" icon={<Wallet className="w-4 h-4 text-primary/80" />} value={formData.budget} options={["Budget", "Mid-range", "Luxury"]} onChange={(val) => setFormData({...formData, budget: val})} />
+                      <FormInput label="Duration" icon={<Calendar className="w-4 h-4 text-primary/80" />} type="number" value={formData.duration} onChange={(val) => setFormData({ ...formData, duration: parseInt(val) || 0 })} />
+                      <FormSelect label="Budget" icon={<Wallet className="w-4 h-4 text-primary/80" />} value={formData.budget} options={["Budget", "Mid-range", "Luxury"]} onChange={(val) => setFormData({ ...formData, budget: val })} />
                     </div>
 
                     <div className="space-y-3">
                       <label className="block text-sm font-bold flex items-center gap-2"><Heart className="w-4 h-4 text-pink-500" /> Your Interests</label>
-                      <textarea 
+                      <textarea
                         className="w-full px-6 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border border-transparent focus:border-primary/80 outline-none font-sans font-bold h-24 transition-all"
                         placeholder="e.g. Anime, street food, temples, nightlife..."
                         value={formData.interests}
-                        onChange={e => setFormData({...formData, interests: e.target.value})}
+                        onChange={e => setFormData({ ...formData, interests: e.target.value })}
                       />
                     </div>
                   </motion.div>
@@ -204,7 +205,7 @@ export default function GeneratePage() {
               </AnimatePresence>
 
               {error && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-2xl text-red-600 dark:text-red-400 text-sm font-bold flex items-center gap-3"
@@ -216,7 +217,7 @@ export default function GeneratePage() {
 
               <button
                 type="submit" disabled={loading}
-                className="w-full py-6 rounded-[2rem] bg-primary text-white font-black text-xl italic tracking-tighter hover:bg-primary/90 transition-all shadow-2xl shadow-primary/80/20 active:scale-95 flex items-center justify-center gap-3"
+                className="w-full py-6 rounded-[2rem] bg-primary text-white font-black text-xl tracking-tighter hover:bg-primary/90 transition-all shadow-2xl shadow-primary/80/20 active:scale-95 flex items-center justify-center gap-3"
               >
                 {loading ? <Zap className="w-6 h-6 animate-spin" /> : <Zap className="w-6 h-6 fill-current" />}
                 {loading ? "GENERATING..." : "GENERATE ITINERARY"}
@@ -234,10 +235,10 @@ export default function GeneratePage() {
 function HeaderSection() {
   return (
     <div className="text-center space-y-4">
-      <div className="w-20 h-20 bg-primary rounded-3xl flex items-center justify-center mx-auto shadow-2xl shadow-primary/80/20">
-        <Sparkles className="w-10 h-10 text-white" />
+      <div className="flex justify-center mb-6">
+        <Image src="/logo.png" alt="Trippzi Logo" width={180} height={70} className="h-16 w-auto object-contain logo-primary" />
       </div>
-      <h1 className="text-4xl font-black italic tracking-tighter uppercase">AI Trip Planner</h1>
+      <h1 className="text-4xl font-black tracking-tighter uppercase">Smart Trip Planner</h1>
       <p className="text-zinc-500 font-medium max-w-sm mx-auto">Create a personalized, high-end itinerary in seconds.</p>
     </div>
   )
@@ -253,9 +254,8 @@ function DestinationSection({ destinations, selected, onToggle, isOtherOpen, onO
         {destinations.map((dest: any) => (
           <button
             key={dest.id} type="button" onClick={() => onToggle(dest.id)}
-            className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${
-              selected.includes(dest.id) ? 'bg-primary text-white' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400'
-            }`}
+            className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 ${selected.includes(dest.id) ? 'bg-primary text-white' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400'
+              }`}
           >
             {selected.includes(dest.id) && <Check className="w-4 h-4" />}
             {dest.name}
@@ -263,18 +263,17 @@ function DestinationSection({ destinations, selected, onToggle, isOtherOpen, onO
         ))}
         <button
           type="button" onClick={onOtherToggle}
-          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all border-2 border-dashed ${
-            isOtherOpen ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 dark:border-zinc-800 text-zinc-400'
-          }`}
+          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all border-2 border-dashed ${isOtherOpen ? 'border-zinc-900 bg-zinc-900 text-white' : 'border-zinc-200 dark:border-zinc-800 text-zinc-400'
+            }`}
         >
           Other +
         </button>
       </div>
       {isOtherOpen && (
-        <motion.input 
+        <motion.input
           initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
           type="text" placeholder="Enter custom destination name..."
-          className="w-full px-6 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border-2 border-dashed border-zinc-200 dark:border-zinc-700 outline-none font-bold italic"
+          className="w-full px-6 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800 border-2 border-dashed border-zinc-200 dark:border-zinc-700 outline-none font-bold"
           value={customValue} onChange={e => onCustomChange(e.target.value)}
         />
       )}
@@ -286,7 +285,7 @@ function FormInput({ label, icon, type, value, onChange }: any) {
   return (
     <div className="space-y-3">
       <label className="block text-sm font-bold flex items-center gap-2">{icon} {label}</label>
-      <input 
+      <input
         type={type} className="w-full px-6 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800 font-bold"
         value={value} onChange={e => onChange(e.target.value)}
       />
@@ -298,7 +297,7 @@ function FormSelect({ label, icon, value, options, onChange }: any) {
   return (
     <div className="space-y-3">
       <label className="block text-sm font-bold flex items-center gap-2">{icon} {label}</label>
-      <select 
+      <select
         className="w-full px-6 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800 font-sans font-bold appearance-none outline-none focus:ring-2 focus:ring-primary/80"
         value={value} onChange={e => onChange(e.target.value)}
       >

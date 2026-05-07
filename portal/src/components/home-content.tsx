@@ -16,7 +16,7 @@ export function HomePageContent() {
               animate={{ opacity: 1, y: 0 }}
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 dark:bg-primary/20/20 text-primary dark:text-primary/70 text-xs font-bold tracking-widest uppercase mb-8"
             >
-              <Zap className="w-3 h-3 fill-current" /> AI-Powered Travel
+              <Zap className="w-3 h-3 fill-current" /> Smart Travel Itineraries
             </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -25,7 +25,7 @@ export function HomePageContent() {
               className="text-5xl lg:text-7xl font-sans font-bold tracking-tight mb-8 leading-[1.1]"
             >
               Your Next Great <br />
-              <span className="text-primary italic">Adventure</span>, Predicted.
+              <span className="text-primary">Adventure</span>, Predicted.
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -33,10 +33,10 @@ export function HomePageContent() {
               transition={{ delay: 0.2 }}
               className="text-lg lg:text-xl text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto mb-12 font-light leading-relaxed"
             >
-              We curate personalized, high-end travel itineraries based on your passport, budget, and passions. 
+              We curate personalized, high-end travel itineraries based on your passport, budget, and passions.
               Skip the planning, keep the discovery.
             </motion.p>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -52,7 +52,7 @@ export function HomePageContent() {
             </motion.div>
           </div>
         </div>
-        
+
         {/* Decorative Elements */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl opacity-10 pointer-events-none">
           <div className="absolute top-0 left-0 w-64 h-64 bg-primary/80 rounded-full blur-[120px]" />
@@ -69,7 +69,7 @@ export function HomePageContent() {
               { icon: <CreditCard className="w-8 h-8" />, title: "Budget Optimized", desc: "AI-driven cost estimations and budget hacks for every destination." },
               { icon: <Download className="w-8 h-8" />, title: "Offline Access", desc: "Download high-quality PDFs and access your plans anywhere." }
             ].map((f, i) => (
-              <motion.div 
+              <motion.div
                 key={f.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}

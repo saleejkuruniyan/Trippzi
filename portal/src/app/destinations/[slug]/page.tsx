@@ -59,7 +59,7 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
               <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter uppercase">
                 {dest.name}
               </h1>
-              <p className="text-xl md:text-2xl text-white/90 font-medium max-w-2xl mx-auto italic">
+              <p className="text-xl md:text-2xl text-white/90 font-medium max-w-2xl mx-auto">
                 {dest.description}
               </p>
             </motion.div>
@@ -239,7 +239,7 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
                     <div className="flex items-center justify-between">
                       <div className="flex flex-col">
                         <span className="text-xs text-zinc-400 line-through">₹{itinerary.regular_price}</span>
-                        <span className="text-2xl font-black text-primary italic">₹{itinerary.sale_price}</span>
+                        <span className="text-2xl font-black text-primary">₹{itinerary.sale_price}</span>
                       </div>
                       <Link 
                         href={`/itinerary/${itinerary.id}`} 
@@ -252,7 +252,7 @@ export default function DestinationGuidePage({ params }: { params: Promise<{ slu
                 </motion.div>
               ))}
               {(!dest.itineraries || dest.itineraries.length === 0) && (
-                <div className="col-span-2 text-center p-12 bg-zinc-50 dark:bg-zinc-900 rounded-3xl italic text-zinc-500">
+                <div className="col-span-2 text-center p-12 bg-zinc-50 dark:bg-zinc-900 rounded-3xl text-zinc-500">
                   New itineraries for {dest.name} are coming soon!
                 </div>
               )}

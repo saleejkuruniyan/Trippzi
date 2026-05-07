@@ -109,7 +109,7 @@ export function CountryDropdown({
                   </button>
                 ))}
                 {filteredCountries.length === 0 && (
-                  <div className="px-4 py-8 text-center text-sm text-zinc-400 italic">No countries found</div>
+                  <div className="px-4 py-8 text-center text-sm text-zinc-400">No countries found</div>
                 )}
               </div>
             </motion.div>

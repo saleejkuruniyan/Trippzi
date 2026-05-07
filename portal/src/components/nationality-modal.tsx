@@ -78,7 +78,7 @@ export function NationalityModal({ isOpen, onClose, onSuccess }: NationalityModa
               <div className="w-16 h-16 bg-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-center mb-4 border border-white/30">
                 <Globe className="w-8 h-8 text-white animate-pulse" />
               </div>
-              <h2 className="text-3xl font-black text-white italic tracking-tighter uppercase">One Last Step</h2>
+              <h2 className="text-3xl font-black text-white tracking-tighter uppercase">One Last Step</h2>
               <p className="text-primary/10 text-sm font-medium">To provide accurate visa intelligence, we need your passport country.</p>
             </div>
 
@@ -98,7 +98,7 @@ export function NationalityModal({ isOpen, onClose, onSuccess }: NationalityModa
                     <Sparkles className="w-5 h-5 text-primary" />
                   </div>
                   <div className="space-y-1">
-                    <h4 className="text-sm font-bold text-primary/20 dark:text-primary/10 italic">Personalized Visa IQ</h4>
+                    <h4 className="text-sm font-bold text-primary/20 dark:text-primary/10">Personalized Visa IQ</h4>
                     <p className="text-xs text-primary/90 dark:text-primary/40 leading-relaxed">
                       We'll automatically calculate visa requirements, costs, and processing times specifically for your nationality.
                     </p>
@@ -109,7 +109,7 @@ export function NationalityModal({ isOpen, onClose, onSuccess }: NationalityModa
               <button 
                 onClick={handleSave}
                 disabled={!selectedCountry || loading}
-                className="w-full flex items-center justify-center gap-3 bg-zinc-950 dark:bg-primary text-white py-6 rounded-[2rem] font-black text-xl italic tracking-tighter hover:bg-primary dark:hover:bg-primary/90 transition-all shadow-xl shadow-primary/80/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-3 bg-zinc-950 dark:bg-primary text-white py-6 rounded-[2rem] font-black text-xl tracking-tighter hover:bg-primary dark:hover:bg-primary/90 transition-all shadow-xl shadow-primary/80/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? <Zap className="w-6 h-6 animate-spin" /> : <Zap className="w-6 h-6 fill-current" />}
                 {loading ? "SAVING..." : "START EXPLORING"}

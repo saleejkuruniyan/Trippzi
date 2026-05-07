@@ -36,7 +36,7 @@ export default function MyTripsPage() {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false)
   const [pendingUnlockId, setPendingUnlockId] = useState<number | null>(null)
   const [currentUserProfile, setCurrentUserProfile] = useState<any>(null)
-  
+
   const [paymentModal, setPaymentModal] = useState<{
     isOpen: boolean,
     status: 'success' | 'failure' | 'processing',
@@ -47,9 +47,9 @@ export default function MyTripsPage() {
     try {
       const { fetchProfile } = await import("@/lib/api")
       const profile = await fetchProfile()
-      
+
       const p = profile.profile || {}
-      
+
       setCurrentUserProfile({
         phone_number: p.phone_number || "",
         address: p.address || "",
@@ -112,7 +112,7 @@ export default function MyTripsPage() {
     setPaymentModal({ isOpen: true, status: 'processing', message: 'Initializing secure payment...' })
     try {
       const order = await createRazorpayOrder(itineraryId)
-      
+
       if (order.status === 'mock_success') {
         setPaymentModal({ isOpen: true, status: 'success', message: 'Mock payment successful!' })
         return
@@ -195,22 +195,22 @@ export default function MyTripsPage() {
                   transition={{ delay: idx * 0.08 }}
                   className="group bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 overflow-hidden hover:shadow-2xl hover:shadow-primary/80/10 transition-all duration-500 flex flex-col"
                 >
-                  <div 
+                  <div
                     onClick={() => router.push(trip.is_purchased_by_user ? `/itinerary/${trip.id}` : `/itinerary/${trip.id}/preview`)}
                     className="cursor-pointer"
                   >
                     <div className="relative aspect-[4/3] overflow-hidden">
-                        <Image 
-                          src={trip.image_url || trip.image || "/placeholder.png"} 
-                          alt={trip.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
+                      <Image
+                        src={trip.image_url || trip.image || "/placeholder.png"}
+                        alt={trip.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                       <div className="absolute bottom-4 left-4 right-4 text-white">
                         <p className="text-xs font-bold uppercase tracking-widest opacity-80 mb-1">
-                          {trip.is_custom ? 'Custom AI Trip' : 'Curated Plan'}
+                          {trip.is_custom ? 'Custom Smart Trip' : 'Curated Plan'}
                         </p>
                         <h3 className="text-xl font-bold truncate">{trip.title}</h3>
                       </div>
@@ -232,14 +232,14 @@ export default function MyTripsPage() {
                     <div className="pt-4 space-y-3">
                       {trip.is_purchased_by_user ? (
                         <div className="flex gap-2">
-                          <button 
+                          <button
                             onClick={() => router.push(`/itinerary/${trip.id}`)}
                             className="flex-1 flex items-center justify-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-black py-3 rounded-2xl font-bold hover:scale-[1.02] transition-transform"
                           >
                             <Sparkles className="w-4 h-4" />
                             View
                           </button>
-                          <button 
+                          <button
                             onClick={() => handleDownload(trip.id)}
                             className="flex-1 flex items-center justify-center gap-2 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white py-3 rounded-2xl font-bold hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all"
                           >
@@ -248,7 +248,7 @@ export default function MyTripsPage() {
                           </button>
                         </div>
                       ) : (
-                        <button 
+                        <button
                           onClick={() => handleUnlock(trip.id)}
                           className="w-full flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-2xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/80/20"
                         >

@@ -83,7 +83,7 @@ export default function DestinationsPage() {
           
           {filtered.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-zinc-500 italic">No destinations found matching your search.</p>
+              <p className="text-zinc-500">No destinations found matching your search.</p>
             </div>
           )}
         </div>
@@ -135,7 +135,10 @@ function DestinationCard({ dest, index }: { dest: any, index: number }) {
             <h3 className="text-3xl font-extrabold text-white leading-tight">{dest.name}</h3>
           </div>
           <p className="text-white/70 text-sm line-clamp-2 mb-4">{dest.description}</p>
-          <Link href={`/destinations/${dest.slug}`} className="inline-flex items-center gap-2 text-primary/70 font-bold text-sm hover:text-primary/40 transition-colors">
+          <Link 
+            href={`/destinations/${dest.slug}`} 
+            className="w-full bg-red-600 text-white py-3 rounded-2xl flex items-center justify-center gap-2 font-black text-sm uppercase tracking-tighter hover:bg-red-700 transition-all shadow-lg shadow-red-600/20 active:scale-95"
+          >
             View Travel Guide <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

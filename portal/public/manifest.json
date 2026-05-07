@@ -1,7 +1,7 @@
 {
   "name": "Trippzi",
   "short_name": "Trippzi",
-  "description": "AI-Powered Travel Itineraries",
+  "description": "Smart Travel Itineraries",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

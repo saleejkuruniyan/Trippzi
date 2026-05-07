@@ -93,7 +93,7 @@ export default function ItineraryPreviewPage() {
               <Sparkles className="w-3 h-3" /> Exclusive Preview
             </div>
           </div>
-          <h1 className="text-5xl md:text-7xl font-black italic tracking-tighter uppercase mb-4">
+          <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase mb-4">
             {itinerary.title}
           </h1>
           <div className="flex items-center gap-6 text-zinc-400 font-medium">
@@ -117,7 +117,7 @@ export default function ItineraryPreviewPage() {
       <div className="max-w-5xl mx-auto px-6 mt-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2 space-y-12">
           <section className="space-y-6">
-            <h2 className="text-3xl font-black italic border-b border-zinc-800 pb-4">A Sneak Peek: Day 01</h2>
+            <h2 className="text-3xl font-black border-b border-zinc-800 pb-4">A Sneak Peek: Day 01</h2>
             
             {day1 && (
               <div className="space-y-8 relative">
@@ -206,7 +206,7 @@ export default function ItineraryPreviewPage() {
                   <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-primary/80/20">
                     <Zap className="w-8 h-8 text-white fill-current" />
                   </div>
-                  <h3 className="text-xl font-black mb-4 uppercase italic">Unlock the full experience</h3>
+                  <h3 className="text-xl font-black mb-4 uppercase">Unlock the full experience</h3>
                   <p className="text-zinc-500 mb-8 text-sm">
                     Get access to all {itinerary.duration_days} days of curated planning, offline PDF booklet, and local secrets.
                   </p>
@@ -229,7 +229,7 @@ export default function ItineraryPreviewPage() {
               <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-green-500/20">
                 <ShieldCheck className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-black uppercase italic">You own this trip</h3>
+              <h3 className="text-xl font-black uppercase">You own this trip</h3>
               <button 
                 onClick={() => router.push(`/itinerary/${id}`)}
                 className="w-full bg-white text-black py-4 rounded-2xl text-lg font-black hover:bg-zinc-200 transition-all shadow-xl active:scale-95 flex items-center justify-center gap-3"
@@ -245,7 +245,7 @@ export default function ItineraryPreviewPage() {
       <div className="max-w-5xl mx-auto px-6 mt-40 space-y-12">
         <div className="flex items-end justify-between">
           <div>
-            <h3 className="text-3xl font-black italic tracking-tighter">YOU MAY ALSO LIKE</h3>
+            <h3 className="text-3xl font-black tracking-tighter">YOU MAY ALSO LIKE</h3>
             <p className="text-zinc-500 mt-2">More adventures curated for your soul.</p>
           </div>
           <Link href="/destinations" className="text-sm font-bold text-primary hover:underline">View all</Link>
@@ -264,7 +264,7 @@ export default function ItineraryPreviewPage() {
               </div>
               <div>
                 <h5 className="font-bold group-hover:text-primary/70 transition-colors">{item.title}</h5>
-                <p className="text-sm text-primary font-black italic">₹{item.sale_price}</p>
+                <p className="text-sm text-primary font-black">₹{item.sale_price}</p>
               </div>
             </Link>
           ))}

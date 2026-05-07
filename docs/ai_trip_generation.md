@@ -1,6 +1,6 @@
-# AI Trip Generation: Architecture & Data Flow
+# Smart Trip Generation: Architecture & Data Flow
 
-This document outlines the technical implementation of the Trippzi AI Trip Generator and its supporting services. The system is designed as a **self-enriching data engine** (Growth Loop) that minimizes API costs while maximizing the realism and accuracy of travel recommendations.
+This document outlines the technical implementation of the Trippzi Smart Trip Generator and its supporting services. The system is designed as a **self-enriching data engine** (Growth Loop) that minimizes API costs while maximizing the realism and accuracy of travel recommendations.
 
 ---
 
