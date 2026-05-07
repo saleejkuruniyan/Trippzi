@@ -6,6 +6,7 @@ import { X, Sparkles, ShieldCheck } from "lucide-react"
 import { useGoogleLogin } from '@react-oauth/google'
 import { googleLogin } from "@/lib/api"
 import Image from "next/image"
+import Link from "next/link"
 
 interface AuthModalProps {
   isOpen: boolean
@@ -61,11 +62,11 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
             className="relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden"
           >
             {/* Header with Background */}
-            <div className="relative h-32 bg-primary flex items-center justify-center">
+            <div className="relative h-44 bg-primary flex items-center justify-center">
               <div className="absolute inset-0 opacity-20">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent" />
               </div>
-              <Image src="/logo.png" alt="Trippzi" width={48} height={48} className="brightness-0 invert relative z-10" />
+              <Image src="/logo.png" alt="Trippzi" width={180} height={70} className="h-20 w-auto object-contain brightness-0 invert relative z-10" />
               <button 
                 onClick={onClose}
                 className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
@@ -97,8 +98,8 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
                   <span className="mx-1">•</span>
                   <Sparkles className="w-3 h-3 text-primary/80" /> One-click setup
                 </div>
-                <p className="text-[10px] text-zinc-400 max-w-[200px] mx-auto">
-                  By continuing, you agree to Trippzi's Terms of Service and Privacy Policy.
+                <p className="text-[10px] text-zinc-400 max-w-[250px] mx-auto leading-relaxed">
+                  By continuing, you agree to Trippzi's <Link href="/terms" className="underline hover:text-primary transition-colors">Terms of Service</Link> and <Link href="/privacy" className="underline hover:text-primary transition-colors">Privacy Policy</Link>.
                 </p>
               </div>
             </div>
