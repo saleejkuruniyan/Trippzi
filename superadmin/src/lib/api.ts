@@ -5,7 +5,7 @@ const getEnv = (key: string, defaultValue: string) => {
   return process.env[key] || defaultValue;
 };
 
-const API_BASE = getEnv('NEXT_PUBLIC_API_URL', 'http://localhost:8000/api');
+const API_BASE = getEnv('NEXT_PUBLIC_API_URL', 'http://localhost:8000/api').replace(/\/$/, '');
 
 function getHeaders() {
   const token = typeof window !== 'undefined' ? localStorage.getItem('trippzi-token') : null;

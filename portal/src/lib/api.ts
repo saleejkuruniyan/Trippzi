@@ -5,7 +5,7 @@ const getEnv = (key: string, defaultValue: string) => {
   return process.env[key] || defaultValue;
 };
 
-const API_BASE = getEnv('NEXT_PUBLIC_API_URL', 'http://localhost:8000/api');
+const API_BASE = getEnv('NEXT_PUBLIC_API_URL', 'http://localhost:8000/api').replace(/\/$/, '');
 
 export async function fetchDestinations(showAll = false) {
   const url = `${API_BASE}/destinations/list_all/?t=${Date.now()}${showAll ? '&show_all=true' : ''}`;
