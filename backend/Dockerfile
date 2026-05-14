@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install -y \
     libcairo2-dev \
     pkg-config \
     libharfbuzz0b \
-    libgdk-pixbuf2.0-0 \
+    libgdk-pixbuf-2.0-0 \
     shared-mime-info \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
