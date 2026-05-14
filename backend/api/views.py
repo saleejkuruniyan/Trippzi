@@ -19,6 +19,7 @@ from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
 import requests
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from .serializers import (
     ItinerarySerializer, TransactionSerializer, 
     UserSerializer, CountrySerializer, DestinationSerializer, AttractionSerializer
@@ -338,59 +339,70 @@ class GenerateItineraryView(APIView):
                 itinerary_obj.image.save(f"itinerary_{itinerary_obj.id}.jpg", hero_file)
             itinerary_obj.save()
 
-        # 4. Fetch and save day-wise images + Enrichment
+        # 4. Enrichment (Batched AI + Parallel Images)
+        all_activities = []
+        attraction_objs_map = {} # activity_name -> object
+        
+        # 4a. Create/Get all Attraction objects first
         for day in content_data:
             day_num = day.get('day_number')
             activities = day.get('activities', [])
-            
             for idx, act in enumerate(activities):
-                # Growth Loop: Save/Update Attraction in DB
-                try:
-                    act_location = act.get('location', '')
-                    # Heuristic: try to find which destination this activity belongs to
-                    dest_for_act = final_dest_objects[0] # Default to first
-                    for d in final_dest_objects:
-                        if d.name.lower() in act_location.lower():
-                            dest_for_act = d
-                            break
+                act_name = act.get('activity')
+                act_location = act.get('location', '')
+                
+                # Heuristic for destination
+                dest_for_act = final_dest_objects[0]
+                for d in final_dest_objects:
+                    if d.name.lower() in act_location.lower():
+                        dest_for_act = d
+                        break
 
-                    attraction_obj, a_created = Attraction.objects.get_or_create(
-                        name=act.get('activity'),
-                        destination=dest_for_act
-                    )
-                    # Refresh if stale or new
-                    ai_engine.refresh_attraction_data(attraction_obj)
-                    
-                    # Inject DB data back into the itinerary JSON for the user
-                    act['opening_time'] = attraction_obj.opening_time or act.get('opening_time')
-                    act['closing_time'] = attraction_obj.closing_time or act.get('closing_time')
-                    act['ticket_price'] = attraction_obj.ticket_price
-                    act['closing_days'] = attraction_obj.closing_days
-                except Exception as e:
-                    print(f"Error in attraction growth loop: {str(e)}")
+                att_obj, _ = Attraction.objects.get_or_create(
+                    name=act_name,
+                    destination=dest_for_act
+                )
+                attraction_objs_map[act_name] = att_obj
+                all_activities.append((act, day_num, idx))
 
-                # Use AI provided unsplash query
+        # 4b. Batch refresh attraction data (Parallel searches + SINGLE LLM extraction)
+        unique_attractions = list(attraction_objs_map.values())
+        ai_engine.batch_refresh_attractions(unique_attractions)
+
+        # 4c. Parallel Image Fetching + Final Data Sync
+        def finalize_activity(act, day_num, idx):
+            try:
+                att_obj = attraction_objs_map.get(act.get('activity'))
+                if att_obj:
+                    act['opening_time'] = att_obj.opening_time or act.get('opening_time')
+                    act['closing_time'] = att_obj.closing_time or act.get('closing_time')
+                    act['ticket_price'] = att_obj.ticket_price
+                    act['closing_days'] = att_obj.closing_days
+                
+                # Image Fetch
                 query = act.get('unsplash_query') or f"{act.get('activity')} {act.get('location')}"
                 image_urls = image_service.fetch_unsplash_images(query, count=1)
-                
                 if image_urls:
                     img_url = image_urls[0]
-                    act['image_url'] = img_url # Add to content JSON
-                    
-                    # Also save as ItineraryDay for backward compatibility or special uses
-                    if idx == 0: # Save first activity of each day as the day's thumbnail
+                    act['image_url'] = img_url
+                    if idx == 0:
                         day_detail = ItineraryDay.objects.create(
-                            itinerary=itinerary_obj,
-                            day_number=day_num,
+                            itinerary=itinerary_obj, day_number=day_num,
                             location_name=act.get('location', ''),
-                            image_url=img_url,
-                            caption=act.get('activity', '')
+                            image_url=img_url, caption=act.get('activity', '')
                         )
                         image_file = image_service.download_image(img_url)
                         if image_file:
                             day_detail.image.save(f"day_{day_num}_spot_{idx}.jpg", image_file)
-        
-        # Save updated content with image URLs
+            except Exception as e:
+                print(f"Error in final enrichment: {str(e)}")
+
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            futures = [executor.submit(finalize_activity, act, d, i) for act, d, i in all_activities]
+            for future in as_completed(futures):
+                future.result()
+
+        # Save updated content with image URLs and enriched data
         itinerary_obj.content = content_data
         itinerary_obj.save()
 

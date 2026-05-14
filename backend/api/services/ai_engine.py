@@ -211,6 +211,49 @@ class AIEngine:
         except:
             pass
 
+    def batch_refresh_attractions(self, attraction_objs):
+        """
+        Refreshes a list of attractions in batch to save LLM costs and time.
+        """
+        from concurrent.futures import ThreadPoolExecutor
+        
+        # 1. Parallel Search for all attractions
+        def fetch_search_context(att):
+            city = att.destination.name
+            return {
+                "id": att.id,
+                "name": att.name,
+                "city": city,
+                "context": self.search_service.search_attraction_info(att.name, city)
+            }
+
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            contexts = list(executor.map(fetch_search_context, attraction_objs))
+
+        # 2. Single LLM call to extract all data
+        messages = [
+            ("system", "You are a travel data assistant. Extract structured details from the provided contexts."),
+            ("user", f"Extract details for the following attractions. Return a JSON array where each object has: id, opening_time, closing_time, suggested_duration, ticket_price, closing_days, description.\n\nContexts: {json.dumps(contexts)}")
+        ]
+        
+        try:
+            results = self._extract_json(self.low_cost_llm.invoke(messages).content)
+            if results and isinstance(results, list):
+                # Map results back to objects
+                result_map = {str(r['id']): r for r in results if 'id' in r}
+                for att in attraction_objs:
+                    data = result_map.get(str(att.id))
+                    if data:
+                        att.opening_time = data.get('opening_time', att.opening_time)
+                        att.closing_time = data.get('closing_time', att.closing_time)
+                        att.suggested_duration = data.get('suggested_duration', att.suggested_duration)
+                        att.ticket_price = data.get('ticket_price', att.ticket_price)
+                        att.closing_days = data.get('closing_days', att.closing_days)
+                        att.description = self._clean_ai_text(data.get('description', att.description))
+                        att.save()
+        except Exception as e:
+            print(f"[AIEngine] Batch refresh failed: {str(e)}")
+
     def refresh_destination_data(self, destination_obj):
         """
         Uses AI to update destination-specific context like culture and heritage.

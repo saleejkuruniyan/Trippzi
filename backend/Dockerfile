@@ -64,4 +64,4 @@ EXPOSE 8000
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # Start Gunicorn with gthread optimization
-CMD ["/opt/venv/bin/gunicorn", "core.wsgi:application", "--bind=0.0.0.0:8000", "--workers=1", "--threads=4", "--worker-class=gthread", "--timeout=120", "--max-requests=1000", "--max-requests-jitter=100"]
+CMD ["/opt/venv/bin/gunicorn", "core.wsgi:application", "--bind=0.0.0.0:8000", "--workers=1", "--threads=4", "--worker-class=gthread", "--timeout=300", "--max-requests=1000", "--max-requests-jitter=100"]
