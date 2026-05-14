@@ -25,7 +25,7 @@ export const CountryForm = ({ initialData, onSave, onCancel, onDelete }: Country
   // Days recommendation is a dict { "3": "Short stay", "5": "Ideal" }
   const [daysRec, setDaysRec] = useState<any[]>(
     initialData?.days_recommendation 
-      ? Object.entries(initialData.days_recommendation).map(([days, desc]) => ({ days, desc }))
+      ? Object.entries(initialData.days_recommendation).map(([days, desc]: [string, any]) => ({ days, desc }))
       : [{ days: "", desc: "" }]
   )
 
@@ -42,8 +42,8 @@ export const CountryForm = ({ initialData, onSave, onCancel, onDelete }: Country
 
     const submissionData = {
       ...formData,
-      airports: formData.airports.split(",").map(s => s.trim()).filter(Boolean),
-      tips: formData.tips.split("\n").map(s => s.trim()).filter(Boolean),
+      airports: formData.airports.split(",").map((s: string) => s.trim()).filter(Boolean),
+      tips: formData.tips.split("\n").map((s: string) => s.trim()).filter(Boolean),
       days_recommendation
     }
     onSave(submissionData)

@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   description: "Administrative Control Center",
 };
 
+import Script from "next/script";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,6 +40,7 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
+        <Script src="/env.js" strategy="beforeInteractive" />
       </body>
     </html>
   );

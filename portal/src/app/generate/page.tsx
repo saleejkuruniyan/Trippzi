@@ -183,12 +183,12 @@ export default function GeneratePage() {
                       isOtherOpen={isOtherOpen}
                       onOtherToggle={() => setIsOtherOpen(!isOtherOpen)}
                       customValue={formData.custom_destination}
-                      onCustomChange={(val) => setFormData({ ...formData, custom_destination: val })}
+                      onCustomChange={(val: string) => setFormData({ ...formData, custom_destination: val })}
                     />
 
                     <div className="grid grid-cols-2 gap-6">
-                      <FormInput label="Duration" icon={<Calendar className="w-4 h-4 text-primary/80" />} type="number" value={formData.duration} onChange={(val) => setFormData({ ...formData, duration: parseInt(val) || 0 })} />
-                      <FormSelect label="Budget" icon={<Wallet className="w-4 h-4 text-primary/80" />} value={formData.budget} options={["Budget", "Mid-range", "Luxury"]} onChange={(val) => setFormData({ ...formData, budget: val })} />
+                      <FormInput label="Duration" icon={<Calendar className="w-4 h-4 text-primary/80" />} type="number" value={formData.duration} onChange={(val: string) => setFormData({ ...formData, duration: parseInt(val) || 0 })} />
+                      <FormSelect label="Budget" icon={<Wallet className="w-4 h-4 text-primary/80" />} value={formData.budget} options={["Budget", "Mid-range", "Luxury"]} onChange={(val: string) => setFormData({ ...formData, budget: val })} />
                     </div>
 
                     <div className="space-y-3">

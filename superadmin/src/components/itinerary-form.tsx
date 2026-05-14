@@ -34,9 +34,10 @@ interface ItineraryFormProps {
   onSave: (data: any) => Promise<void>
   onCancel: () => void
   onDelete?: (id: number) => Promise<void>
+  isCustom?: boolean
 }
 
-export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: ItineraryFormProps) => {
+export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete, isCustom }: ItineraryFormProps) => {
   const [countries, setCountries] = useState<any[]>([])
   const [allDestinations, setAllDestinations] = useState<any[]>([])
   const [formData, setFormData] = useState({
@@ -53,8 +54,8 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
     description: initialData?.description || "",
     highlights: initialData?.highlights || "",
     is_premium: initialData?.is_premium || false,
-    is_custom: initialData?.is_custom || false,
-    is_approved: initialData?.is_approved ?? (!initialData?.is_custom),
+    is_custom: initialData?.is_custom ?? isCustom ?? false,
+    is_approved: initialData?.is_approved ?? (!initialData?.is_custom && !isCustom),
     image_url: initialData?.image_url || "",
     content: initialData?.content || initialData?.days || [],
     nationality: initialData?.nationality?.id || initialData?.nationality || ""
@@ -216,7 +217,7 @@ export const ItineraryForm = ({ initialData, onSave, onCancel, onDelete }: Itine
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Included Sub-Destinations</label>
                   <div className="flex flex-wrap gap-2 p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-800 min-h-[50px]">
-                    {allDestinations.filter(d => !formData.country || d.country === parseInt(formData.country as string)).map(d => (
+                    {allDestinations.filter(d => !formData.country || d.country === parseInt(formData.country as string)).map((d: any) => (
                       <button
                         key={d.id}
                         type="button"

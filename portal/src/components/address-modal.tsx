@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, MapPin, Phone, Home, City, Globe, Hash, Zap } from "lucide-react"
+import { X, MapPin, Phone, Home, Globe, Hash, Zap } from "lucide-react"
 
 interface AddressModalProps {
   isOpen: boolean

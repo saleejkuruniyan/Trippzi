@@ -46,17 +46,32 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? (
-            <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
-              {children}
-            </GoogleOAuthProvider>
-          ) : (
-            children
-          )}
+          {(() => {
+            const clientId = typeof window !== 'undefined' && (window as any).ENV?.NEXT_PUBLIC_GOOGLE_CLIENT_ID 
+              ? (window as any).ENV.NEXT_PUBLIC_GOOGLE_CLIENT_ID 
+              : process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+            
+            if (clientId) {
+              return (
+                <GoogleOAuthProvider clientId={clientId}>
+                  {children}
+                </GoogleOAuthProvider>
+              );
+            }
+            return children;
+          })()}
         </ThemeProvider>
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
-        )}
+        {(() => {
+          const gaId = typeof window !== 'undefined' && (window as any).ENV?.NEXT_PUBLIC_GA_ID 
+            ? (window as any).ENV.NEXT_PUBLIC_GA_ID 
+            : process.env.NEXT_PUBLIC_GA_ID;
+          
+          if (gaId) {
+            return <GoogleAnalytics gaId={gaId} />;
+          }
+          return null;
+        })()}
+        <Script src="/env.js" strategy="beforeInteractive" />
         <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
       </body>
     </html>

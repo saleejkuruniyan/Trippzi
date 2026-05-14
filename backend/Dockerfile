@@ -46,8 +46,22 @@ COPY . /app/
 # Create media and static directories
 RUN mkdir -p /app/staticfiles /app/media
 
+# Add non-root user for security
+RUN adduser --disabled-password --gecos "" djangouser && \
+    chown -R djangouser:djangouser /app /opt/venv
+
+# Set executable permissions for entrypoint
+COPY entrypoint.sh /app/
+RUN chmod +x /app/entrypoint.sh && chown djangouser:djangouser /app/entrypoint.sh
+
+# Switch to non-root user
+USER djangouser
+
 # Expose port
 EXPOSE 8000
+
+# Set entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 # Start Gunicorn with gthread optimization
 CMD ["/opt/venv/bin/gunicorn", "core.wsgi:application", "--bind=0.0.0.0:8000", "--workers=1", "--threads=4", "--worker-class=gthread", "--timeout=120", "--max-requests=1000", "--max-requests-jitter=100"]

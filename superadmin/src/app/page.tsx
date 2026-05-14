@@ -268,13 +268,13 @@ export default function AdminDashboard() {
                         <button onClick={() => setIsCreating(false)} className="text-zinc-500 font-bold hover:text-zinc-950">Cancel</button>
                       </div>
                       {activeTab === 'itineraries' || activeTab === 'custom' ? (
-                        <ItineraryForm onSave={handleSave} isCustom={activeTab === 'custom'} />
+                        <ItineraryForm onSave={handleSave} onCancel={() => setIsCreating(false)} isCustom={activeTab === 'custom'} />
                       ) : activeTab === 'countries' ? (
-                        <CountryForm onSave={handleSave} />
+                        <CountryForm onSave={handleSave} onCancel={() => setIsCreating(false)} />
                       ) : activeTab === 'destinations' ? (
-                        <DestinationForm onSave={handleSave} />
+                        <DestinationForm onSave={handleSave} onCancel={() => setIsCreating(false)} />
                       ) : activeTab === 'attractions' ? (
-                        <AttractionForm onSave={handleSave} />
+                        <AttractionForm onSave={handleSave} onCancel={() => setIsCreating(false)} />
                       ) : null}
                     </div>
                   ) : editingItem ? (
@@ -284,13 +284,13 @@ export default function AdminDashboard() {
                         <button onClick={() => setEditingItem(null)} className="text-zinc-500 font-bold hover:text-zinc-950">Cancel</button>
                       </div>
                       {activeTab === 'itineraries' || activeTab === 'custom' ? (
-                        <ItineraryForm initialData={editingItem} onSave={handleSave} isCustom={activeTab === 'custom'} />
+                        <ItineraryForm initialData={editingItem} onSave={handleSave} onCancel={() => setEditingItem(null)} isCustom={activeTab === 'custom'} />
                       ) : activeTab === 'countries' ? (
-                        <CountryForm initialData={editingItem} onSave={handleSave} />
+                        <CountryForm initialData={editingItem} onSave={handleSave} onCancel={() => setEditingItem(null)} />
                       ) : activeTab === 'destinations' ? (
-                        <DestinationForm initialData={editingItem} onSave={handleSave} />
+                        <DestinationForm initialData={editingItem} onSave={handleSave} onCancel={() => setEditingItem(null)} />
                       ) : activeTab === 'attractions' ? (
-                        <AttractionForm initialData={editingItem} onSave={handleSave} />
+                        <AttractionForm initialData={editingItem} onSave={handleSave} onCancel={() => setEditingItem(null)} />
                       ) : null}
                     </div>
                   ) : activeTab === 'settings' ? (
