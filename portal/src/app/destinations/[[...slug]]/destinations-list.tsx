@@ -9,8 +9,7 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { fetchDestinations } from "@/lib/api"
 import { LoadingScreen } from "@/components/loading-screen"
-
-export default function DestinationsPage() {
+export default function DestinationsList() {
   const [destinations, setDestinations] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")

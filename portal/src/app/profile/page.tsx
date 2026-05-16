@@ -62,6 +62,7 @@ export default function ProfilePage() {
   }
 
   if (loading) return <LoadingScreen message="Loading Profile..." />
+  if (!profile) return <div className="min-h-screen flex items-center justify-center">Failed to load profile. Please try logging in again.</div>
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-zinc-950">

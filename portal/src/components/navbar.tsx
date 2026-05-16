@@ -53,6 +53,7 @@ export function Navbar() {
               height={70} 
               className="h-14 w-auto object-contain logo-primary" 
               priority
+              loading="eager"
             />
           </Link>
           

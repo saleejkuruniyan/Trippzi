@@ -1,6 +1,15 @@
 const getEnv = (key: string, defaultValue: string) => {
   if (typeof window !== 'undefined' && (window as any).ENV) {
-    return (window as any).ENV[key] || defaultValue;
+    const val = (window as any).ENV[key];
+    if (val) {
+      // If we are on localhost but the env URL points to production, use the local default
+      if (key === 'NEXT_PUBLIC_API_URL' && 
+          (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && 
+          (val.includes('trippzi.com') || val.includes('koyeb.app'))) {
+        return defaultValue;
+      }
+      return val;
+    }
   }
   return process.env[key] || defaultValue;
 };
