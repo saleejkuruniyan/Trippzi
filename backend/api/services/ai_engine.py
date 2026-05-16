@@ -4,6 +4,9 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.output_parsers import ResponseSchema, StructuredOutputParser
 from django.conf import settings
 import json
+import logging
+
+llm_logger = logging.getLogger('llm_logger')
 
 from .search_service import SearchService
 from .visa_service import VisaService
@@ -26,6 +29,36 @@ class AIEngine:
         )
         self.search_service = SearchService()
         self.visa_service = VisaService(self)
+
+    def _invoke_llm(self, llm, messages, model_name="LLM"):
+        """
+        Wrapper to invoke LLM with logging.
+        """
+        if not getattr(settings, 'LLM_LOGGING', False):
+            return llm.invoke(messages)
+
+        # Log Request
+        llm_logger.info(f"--- {model_name} REQUEST ---")
+        # Format messages for logging
+        log_messages = []
+        for msg in messages:
+            if hasattr(msg, 'content'):
+                log_messages.append({"role": getattr(msg, 'type', 'unknown'), "content": msg.content})
+            elif isinstance(msg, tuple):
+                log_messages.append({"role": msg[0], "content": msg[1]})
+            else:
+                log_messages.append(str(msg))
+        
+        llm_logger.info(json.dumps(log_messages, indent=2))
+
+        response = llm.invoke(messages)
+
+        # Log Response
+        llm_logger.info(f"--- {model_name} RESPONSE ---")
+        llm_logger.info(response.content)
+        llm_logger.info(f"--- END {model_name} ---")
+
+        return response
 
     def _clean_ai_text(self, text):
         """
@@ -142,7 +175,7 @@ class AIEngine:
         )
 
         try:
-            response = self.llm.invoke(messages)
+            response = self._invoke_llm(self.llm, messages, "Main LLM")
             result = self._extract_json(response.content)
             if result:
                 result['visa_requirements'] = visa_requirements
@@ -166,7 +199,8 @@ class AIEngine:
         ]
         
         try:
-            data = self._extract_json(self.low_cost_llm.invoke(messages).content)
+            response = self._invoke_llm(self.low_cost_llm, messages, "Low-Cost LLM")
+            data = self._extract_json(response.content)
             if data:
                 country_obj.visa_process = self._clean_ai_text(data.get('visa_process', country_obj.visa_process))
                 country_obj.best_time = self._clean_ai_text(data.get('best_time', country_obj.best_time))
@@ -199,7 +233,8 @@ class AIEngine:
         ]
         
         try:
-            data = self._extract_json(self.low_cost_llm.invoke(messages).content)
+            response = self._invoke_llm(self.low_cost_llm, messages, "Low-Cost LLM")
+            data = self._extract_json(response.content)
             if data:
                 attraction_obj.opening_time = data.get('opening_time', attraction_obj.opening_time)
                 attraction_obj.closing_time = data.get('closing_time', attraction_obj.closing_time)
@@ -237,7 +272,8 @@ class AIEngine:
         ]
         
         try:
-            results = self._extract_json(self.low_cost_llm.invoke(messages).content)
+            response = self._invoke_llm(self.low_cost_llm, messages, "Low-Cost LLM")
+            results = self._extract_json(response.content)
             if results and isinstance(results, list):
                 # Map results back to objects
                 result_map = {str(r['id']): r for r in results if 'id' in r}
@@ -264,7 +300,8 @@ class AIEngine:
         ]
         
         try:
-            summary = self.low_cost_llm.invoke(messages).content
+            response = self._invoke_llm(self.low_cost_llm, messages, "Low-Cost LLM")
+            summary = response.content
             destination_obj.culture = self._clean_ai_text(summary)
             destination_obj.save()
         except:

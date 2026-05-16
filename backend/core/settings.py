@@ -22,6 +22,10 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
+API_LOGGING = os.getenv('API_LOGGING', 'False') == 'True'
+SQL_LOGGING = os.getenv('SQL_LOGGING', 'False') == 'True'
+LLM_LOGGING = os.getenv('LLM_LOGGING', 'False') == 'True'
+SEARCH_LOGGING = os.getenv('SEARCH_LOGGING', 'False') == 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,api.trippzi.com').split(',')
 
@@ -63,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'api.middleware.APILoggingMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost:3001').split(',')
@@ -250,3 +255,75 @@ TAVILY_API_KEY = os.getenv('TAVILY_API_KEY')
 
 # Use custom storage by default for media
 DEFAULT_FILE_STORAGE = 'api.storage.R2Storage'
+
+# --- Logging Configuration ---
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+        'api': {
+            'format': '%(asctime)s [%(levelname)s] API: %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'api_logger': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'llm_logger': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'search_logger': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
+# If DEBUG is True, show more django logs
+if DEBUG:
+    LOGGING['loggers']['django']['level'] = 'DEBUG'
+
+# If SQL_LOGGING is True, log all SQL queries
+if SQL_LOGGING:
+    LOGGING['loggers']['django.db.backends'] = {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+        'propagate': False,
+    }
+
+# Ensure api_logger only logs if API_LOGGING is enabled
+if not API_LOGGING:
+    LOGGING['loggers']['api_logger']['level'] = 'WARNING'
+
+# Ensure llm_logger only logs if LLM_LOGGING is enabled
+if not LLM_LOGGING:
+    LOGGING['loggers']['llm_logger']['level'] = 'WARNING'
+
+# Ensure search_logger only logs if SEARCH_LOGGING is enabled
+if not SEARCH_LOGGING:
+    LOGGING['loggers']['search_logger']['level'] = 'WARNING'

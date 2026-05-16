@@ -2,10 +2,32 @@ import os
 from tavily import TavilyClient
 from django.conf import settings
 from datetime import datetime
+import logging
+import json
+
+search_logger = logging.getLogger('search_logger')
 
 class SearchService:
     def __init__(self):
         self.client = TavilyClient(api_key=settings.TAVILY_API_KEY)
+
+    def _execute_search(self, query, depth="basic", max_results=3):
+        """
+        Helper to execute search with logging.
+        """
+        if not getattr(settings, 'SEARCH_LOGGING', False):
+            return self.client.search(query=query, search_depth=depth, max_results=max_results)
+
+        search_logger.info(f"--- TAVILY REQUEST ---")
+        search_logger.info(f"Query: {query} | Depth: {depth} | Max Results: {max_results}")
+
+        result = self.client.search(query=query, search_depth=depth, max_results=max_results)
+
+        search_logger.info(f"--- TAVILY RESPONSE ---")
+        search_logger.info(json.dumps(result, indent=2))
+        search_logger.info(f"--- END TAVILY ---")
+
+        return result
 
     def search_travel_info(self, country, destinations, source_country="India"):
         """
@@ -19,7 +41,7 @@ class SearchService:
         
         try:
             # Perform search with high depth for better context
-            search_result = self.client.search(query=query, search_depth="advanced", max_results=5)
+            search_result = self._execute_search(query, "advanced", 5)
             
             context = ""
             for result in search_result.get('results', []):
@@ -45,7 +67,7 @@ class SearchService:
         context = ""
         for query in queries:
             try:
-                search_result = self.client.search(query=query, search_depth="advanced", max_results=3)
+                search_result = self._execute_search(query, "advanced", 3)
                 for result in search_result.get('results', []):
                     context += f"Source: {result.get('url')}\nContent: {result.get('content')}\n\n"
             except Exception as e:
@@ -59,7 +81,7 @@ class SearchService:
         """
         query = f"opening hours, ticket prices, best time to visit, and closing days for {attraction_name} in {city} 2024 2025"
         try:
-            search_result = self.client.search(query=query, search_depth="basic", max_results=3)
+            search_result = self._execute_search(query, "basic", 3)
             context = ""
             for result in search_result.get('results', []):
                 context += f"Info: {result.get('content')}\n"
@@ -73,7 +95,7 @@ class SearchService:
         """
         query = f"best way to travel from {from_point} to {to_point} in {city}: distance, time by car, public transport, and cost"
         try:
-            search_result = self.client.search(query=query, search_depth="basic", max_results=2)
+            search_result = self._execute_search(query, "basic", 2)
             context = ""
             for result in search_result.get('results', []):
                 context += f"Transit Info: {result.get('content')}\n"
