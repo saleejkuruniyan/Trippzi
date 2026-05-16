@@ -37,7 +37,7 @@
         }
         .label {
             display: inline-block;
-            background-color: #2563eb;
+            background-color: #DC0000;
             color: white;
             padding: 6px 16px;
             font-size: 12px;
@@ -75,7 +75,7 @@
         }
         .day-number-label {
             font-size: 14px;
-            color: #2563eb;
+            color: #DC0000;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -121,7 +121,7 @@
         .activity-time {
             font-size: 12px;
             font-weight: 800;
-            color: #2563eb;
+            color: #DC0000;
             text-transform: uppercase;
             margin-bottom: 5px;
         }
@@ -151,7 +151,7 @@
             margin-top: 15px;
             font-size: 10px;
             font-weight: 800;
-            color: #2563eb;
+            color: #DC0000;
             text-transform: uppercase;
             border-top: 1px dashed #27272a;
             padding-top: 10px;
@@ -193,13 +193,13 @@
         </div>
 
         {% for dest in itinerary.destinations.all %}
-        <div style="margin-bottom: 40px; border-left: 4px solid #2563eb; padding-left: 20px;">
+        <div style="margin-bottom: 40px; border-left: 4px solid #DC0000; padding-left: 20px;">
             <h3 style="font-size: 24px; font-weight: 900; margin: 0; color: #ffffff;">{{ dest.name }}</h3>
             <p style="font-size: 14px; line-height: 1.6; color: #a1a1aa; margin: 10px 0;">{{ dest.description }}</p>
             
             {% if dest.culture %}
             <div style="margin-top: 15px; padding: 15px; background: #18181b; border-radius: 12px; border: 1px solid #27272a;">
-                <h4 style="margin: 0 0 8px 0; font-size: 10px; color: #2563eb; text-transform: uppercase; letter-spacing: 1px;">Culture & Heritage</h4>
+                <h4 style="margin: 0 0 8px 0; font-size: 10px; color: #DC0000; text-transform: uppercase; letter-spacing: 1px;">Culture & Heritage</h4>
                 <p style="margin: 0; font-size: 13px; color: #71717a; line-height: 1.5;">{{ dest.culture }}</p>
             </div>
             {% endif %}
@@ -212,7 +212,7 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
                 {% for stay, desc in itinerary.country.days_recommendation.items %}
                 <div style="background: #18181b; padding: 15px; border-radius: 12px; border: 1px solid #27272a;">
-                    <span style="display: block; font-size: 14px; font-weight: 900; color: #2563eb; margin-bottom: 5px;">{{ stay }} Days</span>
+                    <span style="display: block; font-size: 14px; font-weight: 900; color: #DC0000; margin-bottom: 5px;">{{ stay }} Days</span>
                     <span style="font-size: 12px; color: #71717a;">{{ desc }}</span>
                 </div>
                 {% endfor %}
@@ -308,8 +308,8 @@
             <h2 class="day-title">{{ itinerary.country.name }} Information</h2>
         </div>
 
-        <div style="background: #1e1b4b; padding: 30px; border-radius: 20px; border: 1px solid #312e81; margin-bottom: 25px;">
-            <h4 style="color: #60a5fa; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase;">Visa Requirements</h4>
+        <div style="background: #450a0a; padding: 30px; border-radius: 20px; border: 1px solid #7f1d1d; margin-bottom: 25px;">
+            <h4 style="color: #fca5a5; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase;">Visa Requirements</h4>
             <div style="font-size: 13px; line-height: 1.6; color: #e2e8f0;">
                 {{ visa_requirements|linebreaks }}
             </div>
@@ -319,13 +319,13 @@
             <div style="display: table-row;">
                 <div style="display: table-cell; width: 50%; padding-right: 15px;">
                     <div style="background: #18181b; padding: 25px; border-radius: 20px; border: 1px solid #27272a; height: 180px;">
-                        <h4 style="color: #2563eb; margin: 0 0 10px 0; font-size: 12px; text-transform: uppercase;">Best Time</h4>
+                        <h4 style="color: #DC0000; margin: 0 0 10px 0; font-size: 12px; text-transform: uppercase;">Best Time</h4>
                         <p style="font-size: 13px; color: #fafafa;">{{ itinerary.country.best_time }}</p>
                     </div>
                 </div>
                 <div style="display: table-cell; width: 50%; padding-left: 15px;">
                     <div style="background: #18181b; padding: 25px; border-radius: 20px; border: 1px solid #27272a; height: 180px;">
-                        <h4 style="color: #2563eb; margin: 0 0 10px 0; font-size: 12px; text-transform: uppercase;">Major Hubs</h4>
+                        <h4 style="color: #DC0000; margin: 0 0 10px 0; font-size: 12px; text-transform: uppercase;">Major Hubs</h4>
                         <div style="margin-top: 10px;">
                             {% for apt in itinerary.country.airports %}
                             <span style="display: inline-block; background: #27272a; padding: 4px 10px; border-radius: 6px; font-size: 10px; margin: 0 5px 5px 0; font-weight: 800;">{{ apt }}</span>
@@ -338,11 +338,11 @@
 
         {% if itinerary.country.tips %}
         <div style="margin-top: 25px; background: #09090b; padding: 30px; border-radius: 20px; border: 1px solid #27272a;">
-            <h4 style="color: #2563eb; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase;">Pro Travel Tips</h4>
+            <h4 style="color: #DC0000; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase;">Pro Travel Tips</h4>
             <ul style="margin: 0; padding: 0; list-style: none;">
                 {% for tip in itinerary.country.tips %}
                 <li style="margin-bottom: 10px; font-size: 13px; color: #a1a1aa; padding-left: 20px; position: relative;">
-                    <span style="position: absolute; left: 0; color: #2563eb;">★</span> {{ tip }}
+                    <span style="position: absolute; left: 0; color: #DC0000;">★</span> {{ tip }}
                 </li>
                 {% endfor %}
             </ul>
