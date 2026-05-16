@@ -283,8 +283,13 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': 'INFO',
+            'level': 'INFO', # Keep framework logs clean (no mtime/template discovery logs)
             'propagate': True,
+        },
+        'api': {
+            'handlers': ['console'],
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'propagate': False,
         },
         'api_logger': {
             'handlers': ['console'],
@@ -303,10 +308,6 @@ LOGGING = {
         },
     },
 }
-
-# If DEBUG is True, show more django logs
-if DEBUG:
-    LOGGING['loggers']['django']['level'] = 'DEBUG'
 
 # If SQL_LOGGING is True, log all SQL queries
 if SQL_LOGGING:
